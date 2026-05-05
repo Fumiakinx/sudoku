@@ -54,7 +54,7 @@ public class Led7SegDigit : MonoBehaviour
 
         if (displayImage != null) {
             var theme = styler.CurrentTheme;
-            Color ledColor = theme.textColor;
+            Color ledColor = new Color(theme.textColor.r * 0.7f, theme.textColor.g * 0.7f, theme.textColor.b * 0.7f, theme.textColor.a);
             
             bool isVisible = (_currentValue > 0 && _currentValue <= 9) || (_currentValue == 0 && !hideZero);
 

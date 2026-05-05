@@ -92,6 +92,12 @@ public class UIManager : MonoBehaviour
                 btn.onClick.AddListener(() => ShowMenu());
                 Debug.Log("UIManager: Registered RESTART/NEW GAME listener");
             }
+            
+            // 追加: テーマ切り替えボタンの処理 (名前で判定)
+            // テーマ切り替えボタンはインスペクターで設定済みのため、ここではスキップ（2重登録防止）
+            if (btn.gameObject.name == "Btn_ThemeToggle") {
+                Debug.Log("UIManager: ThemeToggle found (using persistent listener)");
+            }
         }
     }
 

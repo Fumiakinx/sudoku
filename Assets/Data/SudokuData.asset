@@ -43,7 +43,7 @@ MonoBehaviour:
     errorColor: {r: 0.35, g: 0, b: 0, a: 1}
     showBezel: 1
     previewInterval: 1.5
-    isLocked: 0
+    isLocked: 1
   - themeName: 7SEGMENT LED
     displayType: 2
     sprites:
@@ -164,7 +164,7 @@ MonoBehaviour:
     errorColor: {r: 0, g: 0, b: 0, a: 0}
     showBezel: 0
     previewInterval: 1
-    isLocked: 0
+    isLocked: 1
   - themeName: Life Roulette
     displayType: 0
     sprites:
@@ -204,6 +204,6 @@ MonoBehaviour:
     errorColor: {r: 0, g: 0, b: 0, a: 0}
     showBezel: 0
     previewInterval: 0.8
-    isLocked: 0
+    isLocked: 1
   selectedThemeIndex: 2
   defaultMistLimit: 3

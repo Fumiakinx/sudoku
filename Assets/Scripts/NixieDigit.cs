@@ -107,7 +107,7 @@ public class NixieDigit : MonoBehaviour
             img.transform.localScale = new Vector3(scale, scale, 1f);
 
             if (digit == _currentValue) {
-                img.color = theme.textColor;
+                img.color = new Color(theme.textColor.r * 0.7f, theme.textColor.g * 0.7f, theme.textColor.b * 0.7f, theme.textColor.a);
                 img.gameObject.SetActive(true);
             } else {
                 if (targetIndexInStack == -1) {

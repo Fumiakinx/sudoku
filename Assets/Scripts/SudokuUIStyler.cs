@@ -45,6 +45,11 @@ public class SudokuUIStyler : MonoBehaviour
         }
     }
 
+    private void Start() {
+        if (!Application.isPlaying) return;
+        ApplyTheme(true);
+    }
+
     private void Update() {
         if (sudokuData == null) return;
         
@@ -55,28 +60,29 @@ public class SudokuUIStyler : MonoBehaviour
         if (previewTimer >= interval) {
             previewTimer = 0;
             
-            // 1-9, 0, Blank (-1) の順でサイクル
-            // 1-9: そのまま
-            // 10: 0
-            // 11: -1 (Blank)
-            int currentState = (previewValue >= 1 && previewValue <= 9) ? previewValue : (previewValue == 0 ? 10 : 11);
-            int nextState = (currentState % 11) + 1;
+            // 1-9, 0 の順でサイクル
+            int currentState = (previewValue >= 1 && previewValue <= 9) ? previewValue : 0;
+            int nextState = (currentState % 10) + 1;
             
             if (nextState <= 9) previewValue = nextState;
-            else if (nextState == 10) previewValue = 0;
-            else previewValue = -1;
+            else previewValue = 0;
 
-            UpdateThemePreview();
+            UpdateThemePreview(true);
         }
     }
 
-    public void UpdateThemePreview() {
+    public void UpdateThemePreview(bool immediate = false) {
         if (cachedPreviewGo == null) {
-            cachedPreviewGo = GameObject.Find("SudokuUI/SafeArea/MenuPanel/ThemePreview/DigitImage");
+            var previewPanel = FindObject("ThemePreview");
+            if (previewPanel != null) {
+                var digitTransform = previewPanel.transform.Find("DigitImage");
+                if (digitTransform != null) cachedPreviewGo = digitTransform.gameObject;
+                else cachedPreviewGo = previewPanel; // fallback to panel itself
+            }
         }
         
         if (cachedPreviewGo != null && cachedPreviewGo.activeInHierarchy) {
-            ApplyDigitVisual(cachedPreviewGo, previewValue, CurrentTheme, false, false);
+            ApplyDigitVisual(cachedPreviewGo, previewValue, CurrentTheme, immediate, false);
         }
     }
 
@@ -86,81 +92,220 @@ public class SudokuUIStyler : MonoBehaviour
     }
 
     public void ApplyTheme(SudokuData.SudokuTheme theme) {
-        var bg = FindObject("Background")?.GetComponent<Image>();
-        if (bg != null) bg.color = theme.backgroundColor;
+        if (string.IsNullOrEmpty(theme.themeName)) return;
+        Debug.Log($"<color=#00FF00><b>[SudokuUIStyler]</b></color> テーマ適用開始: <b>{theme.themeName}</b> (表示タイプ: {theme.displayType})");
+        
+        // スプライト配列を即座に更新（各コンポーネントが参照するため）
+        if (theme.displayType == SudokuData.ThemeDisplayType.Nixie) NixieSprites = theme.sprites;
+        else if (theme.displayType == SudokuData.ThemeDisplayType.LED7Seg) Led7SegSprites = theme.sprites;
 
-        // 1. 主要パネルと入力ボタンの更新
+        var bgGo = FindObject("Background");
+        if (bgGo != null) {
+            var bg = bgGo.GetComponent<Image>();
+            if (bg != null) {
+                bg.color = theme.backgroundColor;
+                Debug.Log($"[SudokuUIStyler] 背景色を設定: {theme.backgroundColor}");
+            }
+        }
+
+        // 1. 主要パネルの更新
         string[] panels = { "GamePanel", "TopPanel", "BoardPanel", "InputPanel", "MenuPanel" };
         foreach (var pName in panels) {
             var go = FindObject(pName);
-            if (go == null) continue;
-
-            NuclearClean(go);
-
+            if (go == null) {
+                Debug.LogWarning($"[SudokuUIStyler] パネルが見つかりません: {pName}");
+                continue;
+            }
+            
+            Debug.Log($"[SudokuUIStyler] パネルをスタイリング: {pName}");
             var img = go.GetComponent<Image>();
             if (img != null) img.color = theme.panelColor;
+            
             ApplyBezel(go, theme, false, bevelThickness);
 
-            // 入力パネル内のボタンにも一貫したスタイルを適用
+            var texts = go.GetComponentsInChildren<TMPro.TMP_Text>(true);
+            foreach (var txt in texts) {
+                // _Label などの生成済みパーツ以外のテキストの色を更新
+                if (!txt.name.StartsWith("_")) {
+                    txt.color = theme.textColor;
+                }
+            }
         }
 
-        // 入力パネルのボタン
+        // 2. 入力パネルのボタンの個別更新
         var inputPanel = FindObject("InputPanel");
         if (inputPanel != null) {
-            foreach (var btn in inputPanel.GetComponentsInChildren<Button>(true)) {
-                NuclearClean(btn.gameObject);
-                ApplyBezel(btn.gameObject, theme, false, bevelThickness);
+            var buttons = inputPanel.GetComponentsInChildren<Button>(true);
+            Debug.Log($"[SudokuUIStyler] 入力ボタンの更新開始 (合計: {buttons.Length})");
+            foreach (var btn in buttons) {
                 int val = -1;
                 if (btn.name.StartsWith("Btn_")) {
                     string suffix = btn.name.Substring(4);
                     if (suffix == "Clear") val = -1;
                     else int.TryParse(suffix, out val);
                 }
+                
                 var digitGo = btn.transform.Find("DigitImage")?.gameObject ?? btn.gameObject;
                 ApplyDigitVisual(digitGo, val, theme, true, false);
-            }
-        }
-
-        // メニューパネルのボタン
-        var menuPanel = FindObject("MenuPanel");
-        if (menuPanel != null) {
-            var menuButtons = menuPanel.GetComponentsInChildren<Button>(true);
-            foreach (var btn in menuButtons) {
-                NuclearClean(btn.gameObject);
-                
-                // ボタンのサイズを調整 (幅600, 高さ120に設定)
-                var btnRT = btn.GetComponent<RectTransform>();
-                if (btnRT != null) {
-                    btnRT.sizeDelta = new Vector2(600, 120);
-                }
-
                 ApplyBezel(btn.gameObject, theme, false, bevelThickness);
             }
         }
 
-        // 2. タイマースタイルの適用
+        // 3. メニューパネルのボタン調整
+        var menuPanel = FindObject("MenuPanel");
+        if (menuPanel != null) {
+            var menuTexts = new string[] { "EASY", "MEDIUM", "HARD", "EXPERT" };
+            var buttons = menuPanel.GetComponentsInChildren<Button>(true);
+            Debug.Log($"[SudokuUIStyler] メニューボタンの更新開始 (合計: {buttons.Length})");
+            int diffIdx = 0;
+            foreach (var btn in buttons) {
+                var btnRT = btn.GetComponent<RectTransform>();
+                if (btnRT != null) btnRT.sizeDelta = new Vector2(600, 120);
+
+                if (btn.name == "Btn_ThemeToggle") {
+                    var txt = btn.GetComponentInChildren<TMPro.TMP_Text>(true);
+                    if (txt == null) {
+                        Debug.Log("[SudokuUIStyler] ThemeToggle のラベルを作成します");
+                        var go = new GameObject("_Label", typeof(RectTransform), typeof(TMPro.TextMeshProUGUI));
+                        go.transform.SetParent(btn.transform, false);
+                        txt = go.GetComponent<TMPro.TextMeshProUGUI>();
+                        var rt = go.GetComponent<RectTransform>();
+                        rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+                        rt.offsetMin = rt.offsetMax = Vector2.zero;
+                    }
+                    if (txt != null) {
+                        txt.name = "_Label";
+                        txt.alignment = TMPro.TextAlignmentOptions.Center;
+                        txt.gameObject.SetActive(true);
+                        txt.color = theme.textColor;
+                    }
+                    ApplyBezel(btn.gameObject, theme, false, bevelThickness);
+                    continue;
+                }
+
+                if (btn.name.StartsWith("Btn_")) {
+                    var txt = btn.GetComponentInChildren<TMPro.TMP_Text>(true);
+                    if (txt == null && diffIdx < menuTexts.Length) {
+                        Debug.Log($"[SudokuUIStyler] {btn.name} のラベルを作成します");
+                        var go = new GameObject("_Label", typeof(RectTransform), typeof(TMPro.TextMeshProUGUI));
+                        go.transform.SetParent(btn.transform, false);
+                        txt = go.GetComponent<TMPro.TextMeshProUGUI>();
+                        txt.text = menuTexts[diffIdx];
+                        var rt = go.GetComponent<RectTransform>();
+                        rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+                        rt.offsetMin = rt.offsetMax = Vector2.zero;
+                    }
+                    if (txt != null) {
+                        txt.color = theme.textColor;
+                        txt.gameObject.SetActive(true);
+                        txt.name = "_Label";
+                        txt.alignment = TMPro.TextAlignmentOptions.Center;
+                    }
+                    ApplyBezel(btn.gameObject, theme, false, bevelThickness);
+                    diffIdx++;
+                }
+            }
+        }
+
+        // 4. タイマースタイルの適用
+        Debug.Log("[SudokuUIStyler] タイマースタイルを適用中...");
         ApplyTimerStyle(theme);
         
-        // 3. 3x3ブロックのベベル適用
+        // 5. 3x3ブロックのベベル適用
+        Debug.Log("[SudokuUIStyler] 3x3ブロックのベベルを適用中...");
         for (int i = 0; i < 9; i++) {
             var blockGo = FindObject($"Block_{i}");
             if (blockGo != null) ApplyBezel(blockGo, theme, false, bevelThickness);
         }
 
-        // 4. 盤面セルの更新
+        // 6. 盤面セルの更新
         if (SudokuBoard.Instance != null && SudokuBoard.Instance.cells != null) {
+            Debug.Log($"[SudokuUIStyler] 盤面セルの更新開始 (合計: {SudokuBoard.Instance.cells.Length})");
             foreach (var cell in SudokuBoard.Instance.cells) {
                 if (cell != null) {
-                    NuclearClean(cell.gameObject);
-
+                    // セルのクリーンアップ
+                    RobustCleanUp(cell.gameObject, false);
+                    
                     var img = cell.GetComponent<Image>();
                     if (img != null) img.color = theme.panelColor;
                     
                     ApplyBezel(cell.gameObject, theme, false, bevelThickness);
+                    
                     var digitGo = cell.transform.Find("DigitImage")?.gameObject ?? cell.gameObject;
                     ApplyDigitVisual(digitGo, cell.Value, theme, true, true);
                 }
             }
+        } else {
+            Debug.LogWarning("[SudokuUIStyler] SudokuBoard.Instance または cells が null です。セルの更新をスキップします。");
+        }
+
+        // 7. 選択中のセルのハイライト更新
+        if (SudokuBoard.Instance != null) {
+            SudokuBoard.Instance.UpdateSelectionVisuals();
+        }
+
+        // 8. ボタンラベルの更新
+        UpdateThemeButtonLabel();
+
+        // 9. テーマプレビューの即時更新
+        UpdateThemePreview(true);
+        
+        Debug.Log($"<color=#00FF00><b>[SudokuUIStyler]</b></color> テーマ適用完了: <b>{theme.themeName}</b>");
+    }
+
+
+    private string GetPath(Transform t) {
+        if (t.parent == null) return t.name;
+        return GetPath(t.parent) + "/" + t.name;
+    }
+
+    private static int lastCycleFrame = -1;
+    private static float lastCycleTime = -1f;
+
+    public void CycleTheme() {
+        if (UnityEngine.Time.frameCount == lastCycleFrame) return;
+        if (UnityEngine.Time.unscaledTime - lastCycleTime < 0.1f) return;
+        
+        lastCycleFrame = UnityEngine.Time.frameCount;
+        lastCycleTime = UnityEngine.Time.unscaledTime;
+
+        if (sudokuData == null || sudokuData.themes == null || sudokuData.themes.Length == 0) return;
+
+        int nextIndex = GetNextThemeIndex();
+
+        if (nextIndex != sudokuData.selectedThemeIndex) {
+            sudokuData.selectedThemeIndex = nextIndex;
+            
+            // カウントアップ表示をリセットして開始
+            previewValue = 1;
+            previewTimer = 0;
+            
+            ApplyTheme(true);
+            Debug.Log($"[SudokuUIStyler] Theme Cycled to: {CurrentTheme.themeName} (Index: {nextIndex})");
+        }
+    }
+
+    private int GetNextThemeIndex() {
+        int count = sudokuData.themes.Length;
+        for (int i = 1; i <= count; i++) {
+            int idx = (sudokuData.selectedThemeIndex + i) % count;
+            var t = sudokuData.themes[idx];
+            // アンロックされており、かつ Nixie または LED であるテーマを選択
+            if (!t.isLocked && (t.displayType == SudokuData.ThemeDisplayType.Nixie || t.displayType == SudokuData.ThemeDisplayType.LED7Seg)) {
+                return idx;
+            }
+        }
+        return sudokuData.selectedThemeIndex;
+    }
+
+    public void UpdateThemeButtonLabel() {
+        var btn = GameObject.Find("Btn_ThemeToggle");
+        if (btn == null) btn = FindObject("Btn_ThemeToggle");
+        if (btn == null) return;
+
+        var txt = btn.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+        if (txt != null) {
+            txt.text = $"THEME: {CurrentTheme.themeName.ToUpper()}";
         }
     }
 
@@ -203,8 +348,13 @@ public class SudokuUIStyler : MonoBehaviour
         for (int i = 0; i < allElements.Length; i++) {
             // DigitContainerから直接子を探す
             var t = container.transform.Find(allElements[i]);
-            if (t == null) continue;
-            var go = t.gameObject;
+            GameObject go;
+            if (t == null) {
+                go = new GameObject(allElements[i], typeof(RectTransform));
+                go.transform.SetParent(container.transform, false);
+            } else {
+                go = t.gameObject;
+            }
 
             var rt = go.GetComponent<RectTransform>();
             rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
@@ -214,8 +364,11 @@ public class SudokuUIStyler : MonoBehaviour
 
             if (allElements[i].Contains("_C")) {
                 var txt = go.GetComponent<TMPro.TextMeshProUGUI>();
+                if (txt == null) txt = go.AddComponent<TMPro.TextMeshProUGUI>();
                 if (txt != null) {
-                    txt.color = (theme.displayType == SudokuData.ThemeDisplayType.Nixie) ? theme.textColor : theme.lineColor;
+                    txt.text = ":";
+                    Color colonColor = (theme.displayType == SudokuData.ThemeDisplayType.Nixie) ? theme.textColor : theme.lineColor;
+                    txt.color = AdjustLuminance(colonColor, 0.7f);
                     txt.alignment = TMPro.TextAlignmentOptions.Center;
                     txt.fontSize = targetSize * 0.9f;
                     txt.enableAutoSizing = false;
@@ -223,6 +376,23 @@ public class SudokuUIStyler : MonoBehaviour
             } else {
                 int currentVal = GetCurrentValue(go);
                 ApplyDigitVisual(go, currentVal, theme, true, false);
+            }
+        }
+
+        // GraphicalTimerの参照を更新
+        var gt = GameObject.FindAnyObjectByType<GraphicalTimer>();
+        if (gt != null) {
+            var h1 = container.transform.Find("Timer_H1");
+            var h2 = container.transform.Find("Timer_H2");
+            var m1 = container.transform.Find("Timer_M1");
+            var m2 = container.transform.Find("Timer_M2");
+            var s1 = container.transform.Find("Timer_S1");
+            var s2 = container.transform.Find("Timer_S2");
+            var c1 = container.transform.Find("Timer_C1")?.GetComponent<TMPro.TextMeshProUGUI>();
+            var c2 = container.transform.Find("Timer_C2")?.GetComponent<TMPro.TextMeshProUGUI>();
+            
+            if (h1 != null && s2 != null) {
+                gt.SetDigits6(h1, h2, m1, m2, s1, s2, c1, c2);
             }
         }
     }
@@ -238,50 +408,124 @@ public class SudokuUIStyler : MonoBehaviour
             var field = led.GetType().GetField("_currentValue", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             if (field != null) return (int)field.GetValue(led);
         }
-        var flip = go.GetComponent<FlipFlapDisplay>();
-        if (flip != null) return flip.TargetValue;
         return 0;
     }
 
     private GameObject FindObject(string name) {
-        var all = GameObject.FindObjectsByType<GameObject>(FindObjectsInactive.Include);
-        foreach (var go in all) {
-            if (go.name == name) return go;
+        var canvas = GameObject.Find("SudokuUI");
+        if (canvas == null) return null;
+        
+        // Canvas直下または子孫から再帰的に検索
+        return FindRecursive(canvas.transform, name);
+    }
+
+    private GameObject FindRecursive(Transform parent, string name) {
+        if (parent == null) return null;
+        if (parent.name == name) return parent.gameObject;
+        foreach (Transform child in parent) {
+            var result = FindRecursive(child, name);
+            if (result != null) return result;
         }
         return null;
     }
 
-    public void ApplyDigitVisual(GameObject digitGo, int value, SudokuData.SudokuTheme theme, bool immediate, bool hideZero) {
+    public void ApplyDigitVisual(GameObject digitGo, int value, SudokuData.SudokuTheme theme, bool immediate = false, bool hideZero = false) {
         if (digitGo == null) return;
-        Debug.Log($"[SudokuUIStyler] ApplyDigitVisual: {digitGo.name}, Value: {value}");
         
+        // 詳細ログ（大量に出るため、必要な場合のみ有効化するか、特定条件で出す）
+        // Debug.Log($"[SudokuUIStyler] ApplyDigitVisual: {digitGo.name} | 値: {value} | テーマタイプ: {theme.displayType}");
+
+        Color displayColor = AdjustLuminance(theme.textColor, 0.7f);
         var nixie = digitGo.GetComponent<NixieDigit>();
         var led = digitGo.GetComponent<Led7SegDigit>();
         var img = digitGo.GetComponent<Image>();
 
+        // 1. テーマの切り替えに伴う不一致コンポーネントの除去
+        if (theme.displayType != SudokuData.ThemeDisplayType.Nixie && nixie != null) {
+            Debug.Log($"[SudokuUIStyler] コンポーネント除去 (Nixie -> Other): {digitGo.name}");
+            // Nixie特有の子オブジェクト(Wire_)を削除
+            for (int i = digitGo.transform.childCount - 1; i >= 0; i--) {
+                Transform child = digitGo.transform.GetChild(i);
+                if (child.name.StartsWith("Wire_")) SafeDestroy(child.gameObject);
+            }
+            SafeDestroy(nixie); nixie = null;
+        }
+        if (theme.displayType != SudokuData.ThemeDisplayType.LED7Seg && led != null) {
+            Debug.Log($"[SudokuUIStyler] コンポーネント除去 (LED -> Other): {digitGo.name}");
+            SafeDestroy(led); led = null;
+        }
+
+        // 2. 以前の表示生成物を一掃（Digit系コンポーネントが自前で管理するものは除外）
+        // _Label (Cボタン用) のみを確認して必要なら消す
+        var oldLabel = digitGo.transform.Find("_Label");
+        if (value != -1 && oldLabel != null) {
+            SafeDestroy(oldLabel.gameObject);
+        }
+
+        // 3. 元のテキストコンポーネントを保護（非アクティブ化）
+        // DigitImage 自体が TMP_Text を持っている場合の干渉を防ぐ
+        var tComp = digitGo.GetComponent<TMPro.TMP_Text>();
+        if (tComp != null) tComp.enabled = (theme.displayType == SudokuData.ThemeDisplayType.Normal);
+
+        // 4. 特別なラベル（クリアボタン等）の処理
+        if (value == -1) {
+            if (nixie != null) nixie.enabled = false;
+            if (led != null) led.enabled = false;
+            if (img != null) img.enabled = false;
+
+            var clearLabelGo = new GameObject("_Label", typeof(RectTransform), typeof(TMPro.TextMeshProUGUI));
+            clearLabelGo.transform.SetParent(digitGo.transform, false);
+            var labelTxt = clearLabelGo.GetComponent<TMPro.TextMeshProUGUI>();
+            var rt = clearLabelGo.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+            rt.offsetMin = rt.offsetMax = Vector2.zero;
+            
+            labelTxt.text = "C";
+            labelTxt.color = displayColor;
+            labelTxt.alignment = TMPro.TextAlignmentOptions.Center;
+            labelTxt.fontSize = 80;
+            labelTxt.enableAutoSizing = true;
+            return;
+        }
+
+        // 5. 通常の数字表示処理
         if (theme.displayType == SudokuData.ThemeDisplayType.Nixie) {
             if (nixie == null) {
+                Debug.Log($"[SudokuUIStyler] NixieDigit 追加: {digitGo.name}");
                 nixie = digitGo.AddComponent<NixieDigit>();
                 nixie.Setup();
             }
-            if (led != null) DestroyImmediate(led);
+            nixie.enabled = true;
             nixie.hideZero = hideZero;
             nixie.SetValue(value, immediate);
             nixie.RefreshUI();
-            if (img != null) img.enabled = false;
+            
+            if (led != null) led.enabled = false; // LEDを無効化
+            if (img != null) {
+                img.sprite = null;
+                img.enabled = false;
+            }
         } else if (theme.displayType == SudokuData.ThemeDisplayType.LED7Seg) {
             if (led == null) {
+                Debug.Log($"[SudokuUIStyler] Led7SegDigit 追加: {digitGo.name}");
                 led = digitGo.AddComponent<Led7SegDigit>();
                 led.Setup();
             }
-            if (nixie != null) DestroyImmediate(nixie);
+            led.enabled = true;
             led.hideZero = hideZero;
             led.SetValue(value, immediate);
             led.RefreshUI();
-            if (img != null) img.enabled = false;
+            
+            if (nixie != null) nixie.enabled = false; // Nixieを無効化
+            
+            // 重要: Nixieで Image が無効化されていた場合、ここで再度有効化する必要がある
+            if (img != null) {
+                img.enabled = true;
+                // color は Led7SegDigit.RefreshUI 内で設定されるが、
+                // アルファ値が 0 になっている可能性があるためリセット
+                img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
+            }
         } else {
-            if (nixie != null) DestroyImmediate(nixie);
-            if (led != null) DestroyImmediate(led);
             if (img != null) {
                 img.enabled = true;
                 if (value > 0 && value <= theme.sprites.Length) {
@@ -330,7 +574,8 @@ public class SudokuUIStyler : MonoBehaviour
     }
 
     public void ApplySelectionOutline(GameObject go, bool show) {
-        ApplyOutline(go, "_SelectionRoot", Color.yellow, 4f, show);
+        // 標準ベベル(3px)の倍の 6px に設定。色は黄色に固定。
+        ApplyOutline(go, "_SelectionRoot", Color.yellow, 6f, show);
     }
 
     public void ApplyRelatedHighlight(GameObject go, bool show) {
@@ -351,13 +596,17 @@ public class SudokuUIStyler : MonoBehaviour
 
         RectTransform rt = GetOrCreateOverlay(go, "_BackgroundHighlight", typeof(Image));
         rt.gameObject.SetActive(true);
-        rt.SetAsFirstSibling();
+        
+        // すべてのテーマで、数字の上に色を薄く重ねる（SetAsLastSibling）
+        rt.SetAsLastSibling();
         
         var bgImg = rt.GetComponent<Image>();
         if (isSelected) {
-            bgImg.color = new Color(1f, 1f, 0.5f, 0.2f); 
+            // 選択中：さらに薄い黄色（透過度 0.08）
+            bgImg.color = new Color(1f, 1f, 0f, 0.08f); 
         } else {
-            bgImg.color = new Color(0.7f, 1f, 0.5f, 0.15f); 
+            // 関連セル：さらに薄い緑色（透過度 0.04）
+            bgImg.color = new Color(0f, 1f, 0f, 0.04f); 
         }
     }
 
@@ -424,20 +673,73 @@ public class SudokuUIStyler : MonoBehaviour
         return rt;
     }
 
-    private void NuclearClean(GameObject go) {
+    private void SafeDestroy(Object obj) {
+        if (obj == null) return;
+        if (Application.isPlaying) Destroy(obj);
+        else DestroyImmediate(obj);
+    }
+
+    /// <summary>
+    /// UIの生成済みオブジェクトやコンポーネントを安全かつ確実に削除します。
+    /// </summary>
+    /// <param name="go">対象のGameObject</param>
+    /// <param name="keepLabel">_Label という名前のオブジェクトを保持するかどうか</param>
+    private void RobustCleanUp(GameObject go, bool keepLabel) {
         if (go == null) return;
-        var toDestroy = new System.Collections.Generic.List<GameObject>();
-        foreach (Transform t in go.transform) {
-            if (t.name.StartsWith("_Bevel") || t.name.StartsWith("_Out") || t.name.StartsWith("_Selection") || t.name.StartsWith("_Related")) {
-                toDestroy.Add(t.gameObject);
+
+        // 削除対象のプレフィックス定義（Stylerが直接生成したものに限定）
+        string[] targetPrefixes = { "_Bevel", "_Out", "_Selection", "_Related", "_BackgroundHighlight" };
+        
+        var toDestroy = new System.Collections.Generic.List<Object>();
+
+        for (int i = go.transform.childCount - 1; i >= 0; i--) {
+            Transform child = go.transform.GetChild(i);
+            string n = child.name;
+
+            // DigitImage は絶対に消さない
+            if (n == "DigitImage") continue;
+
+            bool shouldDestroy = false;
+            foreach (var prefix in targetPrefixes) {
+                if (n.StartsWith(prefix)) {
+                    shouldDestroy = true;
+                    break;
+                }
+            }
+
+            if (n == "_Label" && !keepLabel) shouldDestroy = true;
+
+            if (shouldDestroy) {
+                toDestroy.Add(child.gameObject);
             }
         }
-        foreach (var d in toDestroy) DestroyImmediate(d);
+
+        if (toDestroy.Count > 0) {
+            foreach (var d in toDestroy) SafeDestroy(d);
+        }
+
+        // 3. 不要になった Canvas コンポーネント等のチェック（必要に応じて）
+        var canvas = go.GetComponent<Canvas>();
+        if (canvas != null && !go.name.Contains("UI") && !go.name.Contains("Panel")) {
+            // セル等に付与された一時的な Canvas を削除
+            SafeDestroy(canvas);
+        }
     }
+
+    // 後方互換性のためのスタブ
+    private void NuclearClean(GameObject go) => RobustCleanUp(go, false);
+    private void CleanPanelVisuals(GameObject go) => RobustCleanUp(go, true);
 
     private void HideBevelImages(GameObject parent) {
         foreach (Transform child in parent.transform) {
             if (child.name.StartsWith("_Bevel")) child.gameObject.SetActive(false);
         }
+    }
+
+    // 輝度を調整（目に優しい明るさに）
+    private Color AdjustLuminance(Color col, float factor) {
+        float h, s, v;
+        Color.RGBToHSV(col, out h, out s, out v);
+        return Color.HSVToRGB(h, s, v * factor);
     }
 }
