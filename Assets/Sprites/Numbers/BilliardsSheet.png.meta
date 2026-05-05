@@ -1,0 +1,514 @@
+fileFormatVersion: 2
+guid: 9c0d54c554545aa4ca48fcda556cf83b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7879581433966929960
+    second: BilliardsSheet_0
+  - first:
+      213: -3237600254150505490
+    second: Billiards_0_0
+  - first:
+      213: 585772353338838088
+    second: Billiards_0_1
+  - first:
+      213: 2570214011604601295
+    second: Billiards_0_2
+  - first:
+      213: -6928261933425324489
+    second: Billiards_0_3
+  - first:
+      213: -7630891682041317631
+    second: Billiards_0_4
+  - first:
+      213: 7480310796121219887
+    second: Billiards_1_0
+  - first:
+      213: -1440368177782188387
+    second: Billiards_1_1
+  - first:
+      213: -5314580560126473863
+    second: Billiards_1_2
+  - first:
+      213: 2811697492751910133
+    second: Billiards_1_3
+  - first:
+      213: 4232680252858974335
+    second: Billiards_1_4
+  - first:
+      213: -5337868196804252761
+    second: Billiards_2_0
+  - first:
+      213: -3234328929617440173
+    second: Billiards_2_1
+  - first:
+      213: -6404903929723762413
+    second: Billiards_2_2
+  - first:
+      213: -1646694740097896175
+    second: Billiards_2_3
+  - first:
+      213: -9001544165978564856
+    second: Billiards_2_4
+  - first:
+      213: -2042861899842431276
+    second: Billiards_3_0
+  - first:
+      213: 567045109896538761
+    second: Billiards_3_1
+  - first:
+      213: -2191013270266626249
+    second: Billiards_3_2
+  - first:
+      213: 7372530686694769990
+    second: Billiards_3_3
+  - first:
+      213: 955219851621888455
+    second: Billiards_3_4
+  - first:
+      213: -6950939884414159871
+    second: Billiards_1
+  - first:
+      213: 8706002442785384392
+    second: Billiards_2
+  - first:
+      213: 6826856124791741272
+    second: Billiards_3
+  - first:
+      213: 1841947696761565661
+    second: Billiards_4
+  - first:
+      213: -6551672526875881565
+    second: Billiards_5
+  - first:
+      213: -457863395312930893
+    second: Billiards_6
+  - first:
+      213: -358593466004342556
+    second: Billiards_7
+  - first:
+      213: -5931678063809718598
+    second: Billiards_8
+  - first:
+      213: -9129090105712932720
+    second: Billiards_9
+  - first:
+      213: -7440399974321719859
+    second: Billiards_0
+  - first:
+      213: -8656685109677810729
+    second: Billiards_V1_1
+  - first:
+      213: 8791477214303166956
+    second: Billiards_V1_2
+  - first:
+      213: 3977304109243530613
+    second: Billiards_V1_3
+  - first:
+      213: -3074785455583027035
+    second: Billiards_V1_4
+  - first:
+      213: -3934641811923509272
+    second: Billiards_V1_5
+  - first:
+      213: 5578755421304670729
+    second: Billiards_V1_6
+  - first:
+      213: 8972432494136608213
+    second: Billiards_V1_7
+  - first:
+      213: 6205726586751753592
+    second: Billiards_V1_8
+  - first:
+      213: 7077983509496182124
+    second: Billiards_V1_9
+  - first:
+      213: 1954268178239550250
+    second: Billiards_V1_0
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Billiards_V1_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 330
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7db9d3102c64dd780800000000000000
+      internalID: -8656685109677810729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Billiards_V1_2
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 330
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce12b7972f9910a70800000000000000
+      internalID: 8791477214303166956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Billiards_V1_3
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 330
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57d7923c309323730800000000000000
+      internalID: 3977304109243530613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Billiards_V1_4
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 330
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a0af674bea2455d0800000000000000
+      internalID: -3074785455583027035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Billiards_V1_5
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 330
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ef56e16e185569c0800000000000000
+      internalID: -3934641811923509272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Billiards_V1_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 220
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90a46a78f78bb6d40800000000000000
+      internalID: 5578755421304670729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Billiards_V1_7
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 220
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d54f20c0db748c70800000000000000
+      internalID: 8972432494136608213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Billiards_V1_8
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 220
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87d1988837b2f1650800000000000000
+      internalID: 6205726586751753592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Billiards_V1_9
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 220
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c65b799408c0a3260800000000000000
+      internalID: 7077983509496182124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Billiards_V1_0
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 220
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2371dfcd84fe1b10800000000000000
+      internalID: 1954268178239550250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BilliardsSheet_0: -7879581433966929960
+      Billiards_0: -7440399974321719859
+      Billiards_0_0: -3237600254150505490
+      Billiards_0_1: 585772353338838088
+      Billiards_0_2: 2570214011604601295
+      Billiards_0_3: -6928261933425324489
+      Billiards_0_4: -7630891682041317631
+      Billiards_1: -6950939884414159871
+      Billiards_1_0: 7480310796121219887
+      Billiards_1_1: -1440368177782188387
+      Billiards_1_2: -5314580560126473863
+      Billiards_1_3: 2811697492751910133
+      Billiards_1_4: 4232680252858974335
+      Billiards_2: 8706002442785384392
+      Billiards_2_0: -5337868196804252761
+      Billiards_2_1: -3234328929617440173
+      Billiards_2_2: -6404903929723762413
+      Billiards_2_3: -1646694740097896175
+      Billiards_2_4: -9001544165978564856
+      Billiards_3: 6826856124791741272
+      Billiards_3_0: -2042861899842431276
+      Billiards_3_1: 567045109896538761
+      Billiards_3_2: -2191013270266626249
+      Billiards_3_3: 7372530686694769990
+      Billiards_3_4: 955219851621888455
+      Billiards_4: 1841947696761565661
+      Billiards_5: -6551672526875881565
+      Billiards_6: -457863395312930893
+      Billiards_7: -358593466004342556
+      Billiards_8: -5931678063809718598
+      Billiards_9: -9129090105712932720
+      Billiards_V1_0: 1954268178239550250
+      Billiards_V1_1: -8656685109677810729
+      Billiards_V1_2: 8791477214303166956
+      Billiards_V1_3: 3977304109243530613
+      Billiards_V1_4: -3074785455583027035
+      Billiards_V1_5: -3934641811923509272
+      Billiards_V1_6: 5578755421304670729
+      Billiards_V1_7: 8972432494136608213
+      Billiards_V1_8: 6205726586751753592
+      Billiards_V1_9: 7077983509496182124
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,209 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f54a9b7635e238e4da019c885c7ff3a2, type: 3}
+  m_Name: SudokuData
+  m_EditorClassIdentifier: Assembly-CSharp::SudokuData
+  themes:
+  - themeName: MECHANICAL
+    displayType: 3
+    sprites:
+    - {fileID: 1565698615107758941, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 9182563149380697123, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 1968497879731775209, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 1188694232831774386, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 2945902943968894201, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 1249859603059171784, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: -8332959868244586114, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 3412057734120741405, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: -5987930670882253121, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: -772783259358506311, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: -1752118532711996864, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    topSprites: []
+    bottomSprites: []
+    backgroundColor: {r: 0, g: 0, b: 0, a: 1}
+    panelColor: {r: 0, g: 0, b: 0, a: 1}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    cellColorFixed: {r: 0.25, g: 0.3, b: 0.4, a: 1}
+    cellColorNormal: {r: 0.2, g: 0.25, b: 0.35, a: 1}
+    lineColor: {r: 1, g: 1, b: 1, a: 0.2}
+    highlightColor: {r: 1, g: 0.65, b: 0.15, a: 1}
+    shadowColor: {r: 0.45, g: 0.23, b: 0.05, a: 1}
+    selectionColor: {r: 0.1, g: 0.15, b: 0.3, a: 1}
+    relatedColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
+    sameDigitColor: {r: 0.25, g: 0.15, b: 0, a: 1}
+    errorColor: {r: 0.35, g: 0, b: 0, a: 1}
+    showBezel: 1
+    previewInterval: 1.5
+    isLocked: 0
+  - themeName: 7SEGMENT LED
+    displayType: 2
+    sprites:
+    - {fileID: 21300000, guid: eba8b965b52b867499daa02c95ac8697, type: 3}
+    - {fileID: 21300000, guid: ca525d9111c444b46817b2816c3b4e54, type: 3}
+    - {fileID: 21300000, guid: 72c859441a881c047b2734e20d9fc7ab, type: 3}
+    - {fileID: 21300000, guid: 56e1c5ff73f783d44b7454d972cada63, type: 3}
+    - {fileID: 21300000, guid: 230b8a297af9df544a9b634e4468355f, type: 3}
+    - {fileID: 21300000, guid: e563fe8b9a14d4f40b0f4f9ec20d1ecc, type: 3}
+    - {fileID: 21300000, guid: 96ddbad9ce4eecd4f9fa0d5f4470479e, type: 3}
+    - {fileID: 21300000, guid: 197c209bc5707ac4095ca9a4dbe68a44, type: 3}
+    - {fileID: 21300000, guid: 63078437e31ce3442a2183b96be90209, type: 3}
+    - {fileID: 21300000, guid: f7e6dc1251c0ffb42bcfee5bbaa3680d, type: 3}
+    - {fileID: 21300000, guid: 1426407215ac83a47b5487e8687c744d, type: 3}
+    topSprites:
+    - {fileID: 1565698615107758941, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 9182563149380697123, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 1968497879731775209, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 1188694232831774386, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 2945902943968894201, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 1249859603059171784, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: -8332959868244586114, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 3412057734120741405, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: -5987930670882253121, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: -772783259358506311, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    bottomSprites:
+    - {fileID: 1565698615107758941, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 9182563149380697123, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 1968497879731775209, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 1188694232831774386, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 2945902943968894201, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 1249859603059171784, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: -8332959868244586114, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 3412057734120741405, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: -5987930670882253121, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: -772783259358506311, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    backgroundColor: {r: 0, g: 0, b: 0, a: 1}
+    panelColor: {r: 0, g: 0, b: 0, a: 1}
+    textColor: {r: 1, g: 0, b: 0, a: 1}
+    cellColorFixed: {r: 0.15, g: 0.15, b: 0.18, a: 1}
+    cellColorNormal: {r: 0.2, g: 0.22, b: 0.28, a: 1}
+    lineColor: {r: 0.6, g: 0.6, b: 0.6, a: 0.5}
+    highlightColor: {r: 1, g: 0.2, b: 0.2, a: 1}
+    shadowColor: {r: 0.5, g: 0, b: 0, a: 1}
+    selectionColor: {r: 0.2, g: 0.05, b: 0.05, a: 1}
+    relatedColor: {r: 0.1, g: 0, b: 0, a: 1}
+    sameDigitColor: {r: 0.3, g: 0.05, b: 0.05, a: 1}
+    errorColor: {r: 0.4, g: 0, b: 0, a: 1}
+    showBezel: 1
+    previewInterval: 1
+    isLocked: 0
+  - themeName: Nixie
+    displayType: 1
+    sprites:
+    - {fileID: -4901160068182221722, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
+    - {fileID: 9100799616773041677, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
+    - {fileID: 8871134320112627562, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
+    - {fileID: 1155289383061039559, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
+    - {fileID: -3597771696384692673, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
+    - {fileID: 5677540318127085371, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
+    - {fileID: 4802406106823990219, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
+    - {fileID: 6528187413684631151, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
+    - {fileID: 6704145229674994, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
+    - {fileID: 2938516603232981622, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
+    topSprites: []
+    bottomSprites: []
+    backgroundColor: {r: 0, g: 0, b: 0, a: 1}
+    panelColor: {r: 0, g: 0, b: 0, a: 1}
+    textColor: {r: 1, g: 0.4, b: 0.1, a: 1}
+    cellColorFixed: {r: 0.15, g: 0.12, b: 0.1, a: 1}
+    cellColorNormal: {r: 0, g: 0, b: 0, a: 1}
+    lineColor: {r: 0.25, g: 0.15, b: 0.05, a: 1}
+    highlightColor: {r: 1, g: 0.6, b: 0.2, a: 1}
+    shadowColor: {r: 0.6, g: 0.3, b: 0.1, a: 1}
+    selectionColor: {r: 0.3, g: 0.15, b: 0.05, a: 1}
+    relatedColor: {r: 0.15, g: 0.08, b: 0.03, a: 1}
+    sameDigitColor: {r: 0.2, g: 0.1, b: 0.04, a: 1}
+    errorColor: {r: 0.4, g: 0, b: 0, a: 1}
+    showBezel: 1
+    previewInterval: 2
+    isLocked: 0
+  - themeName: Billiards
+    displayType: 0
+    sprites:
+    - {fileID: -8656685109677810729, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
+    - {fileID: 8791477214303166956, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
+    - {fileID: 3977304109243530613, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
+    - {fileID: -3074785455583027035, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
+    - {fileID: -3934641811923509272, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
+    - {fileID: 5578755421304670729, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
+    - {fileID: 8972432494136608213, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
+    - {fileID: 6205726586751753592, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
+    - {fileID: 7077983509496182124, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
+    - {fileID: 1954268178239550250, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
+    topSprites:
+    - {fileID: -6950939884414159871, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
+    - {fileID: 8706002442785384392, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
+    - {fileID: 6826856124791741272, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
+    - {fileID: 1841947696761565661, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
+    - {fileID: -6551672526875881565, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
+    - {fileID: -457863395312930893, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
+    - {fileID: -358593466004342556, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
+    - {fileID: -5931678063809718598, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
+    - {fileID: -9129090105712932720, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
+    - {fileID: -7440399974321719859, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
+    bottomSprites: []
+    backgroundColor: {r: 0.04, g: 0.2, b: 0.08, a: 1}
+    panelColor: {r: 0.04, g: 0.2, b: 0.08, a: 1}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    cellColorFixed: {r: 0.03, g: 0.15, b: 0.05, a: 1}
+    cellColorNormal: {r: 0.04, g: 0.25, b: 0.08, a: 1}
+    lineColor: {r: 0.1, g: 0.4, b: 0.2, a: 0.5}
+    highlightColor: {r: 0, g: 0, b: 0, a: 0}
+    shadowColor: {r: 0, g: 0, b: 0, a: 0}
+    selectionColor: {r: 0, g: 0, b: 0, a: 0}
+    relatedColor: {r: 0, g: 0, b: 0, a: 0}
+    sameDigitColor: {r: 0, g: 0, b: 0, a: 0}
+    errorColor: {r: 0, g: 0, b: 0, a: 0}
+    showBezel: 0
+    previewInterval: 1
+    isLocked: 0
+  - themeName: Life Roulette
+    displayType: 0
+    sprites:
+    - {fileID: -796592061103715589, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: 1680612187, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: 1166629494, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: -816295844, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: -1275225009, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: 1867193880, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: -402681717, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: -1772107993, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: 149448727, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: -1713396063, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    topSprites:
+    - {fileID: -796592061103715589, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: 1680612187, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: 1166629494, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: -816295844, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: -1275225009, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: 1867193880, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: -402681717, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: -1772107993, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: 149448727, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: -1713396063, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    bottomSprites: []
+    backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+    panelColor: {r: 1, g: 1, b: 1, a: 1}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    cellColorFixed: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    cellColorNormal: {r: 1, g: 1, b: 1, a: 1}
+    lineColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    highlightColor: {r: 0, g: 0, b: 0, a: 0}
+    shadowColor: {r: 0, g: 0, b: 0, a: 0}
+    selectionColor: {r: 0, g: 0, b: 0, a: 0}
+    relatedColor: {r: 0, g: 0, b: 0, a: 0}
+    sameDigitColor: {r: 0, g: 0, b: 0, a: 0}
+    errorColor: {r: 0, g: 0, b: 0, a: 0}
+    showBezel: 0
+    previewInterval: 0.8
+    isLocked: 0
+  selectedThemeIndex: 2
+  defaultMistLimit: 3

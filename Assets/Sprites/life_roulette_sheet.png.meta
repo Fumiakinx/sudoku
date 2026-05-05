@@ -1,0 +1,478 @@
+fileFormatVersion: 2
+guid: 67c023499a6d6894498fbc395d1dadca
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6121044885319937319
+    second: life_roulette_sheet_0
+  - first:
+      213: 997922824696764738
+    second: life_roulette_sheet_1
+  - first:
+      213: -7781728409244134948
+    second: life_roulette_sheet_2
+  - first:
+      213: 3830857452953180067
+    second: life_roulette_sheet_3
+  - first:
+      213: 3481816558135085657
+    second: life_roulette_sheet_4
+  - first:
+      213: 7641004518447621032
+    second: life_roulette_sheet_5
+  - first:
+      213: -2782955999776314845
+    second: life_roulette_sheet_6
+  - first:
+      213: 8923557764507853732
+    second: life_roulette_sheet_7
+  - first:
+      213: 578221454145611626
+    second: life_roulette_sheet_8
+  - first:
+      213: 5619290457804487971
+    second: life_roulette_sheet_9
+  - first:
+      213: -8038670496841761833
+    second: life_roulette_v2_0
+  - first:
+      213: -2701194865348753481
+    second: life_roulette_v2_1
+  - first:
+      213: 3539234222937951421
+    second: life_roulette_v2_2
+  - first:
+      213: 4243529925215009607
+    second: life_roulette_v2_3
+  - first:
+      213: -3748256247145217407
+    second: life_roulette_v2_4
+  - first:
+      213: 8176666985155216259
+    second: life_roulette_v2_5
+  - first:
+      213: 8683432980400568318
+    second: life_roulette_v2_6
+  - first:
+      213: 8676645683012120275
+    second: life_roulette_v2_7
+  - first:
+      213: -3051874612806334272
+    second: life_roulette_v2_8
+  - first:
+      213: -2007701338886753507
+    second: life_roulette_v2_9
+  - first:
+      213: 4792856940108641258
+    second: life_roulette_0
+  - first:
+      213: -6779807634312782560
+    second: life_roulette_1
+  - first:
+      213: 8502622801117691117
+    second: life_roulette_2
+  - first:
+      213: -7205264597988257654
+    second: life_roulette_3
+  - first:
+      213: 3423542378478187535
+    second: life_roulette_4
+  - first:
+      213: 3623909435006777587
+    second: life_roulette_5
+  - first:
+      213: 8024372157920472953
+    second: life_roulette_6
+  - first:
+      213: -7290752305763604862
+    second: life_roulette_7
+  - first:
+      213: -1720720471116984826
+    second: life_roulette_8
+  - first:
+      213: 6478210690972373158
+    second: life_roulette_9
+  - first:
+      213: -2621817097191101577
+    second: life_roulette_10
+  - first:
+      213: 7465187781421482924
+    second: life_roulette_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: life_roulette_0
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 465
+        width: 98
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae3f07e4ef5a38240800000000000000
+      internalID: 4792856940108641258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: life_roulette_1
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 462
+        width: 99
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02d1e47a0e849e1a0800000000000000
+      internalID: -6779807634312782560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: life_roulette_2
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 462
+        width: 98
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: decb1c783626ff570800000000000000
+      internalID: 8502622801117691117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: life_roulette_3
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 463
+        width: 96
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a805634f502c10c90800000000000000
+      internalID: -7205264597988257654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: life_roulette_4
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 462
+        width: 98
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0430be87add28f20800000000000000
+      internalID: 3423542378478187535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: life_roulette_5
+      rect:
+        serializedVersion: 2
+        x: 514
+        y: 463
+        width: 96
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f8f3cb4e66ba4230800000000000000
+      internalID: 3623909435006777587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: life_roulette_6
+      rect:
+        serializedVersion: 2
+        x: 610
+        y: 463
+        width: 93
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97f626276fb4c5f60800000000000000
+      internalID: 8024372157920472953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: life_roulette_7
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 465
+        width: 97
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 286a99de76b02da90800000000000000
+      internalID: -7290752305763604862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: life_roulette_8
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 463
+        width: 95
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60e445929d5ce18e0800000000000000
+      internalID: -1720720471116984826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: life_roulette_9
+      rect:
+        serializedVersion: 2
+        x: 891
+        y: 462
+        width: 95
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a0db87ec4a37e950800000000000000
+      internalID: 6478210690972373158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      life_roulette_0: 4792856940108641258
+      life_roulette_1: -6779807634312782560
+      life_roulette_10: -2621817097191101577
+      life_roulette_11: 7465187781421482924
+      life_roulette_2: 8502622801117691117
+      life_roulette_3: -7205264597988257654
+      life_roulette_4: 3423542378478187535
+      life_roulette_5: 3623909435006777587
+      life_roulette_6: 8024372157920472953
+      life_roulette_7: -7290752305763604862
+      life_roulette_8: -1720720471116984826
+      life_roulette_9: 6478210690972373158
+      life_roulette_sheet_0: 6121044885319937319
+      life_roulette_sheet_1: 997922824696764738
+      life_roulette_sheet_2: -7781728409244134948
+      life_roulette_sheet_3: 3830857452953180067
+      life_roulette_sheet_4: 3481816558135085657
+      life_roulette_sheet_5: 7641004518447621032
+      life_roulette_sheet_6: -2782955999776314845
+      life_roulette_sheet_7: 8923557764507853732
+      life_roulette_sheet_8: 578221454145611626
+      life_roulette_sheet_9: 5619290457804487971
+      life_roulette_v2_0: -8038670496841761833
+      life_roulette_v2_1: -2701194865348753481
+      life_roulette_v2_2: 3539234222937951421
+      life_roulette_v2_3: 4243529925215009607
+      life_roulette_v2_4: -3748256247145217407
+      life_roulette_v2_5: 8176666985155216259
+      life_roulette_v2_6: 8683432980400568318
+      life_roulette_v2_7: 8676645683012120275
+      life_roulette_v2_8: -3051874612806334272
+      life_roulette_v2_9: -2007701338886753507
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
