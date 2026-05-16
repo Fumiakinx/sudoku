@@ -1,0 +1,67 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+/// <summary>
+/// 各UIパネル（Menu, Game, HUD, Input, Result）の表示状態を一括管理するクラス。
+/// </summary>
+public class SudokuPanelManager : MonoBehaviour
+{
+    [System.Serializable]
+    public struct PanelInfo {
+        public string name;
+        public GameObject panelObject;
+    }
+
+    [Header("Panels Configuration")]
+    public List<PanelInfo> panels = new List<PanelInfo>();
+
+    private Dictionary<string, GameObject> _panelDict = new Dictionary<string, GameObject>();
+
+    private void Awake() {
+                if (panels == null || panels.Count == 0) {
+            Debug.LogWarning("【亡霊アラート】SudokuPanelManagerのpanelsリストが空です。自動構築します。");
+            panels = new List<PanelInfo>();
+            foreach (Transform child in transform) {
+                if (child.name.EndsWith("Panel")) {
+                    panels.Add(new PanelInfo { name = child.name, panelObject = child.gameObject });
+                }
+            }
+        }
+
+foreach (var p in panels) {
+            if (p.panelObject != null) {
+                _panelDict[p.name] = p.panelObject;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 指定した名前のパネルを表示または非表示にします。
+    /// </summary>
+    public void SetPanelActive(string panelName, bool visible) {
+        if (_panelDict.TryGetValue(panelName, out GameObject panel)) {
+            // SetActive(false)はレイアウト計算を止めてしまう「毒」であるため廃止。
+            // 常にActive状態を維持し、CanvasGroupで見せ方と操作性のみを制御する。
+            CanvasGroup cg = panel.GetComponent<CanvasGroup>();
+            if (cg == null) cg = panel.AddComponent<CanvasGroup>();
+
+            cg.alpha = visible ? 1f : 0f;
+            cg.interactable = visible;
+            cg.blocksRaycasts = visible;
+            
+            // 物理的に座標を動かすなどの処理が必要な場合はここに追加可能ですが、
+            // 現状はアルファとブロック設定で十分安定します。
+        } else {
+            Debug.LogWarning($"[SudokuPanelManager] Panel not found in list: {panelName}");
+        }
+    }
+
+    /// <summary>
+    /// 全てのパネルを非表示にします。
+    /// </summary>
+    public void HideAllPanels() {
+        foreach (var name in _panelDict.Keys) {
+            SetPanelActive(name, false);
+        }
+    }
+}

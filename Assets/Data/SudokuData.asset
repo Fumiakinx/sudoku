@@ -16,37 +16,106 @@ MonoBehaviour:
   - themeName: MECHANICAL
     displayType: 3
     sprites:
-    - {fileID: 1565698615107758941, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
-    - {fileID: 9182563149380697123, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
-    - {fileID: 1968497879731775209, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
-    - {fileID: 1188694232831774386, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
-    - {fileID: 2945902943968894201, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
-    - {fileID: 1249859603059171784, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
-    - {fileID: -8332959868244586114, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
-    - {fileID: 3412057734120741405, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
-    - {fileID: -5987930670882253121, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
-    - {fileID: -772783259358506311, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
-    - {fileID: -1752118532711996864, guid: e387ebf133656e6448e0027e6a42abc0, type: 3}
+    - {fileID: 21300000, guid: 4f325817bade85c409eb2e3c37e0643a, type: 3}
+    - {fileID: 21300000, guid: eb7ef9990b936e6498680fc073949b5f, type: 3}
+    - {fileID: 21300000, guid: 86566bb7d9d8817469e2bcfef3441215, type: 3}
+    - {fileID: 21300000, guid: b4dcaf069c7107c44bc17e37edde3bba, type: 3}
+    - {fileID: 21300000, guid: 43ed146bb82d8f944a12fd5b0c964c1b, type: 3}
+    - {fileID: 21300000, guid: 2d9d443316a665548be3544c116a0a5b, type: 3}
+    - {fileID: 21300000, guid: ae4a97f350a447b47a29bcae0d047009, type: 3}
+    - {fileID: 21300000, guid: a7095023f568e334f8d9e21663412fba, type: 3}
+    - {fileID: 21300000, guid: 952dc5b7c3e45b640b83d02e62b3364e, type: 3}
+    - {fileID: 21300000, guid: f20b190482fe183449e7fa1cde694d9c, type: 3}
+    - {fileID: 21300000, guid: 4d579c3dd691dae4a8506f76e860b028, type: 3}
+    allSprites:
+    - {fileID: 21300000, guid: 1599fa26c02e76f4f959d0da84877a50, type: 3}
+    - {fileID: 21300000, guid: 1e0241cec27e07749b0079272521ae64, type: 3}
+    - {fileID: 21300000, guid: 3a8268e964de2ec40971c053a1f3029f, type: 3}
+    - {fileID: 21300000, guid: 7a7da1e154534894e9f08e7aded29e7f, type: 3}
+    - {fileID: 21300000, guid: 3db5a7c9131cda544bc3e2f46e001235, type: 3}
+    - {fileID: 21300000, guid: ccb489b9a0312b4448a216fb6bfab4ed, type: 3}
+    - {fileID: 21300000, guid: c12f7c9b7906332489d68c354f4cedb5, type: 3}
+    - {fileID: 21300000, guid: 3664368cf7648d94ca2f0c5d7e8c584f, type: 3}
+    - {fileID: 21300000, guid: 2f306358b61dbaa46b641e8c22a43ccd, type: 3}
+    - {fileID: 21300000, guid: f91bff5b0b798904f83f4186ebf14c7e, type: 3}
+    - {fileID: 21300000, guid: dbc0b9a9f1b66e940896745742156438, type: 3}
+    - {fileID: 21300000, guid: 3ee3e1a32be01aa46a416388e3199646, type: 3}
+    - {fileID: 21300000, guid: c3044cf71200b214c9c6d03b6cd5f031, type: 3}
+    - {fileID: 21300000, guid: 09717029c7d66e24b9cb1901c2299046, type: 3}
+    - {fileID: 21300000, guid: 3b647835a3dc05c45b9c311e084dd1b3, type: 3}
+    - {fileID: 21300000, guid: 03579f7437d4e8847a048ad332481860, type: 3}
+    - {fileID: 21300000, guid: 4266f638ff4fd9c4d92bf39f14dffe97, type: 3}
+    - {fileID: 21300000, guid: ca07865b8eb2212479c6bbed41577871, type: 3}
+    - {fileID: 21300000, guid: 13dcdee9d61c03b4a8b13c567da4889e, type: 3}
+    - {fileID: 21300000, guid: 120f68cc951125f408263adc8c1961ac, type: 3}
+    - {fileID: 21300000, guid: 7d102ffee19286044b6795f7f1a8fa29, type: 3}
+    - {fileID: 21300000, guid: df3b7eded56129540a1133f2bd358d52, type: 3}
+    - {fileID: 21300000, guid: 686c5edefbf543c40af2e3e0f4c83395, type: 3}
+    - {fileID: 21300000, guid: bfd3f1e53ab2f3248887c9e4a5e4ee48, type: 3}
+    - {fileID: 21300000, guid: 4f41c06176a12ba40a60c4bc2d18fa1f, type: 3}
+    - {fileID: 21300000, guid: 0f3b653b01449d145a313aebf7d9efa5, type: 3}
+    - {fileID: 21300000, guid: f2e3dbe34975b1947b603809e22b853a, type: 3}
+    - {fileID: 21300000, guid: e8ed05523dd791446ad7e5143bcda8b7, type: 3}
+    - {fileID: 21300000, guid: 202dafd6433e08c4ba12dd796ca10abe, type: 3}
+    - {fileID: 21300000, guid: 654484947081cf047933ac89130dc153, type: 3}
+    - {fileID: 21300000, guid: c57bacd70d2135245b03d6f052e5ba88, type: 3}
+    - {fileID: 21300000, guid: b3deacac5e4793848a3c5f4214d9ab3c, type: 3}
+    - {fileID: 21300000, guid: bdecbc18853999240ab1515e366b5831, type: 3}
+    - {fileID: 1939525045574830306, guid: f8f08e2f67a348449b81e46c0012a4f7, type: 3}
+    - {fileID: 6166004642972095182, guid: 0034c034ce722b5439edbf31125a1622, type: 3}
+    - {fileID: -7265788656424667631, guid: d4a45e6e50e08c64fbe884a2f9508c85, type: 3}
+    - {fileID: -2038050484073916889, guid: ad1d72d7feef8e94aa4fb64414100ec6, type: 3}
+    - {fileID: -8005404821665907516, guid: f3ead2eab33e46f4288768ca6e94a485, type: 3}
+    - {fileID: -8080268092389895807, guid: ab0ae454bf098ca44b9405623427c92f, type: 3}
+    - {fileID: 21300000, guid: b457873118458ad4da03fb3378eb9e57, type: 3}
+    - {fileID: 21300000, guid: e545d55ff8581044a8815d6de5cdc498, type: 3}
+    - {fileID: 21300000, guid: 55a17adb410916148bf8c8e5d8f816df, type: 3}
+    - {fileID: 21300000, guid: f20b190482fe183449e7fa1cde694d9c, type: 3}
+    - {fileID: 21300000, guid: 4f325817bade85c409eb2e3c37e0643a, type: 3}
+    - {fileID: 21300000, guid: eb7ef9990b936e6498680fc073949b5f, type: 3}
+    - {fileID: 21300000, guid: 86566bb7d9d8817469e2bcfef3441215, type: 3}
+    - {fileID: 21300000, guid: b4dcaf069c7107c44bc17e37edde3bba, type: 3}
+    - {fileID: 21300000, guid: 43ed146bb82d8f944a12fd5b0c964c1b, type: 3}
+    - {fileID: 21300000, guid: 2d9d443316a665548be3544c116a0a5b, type: 3}
+    - {fileID: 21300000, guid: ae4a97f350a447b47a29bcae0d047009, type: 3}
+    - {fileID: 21300000, guid: a7095023f568e334f8d9e21663412fba, type: 3}
+    - {fileID: 21300000, guid: 952dc5b7c3e45b640b83d02e62b3364e, type: 3}
+    - {fileID: 21300000, guid: 4d579c3dd691dae4a8506f76e860b028, type: 3}
     topSprites: []
     bottomSprites: []
     backgroundColor: {r: 0, g: 0, b: 0, a: 1}
     panelColor: {r: 0, g: 0, b: 0, a: 1}
-    textColor: {r: 1, g: 1, b: 1, a: 1}
+    textColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
     cellColorFixed: {r: 0.25, g: 0.3, b: 0.4, a: 1}
-    cellColorNormal: {r: 0.2, g: 0.25, b: 0.35, a: 1}
+    cellColorNormal: {r: 0, g: 0, b: 0, a: 1}
     lineColor: {r: 1, g: 1, b: 1, a: 0.2}
-    highlightColor: {r: 1, g: 0.65, b: 0.15, a: 1}
-    shadowColor: {r: 0.45, g: 0.23, b: 0.05, a: 1}
-    selectionColor: {r: 0.1, g: 0.15, b: 0.3, a: 1}
-    relatedColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
+    highlightColor: {r: 0.85, g: 0.85, b: 0.85, a: 1}
+    shadowColor: {r: 0.25, g: 0.25, b: 0.25, a: 1}
+    selectionColor: {r: 0.29803923, g: 0.050980393, b: 0.14901961, a: 1}
+    relatedColor: {r: 0.14901961, g: 0.03137255, b: 0.078431375, a: 1}
     sameDigitColor: {r: 0.25, g: 0.15, b: 0, a: 1}
     errorColor: {r: 0.35, g: 0, b: 0, a: 1}
     showBezel: 1
     previewInterval: 1.5
-    isLocked: 1
+    hasBlank: 1
+    isLocked: 0
+    bevelWidth: 4
+    relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   - themeName: 7SEGMENT LED
     displayType: 2
     sprites:
+    - {fileID: 21300000, guid: ca525d9111c444b46817b2816c3b4e54, type: 3}
+    - {fileID: 21300000, guid: 72c859441a881c047b2734e20d9fc7ab, type: 3}
+    - {fileID: 21300000, guid: 56e1c5ff73f783d44b7454d972cada63, type: 3}
+    - {fileID: 21300000, guid: 230b8a297af9df544a9b634e4468355f, type: 3}
+    - {fileID: 21300000, guid: e563fe8b9a14d4f40b0f4f9ec20d1ecc, type: 3}
+    - {fileID: 21300000, guid: 96ddbad9ce4eecd4f9fa0d5f4470479e, type: 3}
+    - {fileID: 21300000, guid: 197c209bc5707ac4095ca9a4dbe68a44, type: 3}
+    - {fileID: 21300000, guid: 63078437e31ce3442a2183b96be90209, type: 3}
+    - {fileID: 21300000, guid: f7e6dc1251c0ffb42bcfee5bbaa3680d, type: 3}
+    - {fileID: 21300000, guid: eba8b965b52b867499daa02c95ac8697, type: 3}
+    - {fileID: 21300000, guid: 1426407215ac83a47b5487e8687c744d, type: 3}
+    allSprites:
     - {fileID: 21300000, guid: eba8b965b52b867499daa02c95ac8697, type: 3}
     - {fileID: 21300000, guid: ca525d9111c444b46817b2816c3b4e54, type: 3}
     - {fileID: 21300000, guid: 72c859441a881c047b2734e20d9fc7ab, type: 3}
@@ -94,7 +163,10 @@ MonoBehaviour:
     errorColor: {r: 0.4, g: 0, b: 0, a: 1}
     showBezel: 1
     previewInterval: 1
+    hasBlank: 1
     isLocked: 0
+    bevelWidth: 0
+    relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   - themeName: Nixie
     displayType: 1
     sprites:
@@ -108,23 +180,65 @@ MonoBehaviour:
     - {fileID: 6528187413684631151, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
     - {fileID: 6704145229674994, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
     - {fileID: 2938516603232981622, guid: 0ea2b956d21350942850c5d703dd9d03, type: 3}
+    - {fileID: 6620769027775016707, guid: aa187fbe06d4371499510fe61a2ced90, type: 3}
+    allSprites:
+    - {fileID: 6620769027775016707, guid: aa187fbe06d4371499510fe61a2ced90, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: -4901160068182221722, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: 9100799616773041677, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: 8871134320112627562, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: 1155289383061039559, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: -3597771696384692673, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: 5677540318127085371, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: 4802406106823990219, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: 6528187413684631151, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: 6704145229674994, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: 2938516603232981622, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: -1140892200973713532, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: -1964100971460774039, guid: fba11779ee060f745babc641b959e85a, type: 3}
+    - {fileID: -4901160068182221722, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
+    - {fileID: 9100799616773041677, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
+    - {fileID: 8871134320112627562, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
+    - {fileID: 1155289383061039559, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
+    - {fileID: -3597771696384692673, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
+    - {fileID: 5677540318127085371, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
+    - {fileID: 4802406106823990219, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
+    - {fileID: 6528187413684631151, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
+    - {fileID: 6704145229674994, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
+    - {fileID: 2938516603232981622, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
+    - {fileID: -1140892200973713532, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
+    - {fileID: -1964100971460774039, guid: c9b1206db7fc11c45b542d9b106186ba, type: 3}
     topSprites: []
     bottomSprites: []
     backgroundColor: {r: 0, g: 0, b: 0, a: 1}
     panelColor: {r: 0, g: 0, b: 0, a: 1}
     textColor: {r: 1, g: 0.4, b: 0.1, a: 1}
-    cellColorFixed: {r: 0.15, g: 0.12, b: 0.1, a: 1}
+    cellColorFixed: {r: 0.1, g: 0.05, b: 0, a: 1}
     cellColorNormal: {r: 0, g: 0, b: 0, a: 1}
     lineColor: {r: 0.25, g: 0.15, b: 0.05, a: 1}
     highlightColor: {r: 1, g: 0.6, b: 0.2, a: 1}
     shadowColor: {r: 0.6, g: 0.3, b: 0.1, a: 1}
-    selectionColor: {r: 0.3, g: 0.15, b: 0.05, a: 1}
-    relatedColor: {r: 0.15, g: 0.08, b: 0.03, a: 1}
+    selectionColor: {r: 1, g: 1, b: 0, a: 0.8}
+    relatedColor: {r: 0, g: 0.8, b: 1, a: 0.5}
     sameDigitColor: {r: 0.2, g: 0.1, b: 0.04, a: 1}
     errorColor: {r: 0.4, g: 0, b: 0, a: 1}
     showBezel: 1
     previewInterval: 2
+    hasBlank: 0
     isLocked: 0
+    bevelWidth: 4
+    relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   - themeName: Billiards
     displayType: 0
     sprites:
@@ -138,6 +252,7 @@ MonoBehaviour:
     - {fileID: 6205726586751753592, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
     - {fileID: 7077983509496182124, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
     - {fileID: 1954268178239550250, guid: 9c0d54c554545aa4ca48fcda556cf83b, type: 3}
+    allSprites: []
     topSprites:
     - {fileID: -6950939884414159871, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
     - {fileID: 8706002442785384392, guid: 7e664860547135745a118a6c3ad9ab87, type: 3}
@@ -164,7 +279,10 @@ MonoBehaviour:
     errorColor: {r: 0, g: 0, b: 0, a: 0}
     showBezel: 0
     previewInterval: 1
+    hasBlank: 1
     isLocked: 1
+    bevelWidth: 0
+    relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   - themeName: Life Roulette
     displayType: 0
     sprites:
@@ -178,6 +296,7 @@ MonoBehaviour:
     - {fileID: -1772107993, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
     - {fileID: 149448727, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
     - {fileID: -1713396063, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    allSprites: []
     topSprites:
     - {fileID: -796592061103715589, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
     - {fileID: 1680612187, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
@@ -204,6 +323,9 @@ MonoBehaviour:
     errorColor: {r: 0, g: 0, b: 0, a: 0}
     showBezel: 0
     previewInterval: 0.8
+    hasBlank: 1
     isLocked: 1
+    bevelWidth: 0
+    relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   selectedThemeIndex: 2
   defaultMistLimit: 3

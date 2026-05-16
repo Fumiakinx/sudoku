@@ -1,0 +1,89 @@
+using UnityEngine;
+using UnityEngine.UI;
+using System;
+using System.Collections.Generic;
+
+/// <summary>
+/// 数字入力パネル（1-9ボタン）のボタン有効化・無効化などのUI制御を担当するクラス。
+/// </summary>
+public class SudokuInputPanelController : MonoBehaviour
+{
+    [Header("Input Buttons")]
+    public List<SudokuInputButton> buttons = new List<SudokuInputButton>();
+
+    /// <summary>
+    /// セルの選択状態や数字のカウントに基づいて、ボタンの有効・無効を更新します。
+    /// </summary>
+    public void UpdateButtonStates(SudokuBoard board, SudokuCell selectedCell) {
+        if (board == null) return;
+        
+        int[] counts = board.GetNumberCounts();
+        
+        foreach (var inputBtn in buttons) {
+            if (inputBtn.Value >= -2 && inputBtn.Value <= 9) {
+                bool isClear = (inputBtn.Value <= 0);
+                int count = isClear ? 0 : (inputBtn.Value > 0 ? counts[inputBtn.Value - 1] : 0);
+                
+                var btnComp = inputBtn.GetComponent<Button>();
+                if (btnComp != null) {
+                    // 全ての数字が埋まった場合は無効化（Clearは常に選択中なら有効）
+                    bool canUse = isClear ? (selectedCell != null) : (count < 9 && selectedCell != null);
+                    btnComp.interactable = canUse;
+                    
+                    var cg = inputBtn.GetComponent<CanvasGroup>();
+                    if (cg == null) cg = inputBtn.gameObject.AddComponent<CanvasGroup>();
+                    cg.alpha = canUse ? 1.0f : 0.3f;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// ボタンクリック時の処理をバインドします。
+    /// </summary>
+    public void Initialize(Action<int> onNumberClicked) {
+        // パネル自体の背景がクリックを遮らないように設定
+        var panelImage = GetComponent<Image>();
+        if (panelImage != null) {
+            panelImage.raycastTarget = false; 
+        }
+
+        // 自身の配下にあるボタンのみを確実に取得（静的再利用）
+        var childButtons = GetComponentsInChildren<SudokuInputButton>(true);
+        buttons = new List<SudokuInputButton>(childButtons);
+        
+        // Value（数字）に基づいてソート
+        buttons.Sort((a, b) => a.Value.CompareTo(b.Value));
+
+        Debug.Log($"[SudokuInputPanelController] Static Initialization: {buttons.Count} buttons found.");
+
+        int boundCount = 0;
+        foreach (var btn in buttons) {
+            if (btn != null) {
+                // ボタンの基本設定（静的構造を維持するため無理な変更は避ける）
+                var img = btn.GetComponent<Image>();
+                if (img != null) {
+                    img.raycastTarget = true;
+                }
+
+                var uiButton = btn.GetComponent<Button>();
+                if (uiButton != null) {
+                    uiButton.onClick.RemoveAllListeners();
+                    int num = btn.Value;
+                    uiButton.onClick.AddListener(() => {
+                        onNumberClicked(num);
+                    });
+                    boundCount++;
+                }
+                
+                // 枠（ベゼル）のリフレッシュ
+                btn.Refresh();
+            }
+        }
+
+        // 初期状態の反映
+        var board = SudokuBoard.Instance;
+        UpdateButtonStates(board, board != null ? board.SelectedCell : null);
+    }
+
+}

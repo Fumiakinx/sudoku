@@ -1,0 +1,127 @@
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class SudokuCell : MonoBehaviour {
+    public int Row { get; private set; }
+    public int Col { get; private set; }
+    public int Value { get; private set; }
+    public bool IsFixed { get; set; }
+    public bool IsPreFilled { get; private set; }
+    public bool IsError { get; set; }
+
+    public event System.Action<int> OnValueChanged;
+    
+    private Image bg;
+    private RectTransform rectTransform;
+    private TMPro.TextMeshProUGUI crossText;
+    private TMPro.TextMeshProUGUI circleText;
+
+    private void OnEnable() {
+        SudokuThemeManager.OnThemeChanged += HandleThemeChanged;
+    }
+
+    private void OnDisable() {
+        SudokuThemeManager.OnThemeChanged -= HandleThemeChanged;
+    }
+
+    private void HandleThemeChanged(SudokuData.SudokuTheme theme, bool isInitial) {
+        RefreshUI(true);
+    }
+
+    public void Init(int r, int c, int val, bool fixedVal, SudokuBoard b) {
+        Row = r;
+        Col = c;
+        Value = val;
+        IsFixed = fixedVal;
+        IsPreFilled = fixedVal;
+        IsError = false;
+        bg = GetComponent<Image>();
+        rectTransform = GetComponent<RectTransform>();
+        
+        Debug.Log("[LOG-3] SudokuCell.Init: (" + Row + "," + Col + ") Value=" + Value);
+        
+        RefreshUI(true);
+        OnValueChanged?.Invoke(Value);
+    }
+
+
+
+
+
+    public void SetValue(int val, bool immediate = true, bool fixedVal = false) {
+        Value = val;
+        IsFixed = fixedVal;
+        RefreshUI(immediate);
+        OnValueChanged?.Invoke(Value);
+    }
+
+    public void SetHighlight(bool isSelected, bool isSameDigit, bool isError, bool isRelated) {
+        if (bg == null) bg = GetComponent<Image>();
+        if (bg == null) return;
+
+        var theme = SudokuThemeManager.Instance != null ? SudokuThemeManager.Instance.CurrentTheme : default;
+        float thickness = theme.bevelWidth > 0 ? theme.bevelWidth : 1f;
+
+        if (isSelected) transform.SetAsLastSibling();
+
+        Color targetColor = theme.cellColorNormal;
+        
+        if (isError) {
+            targetColor = theme.errorColor;
+            SudokuBezelRenderer.ApplyBezel(gameObject, theme, rectTransform.rect.width, rectTransform.rect.height);
+        }
+        else if (isSelected) {
+            targetColor = new Color(1f, 1f, 0f, 0.4f); 
+            SudokuBezelRenderer.ApplyBezel(gameObject, Color.yellow, Color.yellow * 0.8f, rectTransform.rect.width, rectTransform.rect.height, thickness * 1.5f);
+        }
+        else if (isSameDigit) {
+            targetColor = theme.sameDigitColor;
+            SudokuBezelRenderer.ApplyBezel(gameObject, theme, rectTransform.rect.width, rectTransform.rect.height);
+        }
+        else if (isRelated) {
+            Color compColor = new Color(0, 0.5f, 1f, 1f);
+            targetColor = new Color(compColor.r, compColor.g, compColor.b, 0.3f); 
+            SudokuBezelRenderer.ApplyBezel(gameObject, compColor, compColor * 0.7f, rectTransform.rect.width, rectTransform.rect.height, thickness);
+        }
+        else {
+            SudokuBezelRenderer.ApplyBezel(gameObject, theme, rectTransform.rect.width, rectTransform.rect.height);
+        }
+
+        bg.color = targetColor;
+    }
+
+    public void RefreshUI(bool immediate = true) {
+        var theme = SudokuThemeManager.Instance != null ? SudokuThemeManager.Instance.CurrentTheme : default;
+        if (bg != null) bg.color = theme.cellColorNormal;
+
+        if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
+        if (rectTransform != null) {
+            SudokuBezelRenderer.ApplyBezel(gameObject, theme, rectTransform.rect.width, rectTransform.rect.height);
+        }
+
+        var display = GetComponent<SudokuDigitDisplay>();
+        if (display != null) {
+            display.HideZero = true;
+            display.SetDigit(Value, theme, immediate);
+        }
+
+        UpdateMarks();
+    }
+
+    private void UpdateMarks() {
+        if (crossText == null) {
+            var t = transform.Find("CrossMark");
+            if (t != null) crossText = t.GetComponent<TMPro.TextMeshProUGUI>();
+        }
+        if (circleText == null) {
+            var t = transform.Find("CircleMark");
+            if (t != null) circleText = t.GetComponent<TMPro.TextMeshProUGUI>();
+        }
+        
+        if (crossText != null) {
+            bool shouldShow = IsError && Value > 0;
+            if (crossText.enabled != shouldShow) crossText.enabled = shouldShow;
+        }
+    }
+}

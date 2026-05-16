@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\nakam\\UnityProject\\Sudoku\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{705BC960-8304-05D9-D16B-3E290ED86913}|Assembly-CSharp.csproj|c:\\users\\nakam\\unityproject\\sudoku\\assets\\scripts\\sudokuuistyler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{705BC960-8304-05D9-D16B-3E290ED86913}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\sudokuuistyler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{705BC960-8304-05D9-D16B-3E290ED86913}|Assembly-CSharp.csproj|c:\\users\\nakam\\unityproject\\sudoku\\assets\\scripts\\ui\\sudokupanelmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{705BC960-8304-05D9-D16B-3E290ED86913}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\sudokupanelmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{705BC960-8304-05D9-D16B-3E290ED86913}|Assembly-CSharp.csproj|C:\\Users\\nakam\\UnityProject\\Sudoku\\assets\\scripts\\sudokuboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{705BC960-8304-05D9-D16B-3E290ED86913}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\sudokuboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\nakam\\UnityProject\\Sudoku\\Assets\\Scripts\\SudokuUIStyler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\SudokuUIStyler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\nakam\\UnityProject\\Sudoku\\Assets\\Scripts\\SudokuBoard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\SudokuBoard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,19 +27,30 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SudokuUIStyler.cs",
-              "DocumentMoniker": "C:\\Users\\nakam\\UnityProject\\Sudoku\\Assets\\Scripts\\SudokuUIStyler.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\SudokuUIStyler.cs",
-              "ToolTip": "C:\\Users\\nakam\\UnityProject\\Sudoku\\Assets\\Scripts\\SudokuUIStyler.cs",
-              "RelativeToolTip": "Assets\\Scripts\\SudokuUIStyler.cs",
-              "ViewState": "AQIAAOYAAAAAAAAAAAAMwPoAAAABAAAA",
+              "Title": "SudokuPanelManager.cs",
+              "DocumentMoniker": "C:\\Users\\nakam\\UnityProject\\Sudoku\\Assets\\Scripts\\UI\\SudokuPanelManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\SudokuPanelManager.cs",
+              "ToolTip": "C:\\Users\\nakam\\UnityProject\\Sudoku\\Assets\\Scripts\\UI\\SudokuPanelManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UI\\SudokuPanelManager.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAACbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-02T05:27:07.989Z",
+              "WhenOpened": "2026-05-10T23:07:52.549Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "SudokuUIStyler.cs",
+              "DocumentMoniker": "C:\\Users\\nakam\\UnityProject\\Sudoku\\Assets\\Scripts\\SudokuUIStyler.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\SudokuUIStyler.cs",
+              "ToolTip": "C:\\Users\\nakam\\UnityProject\\Sudoku\\Assets\\Scripts\\SudokuUIStyler.cs",
+              "RelativeToolTip": "Assets\\Scripts\\SudokuUIStyler.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-02T05:27:07.989Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "SudokuBoard.cs",
               "DocumentMoniker": "C:\\Users\\nakam\\UnityProject\\Sudoku\\Assets\\Scripts\\SudokuBoard.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\SudokuBoard.cs",

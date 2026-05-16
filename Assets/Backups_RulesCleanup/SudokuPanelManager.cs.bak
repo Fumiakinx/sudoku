@@ -1,0 +1,80 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+/// <summary>
+/// 各UIパネル（Menu, Game, HUD, Input, Result）の表示状態を一括管理するクラス。
+/// </summary>
+public class SudokuPanelManager : MonoBehaviour
+{
+    [System.Serializable]
+    public struct PanelInfo {
+        public string name;
+        public GameObject panelObject;
+    }
+
+    [Header("Panels Configuration")]
+    public List<PanelInfo> panels = new List<PanelInfo>();
+
+    private Dictionary<string, GameObject> _panelDict = new Dictionary<string, GameObject>();
+
+    private void Awake() {
+        Debug.Log($"[SudokuPanelManager] Awake on {gameObject.name}. (Dynamic rebuild disabled to protect static hierarchy)");
+        Debug.Log($"[DIAGNOSTIC] Awake context: Scene={UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}, EventSystem.current={(UnityEngine.EventSystems.EventSystem.current != null ? UnityEngine.EventSystems.EventSystem.current.name : "NULL")}");
+        Debug.Log($"[DIAGNOSTIC] Total EventSystems in scene: {FindObjectsByType<UnityEngine.EventSystems.EventSystem>(FindObjectsSortMode.None).Length}");
+        /*
+        panels = new List<PanelInfo>();
+        _panelDict.Clear();
+
+        Transform[] allTransforms = GetComponentsInChildren<Transform>(true);
+        foreach (Transform t in allTransforms) {
+            if (t == transform) continue;
+
+            string cleanName = t.name.Trim();
+            if (cleanName.EndsWith("Panel", System.StringComparison.OrdinalIgnoreCase)) {
+                if (_panelDict.ContainsKey(cleanName)) continue;
+
+                Debug.Log($"[SudokuPanelManager] Registered panel: {cleanName}");
+                PanelInfo info = new PanelInfo { name = cleanName, panelObject = t.gameObject };
+                panels.Add(info);
+                _panelDict[cleanName] = t.gameObject;
+            }
+        }
+        */
+        
+        // 既存の panels リストから辞書を構築（インスペクター設定を尊重）
+        _panelDict.Clear();
+        foreach (var info in panels) {
+            if (info.panelObject != null) {
+                _panelDict[info.name] = info.panelObject;
+            }
+        }
+        Debug.Log($"[SudokuPanelManager] Initialization complete. {_panelDict.Count} panels loaded from static config.");
+    }
+
+    public void SetPanelActive(string panelName, bool active) {
+        Debug.Log($"[LIFE-LOG] SudokuPanelManager.SetPanelActive ENTER: panelName={panelName}, active={active}");
+        Debug.Log($"[DIAGNOSTIC] SudokuPanelManager: Requesting Panel '{panelName}' -> {(active ? "VISIBLE" : "HIDDEN")}");
+        foreach (var panel in panels) {
+            if (panel.name == panelName) {
+                if (panel.panelObject != null) {
+                    var cg = panel.panelObject.GetComponent<CanvasGroup>();
+                    if (cg != null) {
+                        cg.alpha = active ? 1f : 0f;
+                        cg.blocksRaycasts = active;
+                        cg.interactable = active;
+                    } else {
+                        // CanvasGroupがない場合のフォールバック（推奨されないが破壊を避けるため）
+                        panel.panelObject.SetActive(active);
+                    }
+                    Debug.Log($"[DIAGNOSTIC]   - Panel '{panelName}' visual state set to {(active ? "VISIBLE" : "HIDDEN")}");
+                } else {
+                    Debug.LogWarning($"[DIAGNOSTIC]   - Panel '{panelName}' has a MISSING object reference!");
+                }
+                return;
+            }
+        }
+        Debug.LogWarning($"[DIAGNOSTIC]   - Panel '{panelName}' was not found in the list.");
+    }
+
+
+}

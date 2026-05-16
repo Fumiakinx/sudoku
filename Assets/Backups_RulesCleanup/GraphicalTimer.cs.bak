@@ -1,0 +1,82 @@
+using UnityEngine;
+using TMPro;
+using System;
+
+public class GraphicalTimer : MonoBehaviour
+{
+    [SerializeField] public bool UseAnimation = true;
+    private SudokuDigitDisplay[] digits;
+    private TextMeshProUGUI[] colons;
+    
+    private void Start() {
+        UpdateTime(0);
+    }
+
+    public void UpdateTime(float time) {
+        if (digits == null || digits.Length < 6) {
+            // --- 静的UI運用のための修正: 自動検索を停止 ---
+            /*
+            var found = new System.Collections.Generic.List<SudokuDigitDisplay>(GetComponentsInChildren<SudokuDigitDisplay>(true));
+            found.Sort((a, b) => string.Compare(a.name, b.name));
+
+            if (found.Count >= 6) {
+                digits = found.ToArray();
+                Debug.Log($"[GraphicalTimer] Dynamically found {digits.Length} digits.");
+            } else {
+                return;
+            }
+            */
+            // すでにインスペクター等で設定されている場合はそのまま使用する
+            var found = new System.Collections.Generic.List<SudokuDigitDisplay>(GetComponentsInChildren<SudokuDigitDisplay>(true));
+            if (found.Count >= 6) {
+                found.Sort((a, b) => string.Compare(a.name, b.name));
+                digits = found.ToArray();
+            } else {
+                return;
+            }
+
+            colons = GetComponentsInChildren<TextMeshProUGUI>(true);
+            foreach (var c in colons) if (c != null && !c.name.Contains("Digit")) c.enabled = true;
+        }
+
+        bool allValid = true;
+        if (digits == null) allValid = false;
+        else {
+            foreach (var d in digits) if (d == null) { allValid = false; break; }
+        }
+        
+        if (!allValid) {
+            digits = null; // 参照が壊れている場合はリセットして次回のUpdateTimeで再検索を促す
+            return;
+        }
+
+        int hours = Mathf.FloorToInt(time / 3600);
+        int minutes = Mathf.FloorToInt((time % 3600) / 60);
+        int seconds = Mathf.FloorToInt(time % 60);
+
+        var theme = SudokuThemeManager.Instance != null ? SudokuThemeManager.Instance.CurrentTheme : default;
+
+        SetDigit(0, (hours / 10) % 10, theme);
+        SetDigit(1, hours % 10, theme);
+        SetDigit(2, (minutes / 10) % 10, theme);
+        SetDigit(3, minutes % 10, theme);
+        SetDigit(4, (seconds / 10) % 10, theme);
+        SetDigit(5, seconds % 10, theme);
+
+        if (colons != null) {
+            foreach (var c in colons) {
+                if (c != null) c.color = theme.textColor;
+            }
+        }
+    }
+
+    private void SetDigit(int index, int val, SudokuData.SudokuTheme theme) {
+        if (index < digits.Length) {
+            var d = digits[index];
+            if (d != null) {
+                d.HideZero = false;
+                d.SetDigit(val, theme, !UseAnimation, false);
+            }
+        }
+    }
+}

@@ -1,0 +1,93 @@
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using System.Collections;
+
+public class ThemeElement : MonoBehaviour
+{
+    [Header("Basic Settings")]
+    public bool styleImage = true;
+    public bool styleText = true;
+    public bool styleBevel = true; // 他のスクリプトで使用されているため復活
+
+    protected virtual void OnEnable()
+    {
+        SudokuThemeManager.OnThemeChanged += HandleThemeChanged;
+    }
+
+    protected virtual void Start()
+    {
+        // OnEnableではなくStartで初期化することで、Unityのライフサイクル衝突（Assertionエラー）を回避する
+        if (SudokuThemeManager.Instance != null && !SudokuThemeManager.Instance.IsNotifying)
+        {
+            HandleThemeChanged(SudokuThemeManager.Instance.CurrentTheme, false);
+        }
+    }
+
+    protected virtual void OnDisable()
+    {
+        SudokuThemeManager.OnThemeChanged -= HandleThemeChanged;
+    }
+
+    public virtual void Refresh()
+    {
+        if (SudokuThemeManager.Instance != null)
+        {
+            HandleThemeChanged(SudokuThemeManager.Instance.CurrentTheme, false);
+        }
+    }
+
+    protected virtual void HandleThemeChanged(SudokuData.SudokuTheme theme, bool isInitial)
+    {
+        if (string.IsNullOrEmpty(theme.themeName)) return;
+        
+        // 1. テキストの色同期
+        if (styleText)
+        {
+            var texts = GetComponentsInChildren<TextMeshProUGUI>(true);
+            foreach (var t in texts)
+            {
+                SudokuLabelStyler.ApplyStyle(t, theme);
+            }
+        }
+
+        // 2. 枠線（ベゼル）の色と表示同期
+        // 新規生成は行わず、既存のパーツがあれば色を塗り替える（不要なら隠す）
+        if (styleBevel)
+        {
+            var rt = GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                SudokuBezelRenderer.ApplyBezel(gameObject, theme, rt.rect.width, rt.rect.height);
+            }
+        }
+
+        // 3. 各種Imageの色同期
+        if (styleImage)
+        {
+            var images = GetComponentsInChildren<Image>(true);
+            foreach (var img in images)
+            {
+                string objName = img.gameObject.name;
+                
+                // 枠線パーツや数字スプライト自体は、専用のレンダラーが管理するためスキップ
+                bool isManagedPart = (objName == "_Bezel" || objName == "_Bezel_" || objName.StartsWith("_B_") || objName == "DigitImage");
+                if (isManagedPart) continue;
+                
+                // オブジェクト名に基づいてテーマカラーを割り当てる
+                if (objName.Contains("Background") || objName.Contains("Grid") || objName.Contains("Board")) {
+                    img.color = theme.backgroundColor;
+                } else if (objName.Contains("Panel") || (objName.Contains("Block") && !objName.Contains("Cell"))) {
+                    img.color = theme.panelColor;
+                } else if (img.GetComponent<Button>() != null && !objName.Contains("Cell")) {
+                    // メニューボタン本体などは透明にするが、盤面のCellは除外する
+                    img.color = new Color(0,0,0,0);
+                } else if (img.GetComponentInParent<SudokuCell>() != null || img.GetComponentInParent<Button>() != null) {
+                    img.color = theme.cellColorNormal;
+                } else {
+                    img.color = theme.textColor;
+                }
+            }
+        }
+    }
+}

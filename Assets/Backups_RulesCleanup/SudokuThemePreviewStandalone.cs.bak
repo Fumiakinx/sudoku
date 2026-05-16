@@ -1,0 +1,226 @@
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+
+/// <summary>
+/// ユーザー仕様に基づいた、自律型のテーマプレビュー制御クラス。
+/// 1秒ごとのカウントアップと、各テーマ特有のアニメーションを再現します。
+/// </summary>
+public class SudokuThemePreviewStandalone : MonoBehaviour
+{
+    [Header("Data Source")]
+    public SudokuData sudokuData;
+
+    [Header("Components")]
+    [SerializeField] private Image _displayImage;
+    [SerializeField] private TMPro.TextMeshProUGUI _themeNameText;
+
+    private int _currentThemeIndex = 0;
+    private int _currentDigit = 1;
+    private Coroutine _previewRoutine;
+
+    // ニキシー管のソビエト配列（最奥からの順にするため、既存の逆順を定義）
+    private readonly int[] _sovietOrder = { 1, 6, 2, 7, 5, 0, 4, 9, 8, 3 };
+
+    private void Awake() {
+        // 画像の自動取得
+        if (_displayImage == null) _displayImage = GetComponent<Image>();
+        
+        // データの取得
+        if (sudokuData == null) {
+            sudokuData = UnityEditor.AssetDatabase.LoadAssetAtPath<SudokuData>("Assets/Data/SudokuData.asset");
+        }
+        
+        if (sudokuData != null) _currentThemeIndex = sudokuData.selectedThemeIndex;
+
+        // ボタンとテキストの自動検索
+        GameObject btnObj = GameObject.Find("MenuUI/SafeArea/MenuPanel/Btn_THEME");
+        if (btnObj != null) {
+            if (_themeNameText == null) _themeNameText = btnObj.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            
+            Button btn = btnObj.GetComponent<Button>();
+            if (btn != null) {
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(NextTheme);
+            }
+        }
+    }
+
+    private void OnEnable() {
+        UpdateThemeNameUI();
+        UpdateSceneThemes();
+        StartPreview();
+    }
+
+    private void OnDisable() {
+        StopPreview();
+    }
+
+    public void StartPreview() {
+        StopPreview();
+        _currentDigit = 1;
+        _previewRoutine = StartCoroutine(PreviewLoop());
+    }
+
+    public void StopPreview() {
+        if (_previewRoutine != null) {
+            StopCoroutine(_previewRoutine);
+            _previewRoutine = null;
+        }
+    }
+
+    /// <summary>
+    /// テーマ切り替えボタンから呼ばれるメソッド
+    /// </summary>
+    public void NextTheme() {
+        if (sudokuData == null || sudokuData.themes == null || sudokuData.themes.Length == 0) return;
+
+        // 有効な（Lockedでない）テーマが見つかるまでインデックスを進める
+        int safetyCount = 0;
+        do {
+            _currentThemeIndex = (_currentThemeIndex + 1) % sudokuData.themes.Length;
+            safetyCount++;
+        } while (sudokuData.themes[_currentThemeIndex].isLocked && safetyCount < sudokuData.themes.Length);
+
+        sudokuData.selectedThemeIndex = _currentThemeIndex;
+
+        Debug.Log($"[PREVIEW] Theme Switched to: {sudokuData.themes[_currentThemeIndex].themeName}");
+        
+        // テキストとシーン全体のテーマ更新
+        UpdateThemeNameUI();
+        UpdateSceneThemes();
+        
+        // カウントを1からリスタート
+        StartPreview();
+    }
+
+    private void UpdateSceneThemes() {
+        if (sudokuData == null) return;
+        var theme = sudokuData.themes[_currentThemeIndex];
+
+        // シーン内の全ての ThemeElement を更新
+        var elements = GameObject.FindObjectsByType<ThemeElement>(FindObjectsInactive.Include);
+        foreach (var el in elements) {
+            // ThemeElement.HandleThemeChanged は protected なので、リフレクションか Refresh 経由で呼び出す必要があるが、
+            // 今回はマネージャーがいないため、直接ロジックを叩くか、共通の更新処理を呼ぶ。
+            // ここでは簡易的に、リフレクションを用いて直接 HandleThemeChanged を叩く
+            var method = typeof(ThemeElement).GetMethod("HandleThemeChanged", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (method != null) {
+                method.Invoke(el, new object[] { theme, false });
+            }
+        }
+    }
+
+    private void UpdateThemeNameUI() {
+        if (_themeNameText != null && sudokuData != null) {
+            var theme = sudokuData.themes[_currentThemeIndex];
+            _themeNameText.text = theme.themeName.ToUpper();
+            _themeNameText.color = theme.textColor;
+        }
+    }
+
+    private IEnumerator PreviewLoop() {
+        while (true) {
+            yield return StartCoroutine(AnimateToDigit(_currentDigit));
+            
+            // 1秒待機
+            yield return new WaitForSeconds(1.0f);
+            
+            // 次の数字へ (1-9, 0)
+            _currentDigit++;
+            if (_currentDigit > 9) _currentDigit = 0;
+        }
+    }
+
+    private IEnumerator AnimateToDigit(int target) {
+        var theme = sudokuData.themes[_currentThemeIndex];
+        
+        switch (theme.displayType) {
+            case SudokuData.ThemeDisplayType.Nixie:
+                yield return StartCoroutine(AnimateNixie(target, theme));
+                break;
+            case SudokuData.ThemeDisplayType.Mechanical:
+            case SudokuData.ThemeDisplayType.FlipFlap:
+                yield return StartCoroutine(AnimateMechanical(target, theme));
+                break;
+            default:
+                ApplySprite(target.ToString(), theme);
+                yield return null;
+                break;
+        }
+    }
+
+    private IEnumerator AnimateNixie(int target, SudokuData.SudokuTheme theme) {
+        // 最奥（配列の最後）から、ターゲットが見つかる位置まで高速に切り替え
+        int targetIdx = System.Array.IndexOf(_sovietOrder, target);
+        if (targetIdx == -1) {
+            ApplySprite(target.ToString(), theme);
+            yield break;
+        }
+
+        for (int i = _sovietOrder.Length - 1; i >= targetIdx; i--) {
+            int val = _sovietOrder[i];
+            ApplySprite(val.ToString(), theme);
+            
+            // ニキシー特有の奥行きによる暗転効果をシミュレート
+            float brightness = Mathf.Lerp(0.6f, 1.0f, (float)(_sovietOrder.Length - 1 - i) / (_sovietOrder.Length - 1));
+            _displayImage.color = theme.textColor * brightness;
+            
+            yield return new WaitForSeconds(0.03f);
+        }
+        
+        _displayImage.color = theme.textColor;
+    }
+
+    private IEnumerator AnimateMechanical(int target, SudokuData.SudokuTheme theme) {
+        int prev = (_currentDigit == 1) ? 0 : (_currentDigit - 1);
+        if (prev < 0) prev = 9;
+        
+        string prevStr = prev.ToString();
+        string targetStr = target.ToString();
+
+        // 45, 90, 135度のスプライトを順に表示
+        string[] angles = { "45", "90", "135" };
+        foreach (var angle in angles) {
+            // Anim_前_後_角度 という名前のスプライトを探す
+            string spriteName = $"Anim_{prevStr}_{targetStr}_{angle}";
+            Sprite s = FindSprite(spriteName, theme);
+            if (s != null) {
+                _displayImage.sprite = s;
+                _displayImage.enabled = true;
+                _displayImage.color = theme.textColor;
+                yield return new WaitForSeconds(0.05f);
+            }
+        }
+
+        // 最終的な数字を表示
+        ApplySprite(targetStr, theme);
+    }
+
+    private void ApplySprite(string spriteName, SudokuData.SudokuTheme theme) {
+        Sprite s = FindSprite(spriteName, theme);
+        if (s != null) {
+            _displayImage.sprite = s;
+            _displayImage.enabled = true;
+        } else {
+            // 見つからない場合は非表示（またはテキストフォールバックだが、プレビューは画像前提）
+            _displayImage.enabled = false;
+        }
+        _displayImage.color = theme.textColor;
+    }
+
+    private Sprite FindSprite(string name, SudokuData.SudokuTheme theme) {
+        if (theme.sprites == null) return null;
+        foreach (var s in theme.sprites) {
+            if (s != null && (s.name == name || s.name.EndsWith("_" + name) || s.name.EndsWith(name))) return s;
+        }
+        // allSpritesも探す（中間アニメーション用）
+        if (theme.allSprites != null) {
+            foreach (var s in theme.allSprites) {
+                if (s != null && (s.name == name || s.name.EndsWith("_" + name) || s.name.EndsWith(name))) return s;
+            }
+        }
+        return null;
+    }
+}

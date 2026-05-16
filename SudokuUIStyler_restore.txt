@@ -1,0 +1,720 @@
+﻿using UnityEngine;
+using UnityEngine.UI;
+
+[ExecuteAlways]
+public class SudokuUIStyler : MonoBehaviour
+{
+    private static SudokuUIStyler instance;
+    public static SudokuUIStyler Instance {
+        get {
+            if (instance == null) instance = GameObject.FindAnyObjectByType<SudokuUIStyler>();
+            return instance;
+        }
+        private set => instance = value;
+    }
+
+    [Header("Themes")]
+    public SudokuData sudokuData;
+    
+    public SudokuData.SudokuTheme CurrentTheme => sudokuData != null ? sudokuData.CurrentTheme : default;
+
+    [Header("Shared Sprites")]
+    public Sprite[] Led7SegSprites;
+    public Sprite[] NixieSprites;
+
+    public float bevelThickness = 3f;
+
+    private float previewTimer;
+    private int previewValue = 1;
+    private GameObject cachedPreviewGo;
+
+    private void Awake() {
+        Instance = this;
+        if (sudokuData == null) {
+            sudokuData = Resources.Load<SudokuData>("SudokuData");
+            if (sudokuData == null) {
+                // Resources縺ｫ縺ｪ縺・ｴ蜷医・AssetDatabase縺ｪ縺ｩ縺ｧ讀懃ｴ｢・医お繝・ぅ繧ｿ譎ゑｼ・#if UNITY_EDITOR
+                string[] guids = UnityEditor.AssetDatabase.FindAssets("t:SudokuData");
+                if (guids.Length > 0) {
+                    string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+                    sudokuData = UnityEditor.AssetDatabase.LoadAssetAtPath<SudokuData>(path);
+                }
+#endif
+            }
+        }
+    }
+
+    private void Start() {
+        if (!Application.isPlaying) return;
+        ApplyTheme(true);
+    }
+
+    private void Update() {
+        if (sudokuData == null) return;
+        
+        float interval = CurrentTheme.previewInterval;
+        if (interval <= 0) interval = 2.0f;
+
+        previewTimer += Time.deltaTime;
+        if (previewTimer >= interval) {
+            previewTimer = 0;
+            
+            // 1-9, 0 縺ｮ鬆・〒繧ｵ繧､繧ｯ繝ｫ
+            int currentState = (previewValue >= 1 && previewValue <= 9) ? previewValue : 0;
+            int nextState = (currentState % 10) + 1;
+            
+            if (nextState <= 9) previewValue = nextState;
+            else previewValue = 0;
+
+            UpdateThemePreview(true);
+        }
+    }
+
+    public void UpdateThemePreview(bool immediate = false) {
+        if (cachedPreviewGo == null) {
+            var previewPanel = FindObject("ThemePreview");
+            if (previewPanel != null) {
+                var digitTransform = previewPanel.transform.Find("DigitImage");
+                if (digitTransform != null) cachedPreviewGo = digitTransform.gameObject;
+                else cachedPreviewGo = previewPanel; // fallback to panel itself
+            }
+        }
+        
+        if (cachedPreviewGo != null && cachedPreviewGo.activeInHierarchy) {
+            ApplyDigitVisual(cachedPreviewGo, previewValue, CurrentTheme, immediate, false);
+        }
+    }
+
+    public void ApplyTheme(bool isInitial) {
+        if (isInitial) cachedTargetSize = -1f;
+        ApplyTheme(CurrentTheme);
+    }
+
+    public void ApplyTheme(SudokuData.SudokuTheme theme) {
+        if (string.IsNullOrEmpty(theme.themeName)) return;
+        Debug.Log($"<color=#00FF00><b>[SudokuUIStyler]</b></color> 繝・・繝樣←逕ｨ髢句ｧ・ <b>{theme.themeName}</b> (陦ｨ遉ｺ繧ｿ繧､繝・ {theme.displayType})");
+        
+        // 繧ｹ繝励Λ繧､繝磯・蛻励ｒ蜊ｳ蠎ｧ縺ｫ譖ｴ譁ｰ・亥推繧ｳ繝ｳ繝昴・繝阪Φ繝医′蜿ら・縺吶ｋ縺溘ａ・・        if (theme.displayType == SudokuData.ThemeDisplayType.Nixie) NixieSprites = theme.sprites;
+        else if (theme.displayType == SudokuData.ThemeDisplayType.LED7Seg) Led7SegSprites = theme.sprites;
+
+        var bgGo = FindObject("Background");
+        if (bgGo != null) {
+            var bg = bgGo.GetComponent<Image>();
+            if (bg != null) {
+                bg.color = theme.backgroundColor;
+                Debug.Log($"[SudokuUIStyler] 閭梧勹濶ｲ繧定ｨｭ螳・ {theme.backgroundColor}");
+            }
+        }
+
+        // 1. 荳ｻ隕√ヱ繝阪Ν縺ｮ譖ｴ譁ｰ
+        string[] panels = { "GamePanel", "TopPanel", "BoardPanel", "InputPanel", "MenuPanel" };
+        foreach (var pName in panels) {
+            var go = FindObject(pName);
+            if (go == null) {
+                Debug.LogWarning($"[SudokuUIStyler] 繝代ロ繝ｫ縺瑚ｦ九▽縺九ｊ縺ｾ縺帙ｓ: {pName}");
+                continue;
+            }
+            
+            Debug.Log($"[SudokuUIStyler] 繝代ロ繝ｫ繧偵せ繧ｿ繧､繝ｪ繝ｳ繧ｰ: {pName}");
+            var img = go.GetComponent<Image>();
+            if (img != null) img.color = theme.panelColor;
+            
+            ApplyBezel(go, theme, false, bevelThickness);
+
+            var texts = go.GetComponentsInChildren<TMPro.TMP_Text>(true);
+            foreach (var txt in texts) {
+                // _Label 縺ｪ縺ｩ縺ｮ逕滓・貂医∩繝代・繝・ｻ･螟悶・繝・く繧ｹ繝医・濶ｲ繧呈峩譁ｰ
+                if (!txt.name.StartsWith("_")) {
+                    txt.color = theme.textColor;
+                }
+            }
+        }
+
+        // 2. 蜈･蜉帙ヱ繝阪Ν縺ｮ繝懊ち繝ｳ縺ｮ蛟句挨譖ｴ譁ｰ
+        var inputPanel = FindObject("InputPanel");
+        if (inputPanel != null) {
+            var buttons = inputPanel.GetComponentsInChildren<Button>(true);
+            Debug.Log($"[SudokuUIStyler] 蜈･蜉帙・繧ｿ繝ｳ縺ｮ譖ｴ譁ｰ髢句ｧ・(蜷郁ｨ・ {buttons.Length})");
+            foreach (var btn in buttons) {
+                int val = -1;
+                if (btn.name.StartsWith("Btn_")) {
+                    string suffix = btn.name.Substring(4);
+                    if (suffix == "Clear") val = -1;
+                    else int.TryParse(suffix, out val);
+                }
+                
+                var digitGo = btn.transform.Find("DigitImage")?.gameObject ?? btn.gameObject;
+                ApplyDigitVisual(digitGo, val, theme, true, false);
+                ApplyBezel(btn.gameObject, theme, false, bevelThickness);
+            }
+        }
+
+        // 3. 繝｡繝九Η繝ｼ繝代ロ繝ｫ縺ｮ繝懊ち繝ｳ隱ｿ謨ｴ
+        var menuPanel = FindObject("MenuPanel");
+        if (menuPanel != null) {
+            var menuTexts = new string[] { "EASY", "MEDIUM", "HARD", "EXPERT" };
+            var buttons = menuPanel.GetComponentsInChildren<Button>(true);
+            Debug.Log($"[SudokuUIStyler] 繝｡繝九Η繝ｼ繝懊ち繝ｳ縺ｮ譖ｴ譁ｰ髢句ｧ・(蜷郁ｨ・ {buttons.Length})");
+            int diffIdx = 0;
+            foreach (var btn in buttons) {
+                var btnRT = btn.GetComponent<RectTransform>();
+                if (btnRT != null) btnRT.sizeDelta = new Vector2(600, 120);
+
+                if (btn.name == "Btn_ThemeToggle") {
+                    var txt = btn.GetComponentInChildren<TMPro.TMP_Text>(true);
+                    if (txt == null) {
+                        Debug.Log("[SudokuUIStyler] ThemeToggle 縺ｮ繝ｩ繝吶Ν繧剃ｽ懈・縺励∪縺・);
+                        var go = new GameObject("_Label", typeof(RectTransform), typeof(TMPro.TextMeshProUGUI));
+                        go.transform.SetParent(btn.transform, false);
+                        txt = go.GetComponent<TMPro.TextMeshProUGUI>();
+                        var rt = go.GetComponent<RectTransform>();
+                        rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+                        rt.offsetMin = rt.offsetMax = Vector2.zero;
+                    }
+                    if (txt != null) {
+                        txt.name = "_Label";
+                        txt.alignment = TMPro.TextAlignmentOptions.Center;
+                        txt.gameObject.SetActive(true);
+                        txt.color = theme.textColor;
+                    }
+                    ApplyBezel(btn.gameObject, theme, false, bevelThickness);
+                    continue;
+                }
+
+                if (btn.name.StartsWith("Btn_")) {
+                    var txt = btn.GetComponentInChildren<TMPro.TMP_Text>(true);
+                    if (txt == null && diffIdx < menuTexts.Length) {
+                        Debug.Log($"[SudokuUIStyler] {btn.name} 縺ｮ繝ｩ繝吶Ν繧剃ｽ懈・縺励∪縺・);
+                        var go = new GameObject("_Label", typeof(RectTransform), typeof(TMPro.TextMeshProUGUI));
+                        go.transform.SetParent(btn.transform, false);
+                        txt = go.GetComponent<TMPro.TextMeshProUGUI>();
+                        txt.text = menuTexts[diffIdx];
+                        var rt = go.GetComponent<RectTransform>();
+                        rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+                        rt.offsetMin = rt.offsetMax = Vector2.zero;
+                    }
+                    if (txt != null) {
+                        txt.color = theme.textColor;
+                        txt.gameObject.SetActive(true);
+                        txt.name = "_Label";
+                        txt.alignment = TMPro.TextAlignmentOptions.Center;
+                    }
+                    ApplyBezel(btn.gameObject, theme, false, bevelThickness);
+                    diffIdx++;
+                }
+            }
+        }
+
+        // 4. 繧ｿ繧､繝槭・繧ｹ繧ｿ繧､繝ｫ縺ｮ驕ｩ逕ｨ
+        Debug.Log("[SudokuUIStyler] 繧ｿ繧､繝槭・繧ｹ繧ｿ繧､繝ｫ繧帝←逕ｨ荳ｭ...");
+        ApplyTimerStyle(theme);
+        
+        // 5. 3x3繝悶Ο繝・け縺ｮ繝吶・繝ｫ驕ｩ逕ｨ
+        Debug.Log("[SudokuUIStyler] 3x3繝悶Ο繝・け縺ｮ繝吶・繝ｫ繧帝←逕ｨ荳ｭ...");
+        for (int i = 0; i < 9; i++) {
+            var blockGo = FindObject($"Block_{i}");
+            if (blockGo != null) ApplyBezel(blockGo, theme, false, bevelThickness);
+        }
+
+        // 6. 逶､髱｢繧ｻ繝ｫ縺ｮ譖ｴ譁ｰ
+        if (SudokuBoard.Instance != null && SudokuBoard.Instance.cells != null) {
+            Debug.Log($"[SudokuUIStyler] 逶､髱｢繧ｻ繝ｫ縺ｮ譖ｴ譁ｰ髢句ｧ・(蜷郁ｨ・ {SudokuBoard.Instance.cells.Length})");
+            foreach (var cell in SudokuBoard.Instance.cells) {
+                if (cell != null) {
+                    // 繧ｻ繝ｫ縺ｮ繧ｯ繝ｪ繝ｼ繝ｳ繧｢繝・・
+                    RobustCleanUp(cell.gameObject, false);
+                    
+                    var img = cell.GetComponent<Image>();
+                    if (img != null) img.color = theme.panelColor;
+                    
+                    ApplyBezel(cell.gameObject, theme, false, bevelThickness);
+                    
+                    var digitGo = cell.transform.Find("DigitImage")?.gameObject ?? cell.gameObject;
+                    ApplyDigitVisual(digitGo, cell.Value, theme, true, true);
+                }
+            }
+        } else {
+            Debug.LogWarning("[SudokuUIStyler] SudokuBoard.Instance 縺ｾ縺溘・ cells 縺・null 縺ｧ縺吶ゅそ繝ｫ縺ｮ譖ｴ譁ｰ繧偵せ繧ｭ繝・・縺励∪縺吶・);
+        }
+
+        // 7. 驕ｸ謚樔ｸｭ縺ｮ繧ｻ繝ｫ縺ｮ繝上う繝ｩ繧､繝域峩譁ｰ
+        if (SudokuBoard.Instance != null) {
+            SudokuBoard.Instance.UpdateSelectionVisuals();
+        }
+
+        // 8. 繝懊ち繝ｳ繝ｩ繝吶Ν縺ｮ譖ｴ譁ｰ
+        UpdateThemeButtonLabel();
+
+        // 9. 繝・・繝槭・繝ｬ繝薙Η繝ｼ縺ｮ蜊ｳ譎よ峩譁ｰ
+        UpdateThemePreview(true);
+        
+        Debug.Log($"<color=#00FF00><b>[SudokuUIStyler]</b></color> 繝・・繝樣←逕ｨ螳御ｺ・ <b>{theme.themeName}</b>");
+    }
+
+
+    private string GetPath(Transform t) {
+        if (t.parent == null) return t.name;
+        return GetPath(t.parent) + "/" + t.name;
+    }
+
+    private static int lastCycleFrame = -1;
+    private static float lastCycleTime = -1f;
+
+    public void CycleTheme() {
+        if (UnityEngine.Time.frameCount == lastCycleFrame) return;
+        if (UnityEngine.Time.unscaledTime - lastCycleTime < 0.1f) return;
+        
+        lastCycleFrame = UnityEngine.Time.frameCount;
+        lastCycleTime = UnityEngine.Time.unscaledTime;
+
+        if (sudokuData == null || sudokuData.themes == null || sudokuData.themes.Length == 0) return;
+
+        int nextIndex = GetNextThemeIndex();
+
+        if (nextIndex != sudokuData.selectedThemeIndex) {
+            sudokuData.selectedThemeIndex = nextIndex;
+            
+            // 繧ｫ繧ｦ繝ｳ繝医い繝・・陦ｨ遉ｺ繧偵Μ繧ｻ繝・ヨ縺励※髢句ｧ・            previewValue = 1;
+            previewTimer = 0;
+            
+            ApplyTheme(true);
+            Debug.Log($"[SudokuUIStyler] Theme Cycled to: {CurrentTheme.themeName} (Index: {nextIndex})");
+        }
+    }
+
+    private int GetNextThemeIndex() {
+        int count = sudokuData.themes.Length;
+        for (int i = 1; i <= count; i++) {
+            int idx = (sudokuData.selectedThemeIndex + i) % count;
+            var t = sudokuData.themes[idx];
+            // 繧｢繝ｳ繝ｭ繝・け縺輔ｌ縺ｦ縺翫ｊ縲√°縺､ Nixie 縺ｾ縺溘・ LED 縺ｧ縺ゅｋ繝・・繝槭ｒ驕ｸ謚・            if (!t.isLocked && (t.displayType == SudokuData.ThemeDisplayType.Nixie || t.displayType == SudokuData.ThemeDisplayType.LED7Seg)) {
+                return idx;
+            }
+        }
+        return sudokuData.selectedThemeIndex;
+    }
+
+    public void UpdateThemeButtonLabel() {
+        var btn = GameObject.Find("Btn_ThemeToggle");
+        if (btn == null) btn = FindObject("Btn_ThemeToggle");
+        if (btn == null) return;
+
+        var txt = btn.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+        if (txt != null) {
+            txt.text = $"THEME: {CurrentTheme.themeName.ToUpper()}";
+        }
+    }
+
+    private float cachedTargetSize = -1f;
+
+    private void ApplyTimerStyle(SudokuData.SudokuTheme theme) {
+        var container = FindObject("DigitContainer");
+        if (container == null) return;
+
+        if (cachedTargetSize <= 0) {
+            var refBtn = FindObject("Btn_1");
+            if (refBtn != null) {
+                float btnW = refBtn.GetComponent<RectTransform>().rect.width;
+                if (btnW > 0) cachedTargetSize = btnW / 2f;
+            }
+        }
+        float targetSize = (cachedTargetSize > 0) ? cachedTargetSize : 57f;
+
+        string[] allElements = { "Timer_H1", "Timer_H2", "Timer_C1", "Timer_M1", "Timer_M2", "Timer_C2", "Timer_S1", "Timer_S2" };
+        float totalWidth = targetSize * allElements.Length;
+
+        // 繧ｳ繝ｳ繝・リ縺ｮ繧ｵ繧､繧ｺ隱ｿ謨ｴ
+        var containerRT = container.GetComponent<RectTransform>();
+        containerRT.anchorMin = containerRT.anchorMax = containerRT.pivot = new Vector2(0.5f, 0.5f);
+        containerRT.sizeDelta = new Vector2(totalWidth, targetSize);
+        containerRT.anchoredPosition = Vector2.zero;
+
+        // 閭梧勹縺ｮ繧ｵ繧､繧ｺ隱ｿ謨ｴ
+        var bg = FindObject("TimerBG");
+        if (bg != null) {
+            var rt = bg.GetComponent<RectTransform>();
+            rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.sizeDelta = new Vector2(totalWidth + 30f, targetSize + 20f);
+            rt.anchoredPosition = Vector2.zero;
+            ApplyBezel(bg, theme, false, bevelThickness);
+        }
+        
+        float startX = -(allElements.Length - 1) * targetSize / 2f;
+
+        for (int i = 0; i < allElements.Length; i++) {
+            // DigitContainer縺九ｉ逶ｴ謗･蟄舌ｒ謗｢縺・            var t = container.transform.Find(allElements[i]);
+            GameObject go;
+            if (t == null) {
+                go = new GameObject(allElements[i], typeof(RectTransform));
+                go.transform.SetParent(container.transform, false);
+            } else {
+                go = t.gameObject;
+            }
+
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.sizeDelta = new Vector2(targetSize, targetSize);
+            rt.localScale = Vector3.one;
+            rt.anchoredPosition = new Vector2(startX + (i * targetSize), 0);
+
+            if (allElements[i].Contains("_C")) {
+                var txt = go.GetComponent<TMPro.TextMeshProUGUI>();
+                if (txt == null) txt = go.AddComponent<TMPro.TextMeshProUGUI>();
+                if (txt != null) {
+                    txt.text = ":";
+                    Color colonColor = (theme.displayType == SudokuData.ThemeDisplayType.Nixie) ? theme.textColor : theme.lineColor;
+                    txt.color = AdjustLuminance(colonColor, 0.7f);
+                    txt.alignment = TMPro.TextAlignmentOptions.Center;
+                    txt.fontSize = targetSize * 0.9f;
+                    txt.enableAutoSizing = false;
+                }
+            } else {
+                int currentVal = GetCurrentValue(go);
+                ApplyDigitVisual(go, currentVal, theme, true, false);
+            }
+        }
+
+        // GraphicalTimer縺ｮ蜿ら・繧呈峩譁ｰ
+        var gt = GameObject.FindAnyObjectByType<GraphicalTimer>();
+        if (gt != null) {
+            var h1 = container.transform.Find("Timer_H1");
+            var h2 = container.transform.Find("Timer_H2");
+            var m1 = container.transform.Find("Timer_M1");
+            var m2 = container.transform.Find("Timer_M2");
+            var s1 = container.transform.Find("Timer_S1");
+            var s2 = container.transform.Find("Timer_S2");
+            var c1 = container.transform.Find("Timer_C1")?.GetComponent<TMPro.TextMeshProUGUI>();
+            var c2 = container.transform.Find("Timer_C2")?.GetComponent<TMPro.TextMeshProUGUI>();
+            
+            if (h1 != null && s2 != null) {
+                gt.SetDigits6(h1, h2, m1, m2, s1, s2, c1, c2);
+            }
+        }
+    }
+
+    private int GetCurrentValue(GameObject go) {
+        var nixie = go.GetComponent<NixieDigit>();
+        if (nixie != null) {
+            var field = nixie.GetType().GetField("_currentValue", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (field != null) return (int)field.GetValue(nixie);
+        }
+        var led = go.GetComponent<Led7SegDigit>();
+        if (led != null) {
+            var field = led.GetType().GetField("_currentValue", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (field != null) return (int)field.GetValue(led);
+        }
+        return 0;
+    }
+
+    private GameObject FindObject(string name) {
+        var canvas = GameObject.Find("SudokuUI");
+        if (canvas == null) return null;
+        
+        // Canvas逶ｴ荳九∪縺溘・蟄仙ｭｫ縺九ｉ蜀榊ｸｰ逧・↓讀懃ｴ｢
+        return FindRecursive(canvas.transform, name);
+    }
+
+    private GameObject FindRecursive(Transform parent, string name) {
+        if (parent == null) return null;
+        if (parent.name == name) return parent.gameObject;
+        foreach (Transform child in parent) {
+            var result = FindRecursive(child, name);
+            if (result != null) return result;
+        }
+        return null;
+    }
+
+    public void ApplyDigitVisual(GameObject digitGo, int value, SudokuData.SudokuTheme theme, bool immediate = false, bool hideZero = false) {
+        if (digitGo == null) return;
+        
+        // 隧ｳ邏ｰ繝ｭ繧ｰ・亥､ｧ驥上↓蜃ｺ繧九◆繧√∝ｿ・ｦ√↑蝣ｴ蜷医・縺ｿ譛牙柑蛹悶☆繧九°縲∫音螳壽擅莉ｶ縺ｧ蜃ｺ縺呻ｼ・        // Debug.Log($"[SudokuUIStyler] ApplyDigitVisual: {digitGo.name} | 蛟､: {value} | 繝・・繝槭ち繧､繝・ {theme.displayType}");
+
+        Color displayColor = AdjustLuminance(theme.textColor, 0.7f);
+        var nixie = digitGo.GetComponent<NixieDigit>();
+        var led = digitGo.GetComponent<Led7SegDigit>();
+        var img = digitGo.GetComponent<Image>();
+
+        // 1. 繝・・繝槭・蛻・ｊ譖ｿ縺医↓莨ｴ縺・ｸ堺ｸ閾ｴ繧ｳ繝ｳ繝昴・繝阪Φ繝医・髯､蜴ｻ
+        if (theme.displayType != SudokuData.ThemeDisplayType.Nixie && nixie != null) {
+            Debug.Log($"[SudokuUIStyler] 繧ｳ繝ｳ繝昴・繝阪Φ繝磯勁蜴ｻ (Nixie -> Other): {digitGo.name}");
+            // Nixie迚ｹ譛峨・蟄舌が繝悶ず繧ｧ繧ｯ繝・Wire_)繧貞炎髯､
+            for (int i = digitGo.transform.childCount - 1; i >= 0; i--) {
+                Transform child = digitGo.transform.GetChild(i);
+                if (child.name.StartsWith("Wire_")) SafeDestroy(child.gameObject);
+            }
+            SafeDestroy(nixie); nixie = null;
+        }
+        if (theme.displayType != SudokuData.ThemeDisplayType.LED7Seg && led != null) {
+            Debug.Log($"[SudokuUIStyler] 繧ｳ繝ｳ繝昴・繝阪Φ繝磯勁蜴ｻ (LED -> Other): {digitGo.name}");
+            SafeDestroy(led); led = null;
+        }
+
+        // 2. 莉･蜑阪・陦ｨ遉ｺ逕滓・迚ｩ繧剃ｸ謗・ｼ・igit邉ｻ繧ｳ繝ｳ繝昴・繝阪Φ繝医′閾ｪ蜑阪〒邂｡逅・☆繧九ｂ縺ｮ縺ｯ髯､螟厄ｼ・        // _Label (C繝懊ち繝ｳ逕ｨ) 縺ｮ縺ｿ繧堤｢ｺ隱阪＠縺ｦ蠢・ｦ√↑繧画ｶ医☆
+        var oldLabel = digitGo.transform.Find("_Label");
+        if (value != -1 && oldLabel != null) {
+            SafeDestroy(oldLabel.gameObject);
+        }
+
+        // 3. 蜈・・繝・く繧ｹ繝医さ繝ｳ繝昴・繝阪Φ繝医ｒ菫晁ｭｷ・磯撼繧｢繧ｯ繝・ぅ繝門喧・・        // DigitImage 閾ｪ菴薙′ TMP_Text 繧呈戟縺｣縺ｦ縺・ｋ蝣ｴ蜷医・蟷ｲ貂峨ｒ髦ｲ縺・        var tComp = digitGo.GetComponent<TMPro.TMP_Text>();
+        if (tComp != null) tComp.enabled = (theme.displayType == SudokuData.ThemeDisplayType.Normal);
+
+        // 4. 迚ｹ蛻･縺ｪ繝ｩ繝吶Ν・医け繝ｪ繧｢繝懊ち繝ｳ遲会ｼ峨・蜃ｦ逅・        if (value == -1) {
+            if (nixie != null) nixie.enabled = false;
+            if (led != null) led.enabled = false;
+            if (img != null) img.enabled = false;
+
+            var clearLabelGo = new GameObject("_Label", typeof(RectTransform), typeof(TMPro.TextMeshProUGUI));
+            clearLabelGo.transform.SetParent(digitGo.transform, false);
+            var labelTxt = clearLabelGo.GetComponent<TMPro.TextMeshProUGUI>();
+            var rt = clearLabelGo.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+            rt.offsetMin = rt.offsetMax = Vector2.zero;
+            
+            labelTxt.text = "C";
+            labelTxt.color = displayColor;
+            labelTxt.alignment = TMPro.TextAlignmentOptions.Center;
+            labelTxt.fontSize = 80;
+            labelTxt.enableAutoSizing = true;
+            return;
+        }
+
+        // 5. 騾壼ｸｸ縺ｮ謨ｰ蟄苓｡ｨ遉ｺ蜃ｦ逅・        if (theme.displayType == SudokuData.ThemeDisplayType.Nixie) {
+            if (nixie == null) {
+                Debug.Log($"[SudokuUIStyler] NixieDigit 霑ｽ蜉: {digitGo.name}");
+                nixie = digitGo.AddComponent<NixieDigit>();
+                nixie.Setup();
+            }
+            nixie.enabled = true;
+            nixie.hideZero = hideZero;
+            nixie.SetValue(value, immediate);
+            nixie.RefreshUI();
+            
+            if (led != null) led.enabled = false; // LED繧堤┌蜉ｹ蛹・            if (img != null) {
+                img.sprite = null;
+                img.enabled = false;
+            }
+        } else if (theme.displayType == SudokuData.ThemeDisplayType.LED7Seg) {
+            if (led == null) {
+                Debug.Log($"[SudokuUIStyler] Led7SegDigit 霑ｽ蜉: {digitGo.name}");
+                led = digitGo.AddComponent<Led7SegDigit>();
+                led.Setup();
+            }
+            led.enabled = true;
+            led.hideZero = hideZero;
+            led.SetValue(value, immediate);
+            led.RefreshUI();
+            
+            if (nixie != null) nixie.enabled = false; // Nixie繧堤┌蜉ｹ蛹・            
+            // 驥崎ｦ・ Nixie縺ｧ Image 縺檎┌蜉ｹ蛹悶＆繧後※縺・◆蝣ｴ蜷医√％縺薙〒蜀榊ｺｦ譛牙柑蛹悶☆繧句ｿ・ｦ√′縺ゅｋ
+            if (img != null) {
+                img.enabled = true;
+                // color 縺ｯ Led7SegDigit.RefreshUI 蜀・〒險ｭ螳壹＆繧後ｋ縺後・                // 繧｢繝ｫ繝輔ぃ蛟､縺・0 縺ｫ縺ｪ縺｣縺ｦ縺・ｋ蜿ｯ閭ｽ諤ｧ縺後≠繧九◆繧√Μ繧ｻ繝・ヨ
+                img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
+            }
+        } else {
+            if (img != null) {
+                img.enabled = true;
+                if (value > 0 && value <= theme.sprites.Length) {
+                    img.sprite = theme.sprites[value - 1];
+                    img.color = Color.white;
+                } else {
+                    img.sprite = null;
+                    img.color = Color.clear;
+                }
+            }
+        }
+    }
+
+    public void ApplyBezel(GameObject go, SudokuData.SudokuTheme theme, bool isSelected, float thickness) {
+        if (go == null) return;
+        if (!theme.showBezel) {
+            HideBevelImages(go);
+            return;
+        }
+
+        // 譏弱ｋ縺・牡・井ｸ翫・蟾ｦ・峨→證励＞濶ｲ・井ｸ九・蜿ｳ・峨ｒ菴ｿ縺・・縺代※遶倶ｽ捺─繧貞・縺・        Color light = theme.highlightColor;
+        Color dark = theme.shadowColor;
+
+        SetBevel(go, "_Bevel_Top", light, new Vector2(0, 1), new Vector2(1, 1), new Vector2(0, -thickness), Vector2.zero);
+        SetBevel(go, "_Bevel_Left", light, new Vector2(0, 0), new Vector2(0, 1), Vector2.zero, new Vector2(thickness, 0));
+        SetBevel(go, "_Bevel_Bottom", dark, new Vector2(0, 0), new Vector2(1, 0), Vector2.zero, new Vector2(0, thickness));
+        SetBevel(go, "_Bevel_Right", dark, new Vector2(1, 0), new Vector2(1, 1), new Vector2(-thickness, 0), Vector2.zero);
+        
+        // 譫邱壹ｒ蟶ｸ縺ｫ譛蜑埼擇縺ｫ縺吶ｋ
+        foreach (Transform child in go.transform) {
+            if (child.name.StartsWith("_Bevel")) child.SetAsLastSibling();
+        }
+    }
+
+    private void SetBevel(GameObject parent, string name, Color color, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax) {
+        RectTransform rt = GetOrCreateOverlay(parent, name, typeof(Image), typeof(LayoutElement));
+        rt.gameObject.SetActive(true);
+        rt.anchorMin = anchorMin; rt.anchorMax = anchorMax;
+        rt.offsetMin = offsetMin; rt.offsetMax = offsetMax;
+        rt.GetComponent<Image>().color = color;
+        
+        // 繝ｬ繧､繧｢繧ｦ繝医げ繝ｫ繝ｼ繝暦ｼ・ridLayoutGroup遲会ｼ峨↓辟｡隕悶＆縺帙ｋ
+        var le = rt.GetComponent<LayoutElement>();
+        if (le != null) le.ignoreLayout = true;
+    }
+
+    public void ApplySelectionOutline(GameObject go, bool show) {
+        // 讓呎ｺ悶・繝吶Ν(3px)縺ｮ蛟阪・ 6px 縺ｫ險ｭ螳壹り牡縺ｯ鮟・牡縺ｫ蝗ｺ螳壹・        ApplyOutline(go, "_SelectionRoot", Color.yellow, 6f, show);
+    }
+
+    public void ApplyRelatedHighlight(GameObject go, bool show) {
+        var theme = CurrentTheme;
+        Color relColor = (theme.displayType == SudokuData.ThemeDisplayType.Nixie) 
+            ? new Color(0.7f, 1f, 0f, 0.8f) 
+            : new Color(0f, 1f, 0f, 0.8f);   
+        
+        ApplyOutline(go, "_RelatedRoot", relColor, 3f, show);
+    }
+    
+    public void ApplyCellBackgroundHighlight(GameObject go, bool isSelected, bool isRelated) {
+        if (!isSelected && !isRelated) {
+            Transform existing = go.transform.Find("_BackgroundHighlight");
+            if (existing != null) existing.gameObject.SetActive(false);
+            return;
+        }
+
+        RectTransform rt = GetOrCreateOverlay(go, "_BackgroundHighlight", typeof(Image));
+        rt.gameObject.SetActive(true);
+        
+        // 縺吶∋縺ｦ縺ｮ繝・・繝槭〒縲∵焚蟄励・荳翫↓濶ｲ繧定埋縺城㍾縺ｭ繧具ｼ・etAsLastSibling・・        rt.SetAsLastSibling();
+        
+        var bgImg = rt.GetComponent<Image>();
+        if (isSelected) {
+            // 驕ｸ謚樔ｸｭ・壹＆繧峨↓阮・＞鮟・牡・磯城℃蠎ｦ 0.08・・            bgImg.color = new Color(1f, 1f, 0f, 0.08f); 
+        } else {
+            // 髢｢騾｣繧ｻ繝ｫ・壹＆繧峨↓阮・＞邱題牡・磯城℃蠎ｦ 0.04・・            bgImg.color = new Color(0f, 1f, 0f, 0.04f); 
+        }
+    }
+
+    private void ApplyOutline(GameObject go, string rootName, Color color, float thickness, bool show) {
+        if (!show) {
+            Transform existing = go.transform.Find(rootName);
+            if (existing != null) existing.gameObject.SetActive(false);
+            return;
+        }
+
+        RectTransform root = GetOrCreateOverlay(go, rootName);
+        root.gameObject.SetActive(true);
+        root.SetAsLastSibling();
+
+        if (rootName == "_SelectionRoot") {
+            Canvas cv = root.GetComponent<Canvas>();
+            if (cv == null) cv = root.gameObject.AddComponent<Canvas>();
+            if (cv != null) {
+                cv.overrideSorting = true;
+                cv.sortingOrder = 30000;
+            }
+        } else {
+            Canvas cv = root.GetComponent<Canvas>();
+            if (cv != null) DestroyImmediate(cv);
+        }
+        
+        SetOutlineSide(root.gameObject, "_Out_Top", color, new Vector2(0, 1), new Vector2(1, 1), new Vector2(-thickness, 0), new Vector2(thickness, thickness));
+        SetOutlineSide(root.gameObject, "_Out_Bottom", color, new Vector2(0, 0), new Vector2(1, 0), new Vector2(-thickness, -thickness), new Vector2(thickness, 0));
+        SetOutlineSide(root.gameObject, "_Out_Left", color, new Vector2(0, 0), new Vector2(0, 1), new Vector2(-thickness, -thickness), new Vector2(0, thickness));
+        SetOutlineSide(root.gameObject, "_Out_Right", color, new Vector2(1, 0), new Vector2(1, 1), Vector2.zero, new Vector2(thickness, thickness));
+    }
+
+    private void SetOutlineSide(GameObject parent, string name, Color color, Vector2 aMin, Vector2 aMax, Vector2 oMin, Vector2 oMax) {
+        RectTransform rt = GetOrCreateOverlay(parent, name, typeof(Image));
+        rt.gameObject.SetActive(true);
+        rt.anchorMin = aMin; rt.anchorMax = aMax;
+        rt.offsetMin = oMin; rt.offsetMax = oMax;
+        rt.GetComponent<Image>().color = color;
+    }
+
+    private RectTransform GetOrCreateOverlay(GameObject parent, string name, params System.Type[] components) {
+        Transform t = parent.transform.Find(name);
+        GameObject go;
+        if (t != null) {
+            go = t.gameObject;
+        } else {
+            go = new GameObject(name, typeof(RectTransform));
+            go.transform.SetParent(parent.transform, false);
+        }
+
+        foreach (var type in components) {
+            if (type != typeof(RectTransform) && go.GetComponent(type) == null) {
+                go.AddComponent(type);
+            }
+        }
+        
+        var rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+        rt.offsetMin = rt.offsetMax = Vector2.zero;
+        
+        var img = go.GetComponent<Image>();
+        if (img != null) img.raycastTarget = false;
+        
+        return rt;
+    }
+
+    private void SafeDestroy(Object obj) {
+        if (obj == null) return;
+        if (Application.isPlaying) Destroy(obj);
+        else DestroyImmediate(obj);
+    }
+
+    /// <summary>
+    /// UI縺ｮ逕滓・貂医∩繧ｪ繝悶ず繧ｧ繧ｯ繝医ｄ繧ｳ繝ｳ繝昴・繝阪Φ繝医ｒ螳牙・縺九▽遒ｺ螳溘↓蜑企勁縺励∪縺吶・    /// </summary>
+    /// <param name="go">蟇ｾ雎｡縺ｮGameObject</param>
+    /// <param name="keepLabel">_Label 縺ｨ縺・≧蜷榊燕縺ｮ繧ｪ繝悶ず繧ｧ繧ｯ繝医ｒ菫晄戟縺吶ｋ縺九←縺・°</param>
+    private void RobustCleanUp(GameObject go, bool keepLabel) {
+        if (go == null) return;
+
+        // 蜑企勁蟇ｾ雎｡縺ｮ繝励Ξ繝輔ぅ繝・け繧ｹ螳夂ｾｩ・・tyler縺檎峩謗･逕滓・縺励◆繧ゅ・縺ｫ髯仙ｮ夲ｼ・        string[] targetPrefixes = { "_Bevel", "_Out", "_Selection", "_Related", "_BackgroundHighlight" };
+        
+        var toDestroy = new System.Collections.Generic.List<Object>();
+
+        for (int i = go.transform.childCount - 1; i >= 0; i--) {
+            Transform child = go.transform.GetChild(i);
+            string n = child.name;
+
+            // DigitImage 縺ｯ邨ｶ蟇ｾ縺ｫ豸医＆縺ｪ縺・            if (n == "DigitImage") continue;
+
+            bool shouldDestroy = false;
+            foreach (var prefix in targetPrefixes) {
+                if (n.StartsWith(prefix)) {
+                    shouldDestroy = true;
+                    break;
+                }
+            }
+
+            if (n == "_Label" && !keepLabel) shouldDestroy = true;
+
+            if (shouldDestroy) {
+                toDestroy.Add(child.gameObject);
+            }
+        }
+
+        if (toDestroy.Count > 0) {
+            foreach (var d in toDestroy) SafeDestroy(d);
+        }
+
+        // 3. 荳崎ｦ√↓縺ｪ縺｣縺・Canvas 繧ｳ繝ｳ繝昴・繝阪Φ繝育ｭ峨・繝√ぉ繝・け・亥ｿ・ｦ√↓蠢懊§縺ｦ・・        var canvas = go.GetComponent<Canvas>();
+        if (canvas != null && !go.name.Contains("UI") && !go.name.Contains("Panel")) {
+            // 繧ｻ繝ｫ遲峨↓莉倅ｸ弱＆繧後◆荳譎ら噪縺ｪ Canvas 繧貞炎髯､
+            SafeDestroy(canvas);
+        }
+    }
+
+    // 蠕梧婿莠呈鋤諤ｧ縺ｮ縺溘ａ縺ｮ繧ｹ繧ｿ繝・    private void NuclearClean(GameObject go) => RobustCleanUp(go, false);
+    private void CleanPanelVisuals(GameObject go) => RobustCleanUp(go, true);
+
+    private void HideBevelImages(GameObject parent) {
+        foreach (Transform child in parent.transform) {
+            if (child.name.StartsWith("_Bevel")) child.gameObject.SetActive(false);
+        }
+    }
+
+    // 霈晏ｺｦ繧定ｪｿ謨ｴ・育岼縺ｫ蜆ｪ縺励＞譏弱ｋ縺輔↓・・    private Color AdjustLuminance(Color col, float factor) {
+        float h, s, v;
+        Color.RGBToHSV(col, out h, out s, out v);
+        return Color.HSVToRGB(h, s, v * factor);
+    }
+}
