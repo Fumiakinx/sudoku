@@ -130,8 +130,9 @@ public class SudokuDigitDisplay : MonoBehaviour
                 _targetImage.enabled = true;
                 _targetImage.sprite = s;
                 
-                // メニューのサンプル（PreviewStandalone）に合わせて、Nixie時は基本輝度を0.8倍に調整
-                float themeAdjust = (theme.displayType == SudokuData.ThemeDisplayType.Nixie) ? 0.8f : 1.0f;
+                // メニューのサンプル（PreviewStandalone）に合わせて、Nixie/LED7Seg時は基本輝度を0.8倍に調整
+                float themeAdjust = (theme.displayType == SudokuData.ThemeDisplayType.Nixie || 
+                                     theme.displayType == SudokuData.ThemeDisplayType.LED7Seg) ? 0.8f : 1.0f;
                 _targetImage.color = theme.textColor * brightness * themeAdjust;
                 _targetImage.rectTransform.localScale = Vector3.one;
             }

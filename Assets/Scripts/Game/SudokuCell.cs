@@ -76,24 +76,42 @@ public class SudokuCell : MonoBehaviour
     private void ApplyHighlightVisuals() {
         if (bg == null) return;
         var theme = SudokuThemeManager.Instance != null ? SudokuThemeManager.Instance.CurrentTheme : default;
-        float thickness = theme.bevelWidth > 0 ? theme.bevelWidth : 1f;
+        
+        float normalThickness = 2f;    // 通常時は 2px
+        float highlightThickness = 4f; // 選択・関連時は 4px
+        
         Color targetColor = theme.cellColorNormal;
         
         // 優先順位: エラー > 選択中 > 同じ数字 > 関連セル
         if (IsError) {
             targetColor = theme.errorColor;
-            SudokuBezelRenderer.ApplyBezel(gameObject, theme);
+            // エラー時は内側に強調
+            SudokuBezelRenderer.ApplyBezel(gameObject, theme.errorMarkColor, theme.errorMarkColor * 0.5f, highlightThickness, false);
         } else if (_isSelected) {
-            targetColor = theme.selectionColor; 
-            SudokuBezelRenderer.ApplyBezel(gameObject, theme.selectionColor, theme.selectionColor * 0.8f, thickness * 1.5f);
+            // 選択中: 純黄色の透過色 (Alpha: 0.3) を背景に使用
+            targetColor = new Color(1f, 1f, 0f, 0.3f); 
+            // 比視感度最大の「黄色」をベベルに使用
+            SudokuBezelRenderer.ApplyBezel(gameObject, Color.yellow, new Color(0.7f, 0.7f, 0f, 1f), 4f, true);
         } else if (_isSameDigit) {
             targetColor = theme.sameDigitColor;
-            SudokuBezelRenderer.ApplyBezel(gameObject, theme);
+            // 同じ数字: 内側に強調
+            SudokuBezelRenderer.ApplyBezel(gameObject, theme.textColor, theme.textColor * 0.5f, normalThickness, false);
         } else if (_isRelated) {
-            targetColor = theme.relatedColor; 
-            SudokuBezelRenderer.ApplyBezel(gameObject, theme.relatedColor, theme.relatedColor * 0.7f, thickness);
+            // 関連セル: HSV反転＋正規化ロジックで「最も目立つ補色」を算出
+            float h, s, v;
+            Color.RGBToHSV(theme.highlightColor, out h, out s, out v);
+            h = (h + 0.5f) % 1f; // 色相を180度回転
+            if (s < 0.1f) h = 0.5f; // 無彩色ならシアン
+            Color standout = Color.HSVToRGB(h, 1f, 1f);
+            
+            // 背景色は補色の透過色 (Alpha: 0.2) を使用
+            targetColor = new Color(standout.r, standout.g, standout.b, 0.2f);
+            
+            // ベベルにも同じ補色を適用
+            SudokuBezelRenderer.ApplyBezel(gameObject, standout, standout * 0.6f, 4f, true);
         } else {
-            SudokuBezelRenderer.ApplyBezel(gameObject, theme);
+            // 通常時: 内側に 2px (通常設定)
+            SudokuBezelRenderer.ApplyBezel(gameObject, theme, false);
         }
         
         bg.color = targetColor;

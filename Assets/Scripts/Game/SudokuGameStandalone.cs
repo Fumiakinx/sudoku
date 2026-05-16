@@ -105,7 +105,14 @@ public class SudokuGameStandalone : MonoBehaviour {
 
     public void OnCellSelected(SudokuCell cell) {
         if (cell == null || cell.IsFixed) return;
-        selectedCell = cell;
+        
+        // 【修正】既に選択されているセルを再度クリックした場合は選択解除
+        if (selectedCell == cell) {
+            selectedCell = null;
+        } else {
+            selectedCell = cell;
+        }
+
         try {
             UpdateHighlights();
         } catch (System.Exception e) {

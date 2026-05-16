@@ -48,6 +48,8 @@ public class SudokuGameHUD : MonoBehaviour
 
         if (SudokuThemeManager.Instance != null && themeNameText != null) {
             themeNameText.text = SudokuThemeManager.Instance.CurrentTheme.themeName;
+            // 初期化時にテーマスタイルを適用
+            ApplyThemeStyles(SudokuThemeManager.Instance.CurrentTheme);
         }
         
         if (resultPanel != null) {
@@ -74,6 +76,17 @@ public class SudokuGameHUD : MonoBehaviour
         if (themeNameText != null) {
             themeNameText.text = theme.themeName;
         }
+        // テーマ変更時に共通スタイルを適用
+        ApplyThemeStyles(theme);
+    }
+
+    /// <summary>
+    /// 管理下の全テキストラベルにテーマのスタイルを一括適用します。
+    /// </summary>
+    private void ApplyThemeStyles(SudokuData.SudokuTheme theme) {
+        if (themeNameText != null) SudokuLabelStyler.ApplyStyle(themeNameText, theme);
+        if (difficultyText != null) SudokuLabelStyler.ApplyStyle(difficultyText, theme);
+        if (mistakeText != null) SudokuLabelStyler.ApplyStyle(mistakeText, theme);
     }
 
     public void ShowResult(bool won) {

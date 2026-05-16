@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: aa187fbe06d4371499510fe61a2ced90
+guid: 5b407d50d32c864488cdd9a73aa1ade1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6620769027775016707
-    second: Nixie_Blank_0
+      213: 5773326866953442330
+    second: screenshot-20260516-204718_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Nixie_Blank_0
+      name: screenshot-20260516-204718_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 180
-        height: 180
+        width: 1102
+        height: 501
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 30f20783a52b1eb50800000000000000
-      internalID: 6620769027775016707
+      spriteID: a149af4723afe1050800000000000000
+      internalID: 5773326866953442330
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Nixie_Blank_0: 6620769027775016707
+      screenshot-20260516-204718_0: 5773326866953442330
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

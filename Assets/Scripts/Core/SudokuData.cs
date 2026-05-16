@@ -29,8 +29,6 @@ public class SudokuData : ScriptableObject
         public Color lineColor;
         public Color highlightColor;
         public Color shadowColor;
-        public Color selectionColor;  // 追加：選択中の色
-        public Color relatedColor;    // 追加：関連するセルの色
         public Color sameDigitColor;  // 追加：同じ数字の色
         public Color errorColor;      // 追加：エラー時の色
         public bool showBezel;        // 追加：ベゼルの有無
@@ -38,7 +36,6 @@ public class SudokuData : ScriptableObject
         public bool hasBlank;         // 追加：空白スプライトの有無
         public bool isLocked;
         public float bevelWidth;      // 追加：ベゼルの厚さ
-        public Color relatedHighlightColor; // 追加：関連セルの強調色（未設定なら自動計算）
         public Color correctMarkColor; // 正解時の「丸」の色
         public Color errorMarkColor;   // 不正解時の「バツ」の色
     }

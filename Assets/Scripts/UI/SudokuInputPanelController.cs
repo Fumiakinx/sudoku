@@ -28,27 +28,15 @@ public class SudokuInputPanelController : MonoBehaviour
     public void UpdateButtonStates(SudokuGameStandalone board, SudokuCell selectedCell) {
         if (board == null) return;
         
-        int[] counts = board.GetNumberCounts();
-        
         foreach (var inputBtn in buttons) {
             if (inputBtn.Value >= -2 && inputBtn.Value <= 9) {
                 var btnComp = inputBtn.GetComponent<Button>();
                 if (btnComp != null) {
-                    Debug.Log($"[Btn-Check] Controller accessing {inputBtn.name}: ButtonEnabled={btnComp.enabled}");
-                }
-
-                bool isClear = (inputBtn.Value <= 0);
-                int count = isClear ? 0 : (inputBtn.Value > 0 ? counts[inputBtn.Value - 1] : 0);
-                
-                btnComp = inputBtn.GetComponent<Button>();
-                if (btnComp != null) {
-                    // 全ての数字が埋まった場合は無効化（Clearは常に選択中なら有効）
-                    bool canUse = selectedCell != null && !selectedCell.IsPreFilled && (isClear || count < 9);
+                    bool isClear = (inputBtn.Value <= 0);
                     
-                    if (btnComp.interactable != canUse) {
-                        Debug.Log($"[DIAGNOSTIC] InputButton {inputBtn.name} (Value:{inputBtn.Value}) interactable changed: {btnComp.interactable} -> {canUse}");
-                    }
-                    
+                    // 【修正】ヒントにならないよう、数字のカウント（9個制限）による無効化を廃止
+                    // セルが選択されており、かつ書き換え可能なセルであればボタンを有効にする
+                    bool canUse = selectedCell != null && !selectedCell.IsPreFilled;
                     btnComp.interactable = canUse;
                     
                     var cg = inputBtn.GetComponent<CanvasGroup>();
@@ -56,7 +44,8 @@ public class SudokuInputPanelController : MonoBehaviour
                         Debug.LogError($"[SudokuInputPanelController] CanvasGroup missing on {inputBtn.name}. Please add it to the prefab statically.");
                         continue;
                     }
-                    cg.alpha = canUse ? 1.0f : 0.3f;
+                    // 【修正】常に一定の明るさを維持（見た目によるヒントを完全に排除）
+                    cg.alpha = 1.0f;
                 }
             }
         }
