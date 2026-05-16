@@ -101,6 +101,8 @@ MonoBehaviour:
     isLocked: 0
     bevelWidth: 4
     relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
+    correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
+    errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
   - themeName: 7SEGMENT LED
     displayType: 2
     sprites:
@@ -167,6 +169,8 @@ MonoBehaviour:
     isLocked: 0
     bevelWidth: 0
     relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
+    correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
+    errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
   - themeName: Nixie
     displayType: 1
     sprites:
@@ -239,6 +243,8 @@ MonoBehaviour:
     isLocked: 0
     bevelWidth: 4
     relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
+    correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
+    errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
   - themeName: Billiards
     displayType: 0
     sprites:
@@ -283,6 +289,8 @@ MonoBehaviour:
     isLocked: 1
     bevelWidth: 0
     relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
+    correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
+    errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
   - themeName: Life Roulette
     displayType: 0
     sprites:
@@ -327,5 +335,7 @@ MonoBehaviour:
     isLocked: 1
     bevelWidth: 0
     relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
+    correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
+    errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
   selectedThemeIndex: 2
   defaultMistLimit: 3

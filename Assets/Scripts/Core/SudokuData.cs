@@ -39,6 +39,8 @@ public class SudokuData : ScriptableObject
         public bool isLocked;
         public float bevelWidth;      // 追加：ベゼルの厚さ
         public Color relatedHighlightColor; // 追加：関連セルの強調色（未設定なら自動計算）
+        public Color correctMarkColor; // 正解時の「丸」の色
+        public Color errorMarkColor;   // 不正解時の「バツ」の色
     }
 
     public SudokuTheme[] themes;

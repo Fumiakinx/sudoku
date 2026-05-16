@@ -40,6 +40,16 @@ public class SudokuDigitDisplay : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ハイライト色などを数字表示の背景（baseImage）に反映させます。
+    /// どのテーマでも共通で使用できる汎用的な背景色設定です。
+    /// </summary>
+    public void SetBackgroundColor(Color color) {
+        if (baseImage != null) {
+            baseImage.color = color;
+        }
+    }
+
     private IEnumerator AnimateDigit(int value, SudokuData.SudokuTheme theme) {
         try {
             if (theme.displayType == SudokuData.ThemeDisplayType.Normal || 

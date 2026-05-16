@@ -29,7 +29,6 @@ public class SudokuGameStandalone : MonoBehaviour {
 
 
     private void Awake() {
-        Debug.Log($"<color=white>[SudokuGameStandalone] Awake ENTER on {gameObject.name} (Scene: {gameObject.scene.name})</color>");
         Instance = this;
         
         // データのロード（フォールバック付）
@@ -70,25 +69,17 @@ public class SudokuGameStandalone : MonoBehaviour {
     }
 
     public void GenerateNewGame(SudokuLogic.Difficulty difficulty) {
-        Debug.Log($"<color=magenta>【Standalone】GenerateNewGame ENTER: difficulty={difficulty}</color>");
         SudokuGameState.SelectedDifficulty = difficulty;
         InitializeGame();
-        Debug.Log("<color=magenta>【Standalone】GenerateNewGame EXIT</color>");
     }
 
     private void InitializeGame() {
-        Debug.Log("<color=magenta>【Standalone】InitializeGame START</color>");
         // 難易度の取得
         SudokuLogic.Difficulty diff = SudokuGameState.SelectedDifficulty;
         
-        Debug.Log("[Standalone] Calling SudokuLogic.Generate...");
         var result = SudokuLogic.Generate(diff);
-        Debug.Log("[Standalone] SudokuLogic.Generate completed.");
         puzzleGrid = result.puzzle;
         solutionGrid = result.solution;
-        Debug.Log($"[DIAGNOSTIC] Puzzle generated. Difficulty: {diff}. Pre-filled cells: {CountPreFilled(puzzleGrid)}");
-        
-        Debug.Log($"[DIAGNOSTIC] Initializing {cells.GetLength(0) * cells.GetLength(1)} cells...");
         int initCount = 0;
         for (int r = 0; r < 9; r++) {
             for (int c = 0; c < 9; c++) {
@@ -113,8 +104,7 @@ public class SudokuGameStandalone : MonoBehaviour {
     }
 
     public void OnCellSelected(SudokuCell cell) {
-        Debug.Log($"[DIAGNOSTIC] SudokuGameStandalone.OnCellSelected ENTER. Target: {(cell != null ? cell.name : "NULL")}");
-        if (cell == null) return;
+        if (cell == null || cell.IsFixed) return;
         selectedCell = cell;
         try {
             UpdateHighlights();
@@ -124,12 +114,7 @@ public class SudokuGameStandalone : MonoBehaviour {
     }
 
     public void OnInputButtonClicked(int value) {
-        Debug.Log($"<color=orange><b>[INPUT-EVENT] Clicked Value: {value}</b></color> (SelectedCell: {(selectedCell != null ? selectedCell.name : "NULL")})");
-        
-        if (selectedCell == null) {
-            Debug.LogWarning("[INPUT-EVENT] Input ignored because SelectedCell is NULL.");
-            return;
-        }
+        if (selectedCell == null) return;
         if (selectedCell.IsPreFilled) return;
 
         // Cボタン (-2) の特殊処理：テストクリア
@@ -149,19 +134,36 @@ public class SudokuGameStandalone : MonoBehaviour {
         if (value != 0 && value != solutionGrid[selectedCell.Row, selectedCell.Col]) {
             selectedCell.IsError = true;
             Debug.LogWarning($"<color=red><b>[MISTAKE] Mistake detected at ({selectedCell.Row}, {selectedCell.Col})!</b></color> Expected {solutionGrid[selectedCell.Row, selectedCell.Col]}, got {value}");
-            if (SudokuFeedbackOverlay.Instance != null) SudokuFeedbackOverlay.Instance.ShowMistake();
+            
+            // 【新規演出】盤面全体に大きなバツを表示
+            if (SudokuFeedbackOverlay.Instance != null) {
+                SudokuFeedbackOverlay.Instance.ShowMistake();
+            }
+
             if (GameManager.Instance != null) {
                 Debug.Log("[MISTAKE] Invoking GameManager.OnMistake()");
                 GameManager.Instance.OnMistake();
-            } else {
-                Debug.LogError("[MISTAKE] GameManager.Instance is NULL!");
             }
         } else {
             if (value != 0) {
-                Debug.Log($"<color=green><b>[INPUT] Correct value {value} at ({selectedCell.Row}, {selectedCell.Col})</b></color>");
-                if (SudokuFeedbackOverlay.Instance != null) SudokuFeedbackOverlay.Instance.ShowCorrect();
+                // 【修正】正解が入力されたら、そのセルを固定（変更・選択不可）にする
+                selectedCell.IsFixed = true;
+                selectedCell.IsError = false;
+
+                // 【新規演出】盤面全体に大きな丸を表示し、終了後に選択解除
+                if (SudokuFeedbackOverlay.Instance != null) {
+                    SudokuFeedbackOverlay.Instance.ShowCorrect(() => {
+                        selectedCell = null;
+                        UpdateHighlights();
+                    });
+                } else {
+                    // 演出がない場合は即座に解除
+                    selectedCell = null;
+                    UpdateHighlights();
+                }
+            } else {
+                selectedCell.IsError = false;
             }
-            selectedCell.IsError = false;
         }
 
         UpdateHighlights();
@@ -199,18 +201,9 @@ public class SudokuGameStandalone : MonoBehaviour {
                 }
             }
         }
-        Debug.Log("[DIAGNOSTIC] UpdateHighlights: Loop finished. Accessing UIManager...");
         // 入力パネルの状態を更新
-        if (UIManager.Instance != null) {
-            Debug.Log($"[DIAGNOSTIC] UpdateHighlights: UIManager.Instance is FOUND. Controller: {(UIManager.Instance.inputPanelController != null ? "FOUND" : "NULL")}");
-            if (UIManager.Instance.inputPanelController != null) {
-                // Debug.Log($"[DIAGNOSTIC] UpdateHighlights: Requesting Button State Update. SelectedCell: {(selectedCell != null ? selectedCell.name : "NULL")}");
-                UIManager.Instance.inputPanelController.UpdateButtonStates(this, selectedCell);
-            } else {
-                Debug.LogWarning("[DIAGNOSTIC] UpdateHighlights: UIManager.Instance.inputPanelController is NULL!");
-            }
-        } else {
-            Debug.LogWarning("[DIAGNOSTIC] UpdateHighlights: UIManager.Instance is NULL!");
+        if (UIManager.Instance != null && UIManager.Instance.inputPanelController != null) {
+            UIManager.Instance.inputPanelController.UpdateButtonStates(this, selectedCell);
         }
     }
 

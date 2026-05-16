@@ -796,8 +796,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1285ecf079a7d7143a83861b394fa346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SudokuFeedbackOverlay
-  mistakeContainer: {fileID: 0}
-  correctContainer: {fileID: 0}
+  bigCircle: {fileID: 0}
+  bigCross: {fileID: 0}
+  overlayRoot: {fileID: 0}
   displayDuration: 1.5
 --- !u!1 &1611082652
 GameObject:
