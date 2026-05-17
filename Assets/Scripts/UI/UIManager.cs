@@ -34,7 +34,7 @@ public class UIManager : MonoBehaviour
             return;
         }
         instance = this;
-        if (Camera.main != null) Camera.main.backgroundColor = Color.black;
+        // 背景色の強制固定を廃止し、テーマに依存させます
 
         // コンポーネントの自動紐付け（分割UI対応）
         if (panelManager == null) panelManager = GetComponentInChildren<SudokuPanelManager>(true);
@@ -169,6 +169,9 @@ public class UIManager : MonoBehaviour
         yield return null;
         if (SudokuThemeManager.Instance != null) {
             SudokuThemeManager.Instance.NotifyThemeChanged(true);
+            if (Camera.main != null) {
+                Camera.main.backgroundColor = SudokuThemeManager.Instance.CurrentTheme.backgroundColor;
+            }
         }
     }
 

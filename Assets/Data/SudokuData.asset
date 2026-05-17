@@ -13,6 +13,51 @@ MonoBehaviour:
   m_Name: SudokuData
   m_EditorClassIdentifier: Assembly-CSharp::SudokuData
   themes:
+  - themeName: Standard
+    displayType: 0
+    sprites:
+    - {fileID: 21300000, guid: e30e9682cd1e3294c956fccadad8bf22, type: 3}
+    - {fileID: 21300000, guid: e21e360aece285546af48d4bbed6fc36, type: 3}
+    - {fileID: 21300000, guid: 351519e4e599b854cb8cdbb5c2b8dfc9, type: 3}
+    - {fileID: 21300000, guid: 0c9cfe83895ffd649bf554cd30071514, type: 3}
+    - {fileID: 21300000, guid: b12bb3706ca410042b236b635fd6b258, type: 3}
+    - {fileID: 21300000, guid: 0dde6fcb30cc96143a6df4e73b429f27, type: 3}
+    - {fileID: 21300000, guid: 5e287b421325d5247b6ba0fc2d1d8090, type: 3}
+    - {fileID: 21300000, guid: e87cfb7fa9c254c43b9829495aa5cb35, type: 3}
+    - {fileID: 21300000, guid: 4ca34721d065c614bace84a05fa8eb35, type: 3}
+    - {fileID: 21300000, guid: 1ab8db81c1bd6504ebeb5cb3da5ffd6c, type: 3}
+    - {fileID: 21300000, guid: da87f3000102335409c588babfd2ab47, type: 3}
+    allSprites:
+    - {fileID: 21300000, guid: e30e9682cd1e3294c956fccadad8bf22, type: 3}
+    - {fileID: 21300000, guid: e21e360aece285546af48d4bbed6fc36, type: 3}
+    - {fileID: 21300000, guid: 351519e4e599b854cb8cdbb5c2b8dfc9, type: 3}
+    - {fileID: 21300000, guid: 0c9cfe83895ffd649bf554cd30071514, type: 3}
+    - {fileID: 21300000, guid: b12bb3706ca410042b236b635fd6b258, type: 3}
+    - {fileID: 21300000, guid: 0dde6fcb30cc96143a6df4e73b429f27, type: 3}
+    - {fileID: 21300000, guid: 5e287b421325d5247b6ba0fc2d1d8090, type: 3}
+    - {fileID: 21300000, guid: e87cfb7fa9c254c43b9829495aa5cb35, type: 3}
+    - {fileID: 21300000, guid: 4ca34721d065c614bace84a05fa8eb35, type: 3}
+    - {fileID: 21300000, guid: 1ab8db81c1bd6504ebeb5cb3da5ffd6c, type: 3}
+    - {fileID: 21300000, guid: da87f3000102335409c588babfd2ab47, type: 3}
+    topSprites: []
+    bottomSprites: []
+    backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+    panelColor: {r: 1, g: 1, b: 1, a: 1}
+    textColor: {r: 0.15, g: 0.15, b: 0.15, a: 1}
+    cellColorFixed: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+    cellColorNormal: {r: 1, g: 1, b: 1, a: 1}
+    lineColor: {r: 0, g: 0, b: 0, a: 0.3}
+    highlightColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    shadowColor: {r: 0.15, g: 0.15, b: 0.15, a: 1}
+    sameDigitColor: {r: 0.8, g: 1, b: 0.8, a: 1}
+    errorColor: {r: 1, g: 0.8, b: 0.8, a: 1}
+    showBezel: 1
+    previewInterval: 1
+    hasBlank: 1
+    isLocked: 0
+    bevelWidth: 4
+    correctMarkColor: {r: 0.2, g: 0.8, b: 0.2, a: 1}
+    errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
   - themeName: MECHANICAL
     displayType: 3
     sprites:
@@ -91,8 +136,6 @@ MonoBehaviour:
     lineColor: {r: 1, g: 1, b: 1, a: 0.2}
     highlightColor: {r: 0.85, g: 0.85, b: 0.85, a: 1}
     shadowColor: {r: 0.25, g: 0.25, b: 0.25, a: 1}
-    selectionColor: {r: 0.29803923, g: 0.050980393, b: 0.14901961, a: 1}
-    relatedColor: {r: 0.14901961, g: 0.03137255, b: 0.078431375, a: 1}
     sameDigitColor: {r: 0.25, g: 0.15, b: 0, a: 1}
     errorColor: {r: 0.35, g: 0, b: 0, a: 1}
     showBezel: 1
@@ -100,7 +143,6 @@ MonoBehaviour:
     hasBlank: 1
     isLocked: 0
     bevelWidth: 4
-    relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
     correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
   - themeName: 7SEGMENT LED
@@ -159,8 +201,6 @@ MonoBehaviour:
     lineColor: {r: 0.6, g: 0.6, b: 0.6, a: 0.5}
     highlightColor: {r: 1, g: 0, b: 0, a: 1}
     shadowColor: {r: 0.5, g: 0, b: 0, a: 1}
-    selectionColor: {r: 0.2, g: 0.05, b: 0.05, a: 1}
-    relatedColor: {r: 0.1, g: 0, b: 0, a: 1}
     sameDigitColor: {r: 0.3, g: 0.05, b: 0.05, a: 1}
     errorColor: {r: 0.4, g: 0, b: 0, a: 1}
     showBezel: 1
@@ -168,7 +208,6 @@ MonoBehaviour:
     hasBlank: 1
     isLocked: 0
     bevelWidth: 0
-    relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
     correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
   - themeName: Nixie
@@ -233,8 +272,6 @@ MonoBehaviour:
     lineColor: {r: 0.25, g: 0.15, b: 0.05, a: 1}
     highlightColor: {r: 1, g: 0.6, b: 0.2, a: 1}
     shadowColor: {r: 0.6, g: 0.3, b: 0.1, a: 1}
-    selectionColor: {r: 1, g: 1, b: 0, a: 0.8}
-    relatedColor: {r: 0, g: 0.8, b: 1, a: 0.5}
     sameDigitColor: {r: 0.2, g: 0.1, b: 0.04, a: 1}
     errorColor: {r: 0.4, g: 0, b: 0, a: 1}
     showBezel: 1
@@ -242,7 +279,6 @@ MonoBehaviour:
     hasBlank: 0
     isLocked: 0
     bevelWidth: 4
-    relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
     correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
   - themeName: Billiards
@@ -279,8 +315,6 @@ MonoBehaviour:
     lineColor: {r: 0.1, g: 0.4, b: 0.2, a: 0.5}
     highlightColor: {r: 0, g: 0, b: 0, a: 0}
     shadowColor: {r: 0, g: 0, b: 0, a: 0}
-    selectionColor: {r: 0, g: 0, b: 0, a: 0}
-    relatedColor: {r: 0, g: 0, b: 0, a: 0}
     sameDigitColor: {r: 0, g: 0, b: 0, a: 0}
     errorColor: {r: 0, g: 0, b: 0, a: 0}
     showBezel: 0
@@ -288,7 +322,6 @@ MonoBehaviour:
     hasBlank: 1
     isLocked: 1
     bevelWidth: 0
-    relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
     correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
   - themeName: Life Roulette
@@ -325,8 +358,6 @@ MonoBehaviour:
     lineColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     highlightColor: {r: 0, g: 0, b: 0, a: 0}
     shadowColor: {r: 0, g: 0, b: 0, a: 0}
-    selectionColor: {r: 0, g: 0, b: 0, a: 0}
-    relatedColor: {r: 0, g: 0, b: 0, a: 0}
     sameDigitColor: {r: 0, g: 0, b: 0, a: 0}
     errorColor: {r: 0, g: 0, b: 0, a: 0}
     showBezel: 0
@@ -334,8 +365,7 @@ MonoBehaviour:
     hasBlank: 1
     isLocked: 1
     bevelWidth: 0
-    relatedHighlightColor: {r: 0, g: 0, b: 0, a: 0}
     correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
-  selectedThemeIndex: 2
+  selectedThemeIndex: 0
   defaultMistLimit: 3

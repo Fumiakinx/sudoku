@@ -87,8 +87,7 @@ public class SudokuThemeManager : MonoBehaviour
         for (int i = 0; i < sudokuData.themes.Length; i++) {
             var theme = sudokuData.themes[i];
             if (theme.themeName == themeName) {
-                // メカニカル系でない場合はスキップ
-                if (theme.displayType == SudokuData.ThemeDisplayType.Normal) continue;
+                // Any theme type can now be selected
 
                 sudokuData.selectedThemeIndex = i;
                 SudokuGameState.SelectedThemeIndex = i;

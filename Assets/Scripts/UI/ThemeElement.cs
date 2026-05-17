@@ -86,8 +86,12 @@ public class ThemeElement : MonoBehaviour
                 } else if (img.GetComponent<Button>() != null && !objName.Contains("Cell")) {
                     // メニューボタン本体などは透明にする
                     img.color = new Color(0,0,0,0);
-                } else if (img.GetComponentInParent<SudokuCell>() != null || img.GetComponentInParent<Button>() != null) {
+                } else if (img.GetComponentInParent<SudokuCell>() != null) {
+                    // 盤面のセル内部要素
                     img.color = theme.cellColorNormal;
+                } else if (img.GetComponentInParent<Button>() != null) {
+                    // メニューボタンなどの子要素背景（盤面セル以外）は透明にして浮かないようにする
+                    img.color = new Color(0, 0, 0, 0);
                 } else {
                     // 特定できない要素はテキストカラーに合わせる（予備）
                     img.color = theme.textColor;
