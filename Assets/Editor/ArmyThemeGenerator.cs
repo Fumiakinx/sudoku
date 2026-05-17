@@ -58,18 +58,24 @@ public class ArmyThemeGenerator : EditorWindow
         // 3. 各マスの切り出しと重心センタリング処理
         // 元画像サイズ: Width: 722, Height: 542
         float srcCellW = 722f / 5f;  // 144.4
-        float srcCellH = 542f / 2f;  // 271.0
+        float srcCellH = 542f / 3f;  // 180.66
 
-        for (int i = 0; i < 10; i++)
+        // 11マス分切り出しを行う (0〜9は数字、10はBlank)
+        for (int i = 0; i < 11; i++)
         {
             int col = i % 5;
-            int row = i / 5; // 0 = 上半分, 1 = 下半分
+            int row = i / 5; // 0 = 1行目(1〜5), 1 = 2行目(6〜0), 2 = 3行目(Blank)
 
             // 元画像での対象セルのピクセル座標範囲
             int xMin = Mathf.RoundToInt(col * srcCellW);
             int xMax = Mathf.RoundToInt((col + 1) * srcCellW);
-            int yMin = Mathf.RoundToInt((1 - row) * srcCellH); // UnityのY座標は下から上
-            int yMax = Mathf.RoundToInt((2 - row) * srcCellH);
+            
+            // UnityのY座標は下から上なので、row=0 (1行目) は一番上、row=1 (2行目) は真ん中。
+            // 3行構成なので、row=0 の範囲は Y = [2 * srcCellH, 3 * srcCellH]
+            // row=1 の範囲は Y = [1 * srcCellH, 2 * srcCellH]
+            // row=2 の範囲は Y = [0 * srcCellH, 1 * srcCellH]
+            int yMin = Mathf.RoundToInt((2 - row) * srcCellH);
+            int yMax = Mathf.RoundToInt((3 - row) * srcCellH);
 
             // 安全のための境界クランプ
             xMin = Mathf.Clamp(xMin, 0, srcTex.width);
@@ -77,24 +83,32 @@ public class ArmyThemeGenerator : EditorWindow
             yMin = Mathf.Clamp(yMin, 0, srcTex.height);
             yMax = Mathf.Clamp(yMax, 0, srcTex.height);
 
-            // 文字領域（オリーブドラブ以外の白に近い領域）のバウンディングボックスを検出
+            // 文字領域（オリーブドラブ以外の白・黄色に近い領域）のバウンディングボックスを検出
             int charMinX = xMax, charMaxX = xMin;
             int charMinY = yMax, charMaxY = yMin;
             bool foundChar = false;
 
-            for (int y = yMin; y < yMax; y++)
+            // 背景色 (R: 0.294, G: 0.282, B: 0.204)
+            Color bg = new Color(0.294f, 0.282f, 0.204f, 1.0f);
+
+            if (i < 10)
             {
-                for (int x = xMin; x < xMax; x++)
+                for (int y = yMin; y < yMax; y++)
                 {
-                    Color pixel = srcTex.GetPixel(x, y);
-                    // R値が0.45以上のものを文字ピクセルと判定 (背景オリーブドラブは 0.294 程度)
-                    if (pixel.r > 0.45f)
+                    for (int x = xMin; x < xMax; x++)
                     {
-                        if (x < charMinX) charMinX = x;
-                        if (x > charMaxX) charMaxX = x;
-                        if (y < charMinY) charMinY = y;
-                        if (y > charMaxY) charMaxY = y;
-                        foundChar = true;
+                        Color pixel = srcTex.GetPixel(x, y);
+                        // 背景オリーブドラブとの色差を算出
+                        float diff = Mathf.Abs(pixel.r - bg.r) + Mathf.Abs(pixel.g - bg.g) + Mathf.Abs(pixel.b - bg.b);
+                        // 色差が 0.1f 以上のものを文字ピクセルと判定
+                        if (diff > 0.1f)
+                        {
+                            if (x < charMinX) charMinX = x;
+                            if (x > charMaxX) charMaxX = x;
+                            if (y < charMinY) charMinY = y;
+                            if (y > charMaxY) charMaxY = y;
+                            foundChar = true;
+                        }
                     }
                 }
             }
@@ -111,7 +125,7 @@ public class ArmyThemeGenerator : EditorWindow
             {
                 cx = (xMin + xMax) / 2f;
                 cy = (yMin + yMax) / 2f;
-                Debug.LogWarning($"[ARMY-SLICER] 数字 [{i}] の文字領域を検出できませんでした。デフォルト中心を使用します: ({cx}, {cy})");
+                Debug.Log($"[ARMY-SLICER] セル [{i}] (Blank等) のデフォルト中心を使用します: ({cx:F1}, {cy:F1})");
             }
 
             // 新しいセルの中央 (128, 128) に文字の重心を合わせてピクセルをコピー
@@ -130,11 +144,14 @@ public class ArmyThemeGenerator : EditorWindow
                         Color sc = srcTex.GetPixel(sx, sy);
                         destTex.SetPixel(destStartX + dx, dy, sc);
                     }
+                    else
+                    {
+                        destTex.SetPixel(destStartX + dx, dy, bg);
+                    }
                 }
             }
         }
 
-        // 11番目のセル (Blank, インデックス10) はオリーブドラブのままにします。
         destTex.Apply();
 
         // 4. 新規テクスチャのPNG保存
