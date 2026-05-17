@@ -403,5 +403,63 @@ MonoBehaviour:
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
     useOriginalSpriteColor: 1
     originalSpriteBgColor: {r: 0.92, g: 0.92, b: 0.92, a: 1}
-  selectedThemeIndex: 4
+  - themeName: Balloon Pop
+    displayType: 0
+    sprites:
+    - {fileID: -8143837890765290154, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -8778672845207894512, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -4959053903636317076, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 555501601636896949, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 8589982891502495825, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -492425031651562026, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -3477976482979416204, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 6314789013473545449, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -1702918930654832805, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -5816920892155678811, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 0}
+    allSprites:
+    - {fileID: -5816920892155678811, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -8143837890765290154, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -8778672845207894512, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -4959053903636317076, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 555501601636896949, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 8589982891502495825, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -492425031651562026, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -3477976482979416204, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 6314789013473545449, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -1702918930654832805, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 0}
+    topSprites:
+    - {fileID: -8143837890765290154, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -8778672845207894512, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -4959053903636317076, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 555501601636896949, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 8589982891502495825, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -492425031651562026, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -3477976482979416204, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 6314789013473545449, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -1702918930654832805, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: -5816920892155678811, guid: 03ec005ebc4d2c14d8b4352b7cfea8b6, type: 3}
+    - {fileID: 0}
+    bottomSprites: []
+    backgroundColor: {r: 0.96, g: 0.96, b: 0.94, a: 1}
+    panelColor: {r: 0.96, g: 0.96, b: 0.94, a: 1}
+    textColor: {r: 0.15, g: 0.15, b: 0.15, a: 1}
+    cellColorFixed: {r: 0.88, g: 0.88, b: 0.88, a: 1}
+    cellColorNormal: {r: 1, g: 1, b: 1, a: 1}
+    lineColor: {r: 0.7, g: 0.7, b: 0.7, a: 0.5}
+    highlightColor: {r: 1, g: 0.8, b: 0.85, a: 1}
+    shadowColor: {r: 0.75, g: 0.7, b: 0.85, a: 1}
+    sameDigitColor: {r: 0.95, g: 0.9, b: 0.95, a: 1}
+    errorColor: {r: 1, g: 0.7, b: 0.7, a: 1}
+    showBezel: 1
+    previewInterval: 0.8
+    hasBlank: 1
+    isLocked: 0
+    bevelWidth: 4
+    correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
+    errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
+    useOriginalSpriteColor: 1
+    originalSpriteBgColor: {r: 1, g: 1, b: 1, a: 0}
+  selectedThemeIndex: 6
   defaultMistLimit: 3
