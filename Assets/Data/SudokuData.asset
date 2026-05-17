@@ -461,5 +461,52 @@ MonoBehaviour:
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
     useOriginalSpriteColor: 1
     originalSpriteBgColor: {r: 1, g: 1, b: 1, a: 0}
+  - themeName: ARMY RUST
+    displayType: 0
+    sprites:
+    - {fileID: 2130000000000000000, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000001, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000002, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000003, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000004, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000005, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000006, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000007, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000008, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000009, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000010, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    allSprites:
+    - {fileID: 2130000000000000000, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000001, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000002, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000003, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000004, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000005, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000006, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000007, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000008, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000009, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: 2130000000000000010, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    topSprites: []
+    bottomSprites: []
+    backgroundColor: {r: 0.294, g: 0.282, b: 0.204, a: 1}
+    panelColor: {r: 0.22, g: 0.21, b: 0.15, a: 1}
+    textColor: {r: 0.95, g: 0.55, b: 0.1, a: 1}
+    cellColorFixed: {r: 0.26, g: 0.25, b: 0.18, a: 1}
+    cellColorNormal: {r: 0.294, g: 0.282, b: 0.204, a: 1}
+    lineColor: {r: 0.18, g: 0.17, b: 0.12, a: 1}
+    highlightColor: {r: 0.95, g: 0.55, b: 0.1, a: 0.35}
+    shadowColor: {r: 0, g: 0, b: 0, a: 0.5}
+    sameDigitColor: {r: 0.95, g: 0.75, b: 0.15, a: 0.45}
+    errorColor: {r: 0.85, g: 0.2, b: 0.2, a: 0.6}
+    showBezel: 1
+    previewInterval: 0
+    hasBlank: 1
+    isLocked: 0
+    bevelWidth: 4
+    correctMarkColor: {r: 0.2, g: 0.8, b: 0.2, a: 1}
+    errorMarkColor: {r: 0.9, g: 0.2, b: 0.2, a: 1}
+    useOriginalSpriteColor: 1
+    originalSpriteBgColor: {r: 0.294, g: 0.282, b: 0.204, a: 1}
   selectedThemeIndex: 6
   defaultMistLimit: 3
