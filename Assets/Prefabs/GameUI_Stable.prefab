@@ -846,6 +846,7 @@ MonoBehaviour:
   baseImage: {fileID: 874588714996253562}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!114 &5471348306630668678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1728,6 +1729,7 @@ MonoBehaviour:
   baseImage: {fileID: 4759906629627269718}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!114 &5787317256034050188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3977,6 +3979,7 @@ MonoBehaviour:
   baseImage: {fileID: 2598949118138147458}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!225 &5887637448513709247
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -4503,6 +4506,7 @@ MonoBehaviour:
   baseImage: {fileID: 4057160537322793542}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!225 &9158564945521358883
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -4836,6 +4840,7 @@ MonoBehaviour:
   baseImage: {fileID: 689900384447510885}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!114 &4637952329120930417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5460,6 +5465,7 @@ MonoBehaviour:
   baseImage: {fileID: 4174195019256687454}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!114 &2009473448327316628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5804,6 +5810,7 @@ MonoBehaviour:
   baseImage: {fileID: 7902824241596316321}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!114 &6397141922525489376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7432,6 +7439,7 @@ MonoBehaviour:
   baseImage: {fileID: 2955704737047006223}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!114 &3312991744599131734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7984,6 +7992,7 @@ MonoBehaviour:
   baseImage: {fileID: 2295371734985809602}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!225 &4336225927780257452
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -8454,6 +8463,7 @@ MonoBehaviour:
   baseImage: {fileID: 1178676570003122386}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!114 &2181441961840820130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8801,6 +8811,7 @@ MonoBehaviour:
   baseImage: {fileID: 2513493482056146373}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!225 &8427788244880923346
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -10057,6 +10068,7 @@ MonoBehaviour:
   baseImage: {fileID: 1657751978148342641}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!114 &2123071102809115524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10997,6 +11009,7 @@ MonoBehaviour:
   baseImage: {fileID: 6779003432982472568}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!225 &803239167373585205
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -11685,6 +11698,7 @@ MonoBehaviour:
   baseImage: {fileID: 863595827533301899}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!114 &5513419924353221760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12541,6 +12555,7 @@ MonoBehaviour:
   baseImage: {fileID: 633725737830687278}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!114 &2083818778721204422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15175,6 +15190,7 @@ MonoBehaviour:
   baseImage: {fileID: 2222049775415676224}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!225 &3079042847273996541
 CanvasGroup:
   m_ObjectHideFlags: 0

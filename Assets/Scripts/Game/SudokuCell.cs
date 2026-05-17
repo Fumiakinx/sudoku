@@ -77,48 +77,47 @@ public class SudokuCell : MonoBehaviour
         if (bg == null) return;
         var theme = SudokuThemeManager.Instance != null ? SudokuThemeManager.Instance.CurrentTheme : default;
         
-        float normalThickness = 2f;    // 通常時は 2px
-        float highlightThickness = 4f; // 選択・関連時は 4px
+        float selectThickness = 10f;  // 選択・エラーセルは超極太の 10px！
+        float relatedThickness = 8f;  // 関連セル（十字ライン）は極太の 8px！
         
-        Color targetBgColor = theme.cellColorNormal;
-        float targetImageAlpha = 1.0f; // 画像の透明度（通常時は透かさない）
+        Color baseCellColor = theme.useOriginalSpriteColor ? theme.originalSpriteBgColor : theme.cellColorNormal;
         
-        // テーマごとにハイライト時の「透かし具合」を調整
-        // Mechanicalはしっかり透かす(0.6)、Nixie/LEDは数字をはっきり残すため少しだけ透かす(0.85)
-        float highlightAlpha = (theme.displayType == SudokuData.ThemeDisplayType.Mechanical) ? 0.6f : 0.85f;
+        // 輝度（Luminance）の算出 (ITU-R BT.709 規格に基づき人間が感じる明るさを 0.0〜1.0 で自動判定)
+        float luminance = 0.2126f * baseCellColor.r + 0.7152f * baseCellColor.g + 0.0722f * baseCellColor.b;
+        
+        // 通常の背景色を常に維持（ベタ塗り・塗りつぶしを完全廃止！）
+        Color targetBgColor = baseCellColor;
+        float targetImageAlpha = 1.0f; 
+        Color imageMultiplierColor = Color.white;
         
         // 優先順位: エラー > 選択中 > 同じ数字 > 関連セル
         if (IsError) {
-            targetBgColor = theme.errorColor;
-            // エラー時は内側に強調（全辺を明るいエラー色で統一）
-            SudokuBezelRenderer.ApplyBezel(gameObject, theme.errorMarkColor, theme.errorMarkColor, highlightThickness, false);
+            // エラー時は極太 10px の警告色ベゼルを適用
+            SudokuBezelRenderer.ApplyBezel(gameObject, theme.errorMarkColor, theme.errorMarkColor, selectThickness);
         } else if (_isSelected) {
-            // 【選択中】背面を明るい黄色で塗りつぶす
-            targetBgColor = Color.yellow; 
-            targetImageAlpha = highlightAlpha; // 画像を少し透明にして背面の黄色を透かす
-            // ベベルは明暗をなくし、全辺を明るい黄色にする
-            SudokuBezelRenderer.ApplyBezel(gameObject, Color.yellow, Color.yellow, 4f, true);
+            // 【選択中：最前面・極太 10px インテリジェントゴールドベゼル】
+            // 黒背景（luminance=0）の時：明るく輝くネオンゴールド
+            // 白背景（luminance=1）の時：白地に溶けず美しく引き締まるクラシックゴールド
+            Color darkGold = new Color(0.75f, 0.55f, 0.15f, 1f); 
+            Color lightGold = new Color(0.95f, 0.85f, 0.55f, 1f); 
+            Color finalGold = Color.Lerp(lightGold, darkGold, luminance);
+
+            SudokuBezelRenderer.ApplyBezel(gameObject, finalGold, finalGold, selectThickness);
         } else if (_isSameDigit) {
-            targetBgColor = theme.sameDigitColor;
-            // 同じ数字: 内側に強調
-            SudokuBezelRenderer.ApplyBezel(gameObject, theme.textColor, theme.textColor * 0.5f, normalThickness, false);
+            // 同じ数字：太さ 4px で文字色をインナーベゼルとして適用
+            SudokuBezelRenderer.ApplyBezel(gameObject, theme.textColor, theme.textColor * 0.5f, 4f);
         } else if (_isRelated) {
-            // 【関連セル】明るいパステル調の補色を算出
-            float h, s, v;
-            Color.RGBToHSV(theme.highlightColor, out h, out s, out v);
-            h = (h + 0.5f) % 1f; // 色相を180度回転
-            if (s < 0.1f) h = 0.5f; // 無彩色ならシアン
-            Color standout = Color.HSVToRGB(h, 0.6f, 1f);
-            
-            // 背面をその色で塗りつぶす
-            targetBgColor = standout; 
-            targetImageAlpha = highlightAlpha; // 画像を少し透明にして背面の光を透かす
-            
-            // ベベルにも同じ補色を適用（明暗をなくし全辺明るく）
-            SudokuBezelRenderer.ApplyBezel(gameObject, standout, standout, 4f, true);
+            // 【関連セル：最前面・極太 8px インテリジェントブルーベゼル】
+            // 黒背景（luminance=0）の時：鮮やかなネオンブルー
+            // 白背景（luminance=1）の時：白地に溶けず上品に引き締まる深みのあるロイヤルネイビーブルー
+            Color deepNavy = new Color(0.12f, 0.35f, 0.55f, 1f); 
+            Color neonBlue = new Color(0.48f, 0.85f, 0.95f, 1f); 
+            Color finalBlue = Color.Lerp(neonBlue, deepNavy, luminance);
+
+            SudokuBezelRenderer.ApplyBezel(gameObject, finalBlue, finalBlue, relatedThickness);
         } else {
-            // 通常時: 内側に 2px (通常設定)
-            SudokuBezelRenderer.ApplyBezel(gameObject, theme, false);
+            // 通常時: 通常の枠線を描画 (2px)
+            SudokuBezelRenderer.ApplyBezel(gameObject, theme);
         }
         
         bg.color = targetBgColor;
@@ -126,6 +125,7 @@ public class SudokuCell : MonoBehaviour
         if (display != null) {
             display.SetBackgroundColor(targetBgColor);
             display.SetImageAlpha(targetImageAlpha);
+            display.SetImageColor(theme.useOriginalSpriteColor ? imageMultiplierColor : theme.textColor);
         }
         UpdateMarks();
     }
@@ -138,8 +138,8 @@ public class SudokuCell : MonoBehaviour
 
         if (display != null) {
             display.HideZero = true;
-            // 盤面では表示の安定性とパフォーマンスを優先し、常に即時表示（アニメなし）とする
-            display.SetDigit(Value, theme, true);
+            // 指定された immediate パラメータを渡してアニメーションを制御します
+            display.SetDigit(Value, theme, immediate);
         }
         UpdateMarks();
     }

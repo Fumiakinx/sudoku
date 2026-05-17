@@ -56,21 +56,21 @@ public class SudokuInputButton : MonoBehaviour
 
     public void Refresh() {
         var display = GetComponent<SudokuDigitDisplay>();
+        var theme = (SudokuThemeManager.Instance != null) ? SudokuThemeManager.Instance.CurrentTheme : default;
+
         if (display != null) {
             Debug.Log($"[SudokuInputButton] Refresh: {gameObject.name}, Value: {Value} -> Setting to Display");
             // 0の場合は「Clear」スプライトを表示するために -2 を渡す
             int displayValue = (Value == 0) ? -2 : Value;
-            display.SetDigit(displayValue, default, true);
+            display.SetDigit(displayValue, theme, true);
         }
 
         // ベゼルおよび背景色の適用
         if (SudokuThemeManager.Instance != null) {
-            var theme = SudokuThemeManager.Instance.CurrentTheme;
-            
             // 背景色をテーマの通常セル色に合わせる
             var img = GetComponent<Image>();
             if (img != null) {
-                img.color = theme.cellColorNormal;
+                img.color = theme.useOriginalSpriteColor ? theme.originalSpriteBgColor : theme.cellColorNormal;
             }
 
             SudokuBezelRenderer.ApplyBezel(gameObject, theme);

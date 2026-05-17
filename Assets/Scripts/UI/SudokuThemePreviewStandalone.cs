@@ -94,8 +94,10 @@ public class SudokuThemePreviewStandalone : MonoBehaviour
                 yield return StartCoroutine(AnimateNixie(target, theme));
                 break;
             case SudokuData.ThemeDisplayType.Mechanical:
-            case SudokuData.ThemeDisplayType.FlipFlap:
                 yield return StartCoroutine(AnimateMechanical(target, theme));
+                break;
+            case SudokuData.ThemeDisplayType.Roulette:
+                yield return StartCoroutine(AnimateRoulette(target, theme));
                 break;
             default:
                 ApplySprite(target.ToString(), theme);
@@ -115,7 +117,10 @@ public class SudokuThemePreviewStandalone : MonoBehaviour
             int val = _sovietOrder[i];
             ApplySprite(val.ToString(), theme);
             float brightness = Mathf.Lerp(0.8f, 1.0f, (float)(_sovietOrder.Length - 1 - i) / (_sovietOrder.Length - 1));
-            if (_displayImage != null) _displayImage.color = theme.textColor * brightness;
+            if (_displayImage != null) {
+                Color baseColor = theme.useOriginalSpriteColor ? Color.white : theme.textColor;
+                _displayImage.color = baseColor * brightness;
+            }
             yield return new WaitForSeconds(0.03f);
         }
     }
@@ -132,11 +137,24 @@ public class SudokuThemePreviewStandalone : MonoBehaviour
             if (s != null && _displayImage != null) {
                 _displayImage.sprite = s;
                 if (_imageCanvasGroup != null) _imageCanvasGroup.alpha = 1f;
-                _displayImage.color = theme.textColor;
+                _displayImage.color = theme.useOriginalSpriteColor ? Color.white : theme.textColor;
                 yield return new WaitForSeconds(0.05f);
             }
         }
         ApplySprite(targetStr, theme);
+    }
+
+    private IEnumerator AnimateRoulette(int target, SudokuData.SudokuTheme theme) {
+        if (target > 0) {
+            for (int val = 1; val <= target; val++) {
+                ApplySprite(val.ToString(), theme);
+                float progress = (float)(val - 1) / target;
+                float delay = Mathf.Lerp(0.04f, 0.25f, progress);
+                yield return new WaitForSeconds(delay);
+            }
+        } else {
+            ApplySprite("0", theme);
+        }
     }
 
     private void ApplySprite(string spriteName, SudokuData.SudokuTheme theme) {
@@ -148,7 +166,10 @@ public class SudokuThemePreviewStandalone : MonoBehaviour
             } else {
                 if (_imageCanvasGroup != null) _imageCanvasGroup.alpha = 0f;
             }
-            _displayImage.color = theme.textColor;
+            Color baseColor = theme.useOriginalSpriteColor 
+                ? ((spriteName == "0" || spriteName == "Blank") ? theme.originalSpriteBgColor : Color.white) 
+                : theme.textColor;
+            _displayImage.color = baseColor;
         }
     }
 

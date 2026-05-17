@@ -134,8 +134,8 @@ public class SudokuGameStandalone : MonoBehaviour {
             return;
         }
 
-        // 通常の数字入力
-        selectedCell.SetValue(value);
+        // 通常の数字入力（アニメーションを有効にするため immediate = false で設定）
+        selectedCell.SetValue(value, false);
 
         // ミス判定（正解データとの照合）
         if (value != 0 && value != solutionGrid[selectedCell.Row, selectedCell.Col]) {

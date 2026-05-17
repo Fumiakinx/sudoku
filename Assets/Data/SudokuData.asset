@@ -58,7 +58,9 @@ MonoBehaviour:
     bevelWidth: 4
     correctMarkColor: {r: 0.2, g: 0.8, b: 0.2, a: 1}
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
-  - themeName: MECHANICAL
+    useOriginalSpriteColor: 0
+    originalSpriteBgColor: {r: 0, g: 0, b: 0, a: 0}
+  - themeName: FlipFlap
     displayType: 3
     sprites:
     - {fileID: 21300000, guid: 4f325817bade85c409eb2e3c37e0643a, type: 3}
@@ -145,6 +147,8 @@ MonoBehaviour:
     bevelWidth: 4
     correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
+    useOriginalSpriteColor: 0
+    originalSpriteBgColor: {r: 0, g: 0, b: 0, a: 0}
   - themeName: 7SEGMENT LED
     displayType: 2
     sprites:
@@ -210,6 +214,8 @@ MonoBehaviour:
     bevelWidth: 0
     correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
+    useOriginalSpriteColor: 0
+    originalSpriteBgColor: {r: 0, g: 0, b: 0, a: 0}
   - themeName: Nixie
     displayType: 1
     sprites:
@@ -281,6 +287,8 @@ MonoBehaviour:
     bevelWidth: 4
     correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
+    useOriginalSpriteColor: 0
+    originalSpriteBgColor: {r: 0, g: 0, b: 0, a: 0}
   - themeName: Billiards
     displayType: 0
     sprites:
@@ -324,48 +332,64 @@ MonoBehaviour:
     bevelWidth: 0
     correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
+    useOriginalSpriteColor: 0
+    originalSpriteBgColor: {r: 0, g: 0, b: 0, a: 0}
   - themeName: Life Roulette
     displayType: 0
     sprites:
-    - {fileID: -796592061103715589, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: 1680612187, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: 1166629494, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: -816295844, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: -1275225009, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: 1867193880, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: -402681717, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: -1772107993, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: 149448727, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: -1713396063, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    allSprites: []
+    - {fileID: -5305227446223529407, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 9094851498833753591, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -4851140423385800723, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -4881066991978969021, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -7303629597374001937, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -398263874776089451, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 6062408524520973446, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -8394103579533777509, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 5108593321012204261, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 3898264482580741483, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 4220362009574428615, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    allSprites:
+    - {fileID: 3898264482580741483, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -5305227446223529407, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 9094851498833753591, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -4851140423385800723, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -4881066991978969021, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -7303629597374001937, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -398263874776089451, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 6062408524520973446, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -8394103579533777509, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 5108593321012204261, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 4220362009574428615, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
     topSprites:
-    - {fileID: -796592061103715589, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: 1680612187, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: 1166629494, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: -816295844, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: -1275225009, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: 1867193880, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: -402681717, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: -1772107993, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: 149448727, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
-    - {fileID: -1713396063, guid: 2b04e1c6db2192f4d8edf7d640168758, type: 3}
+    - {fileID: 3898264482580741483, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -5305227446223529407, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 9094851498833753591, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -4851140423385800723, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -4881066991978969021, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -7303629597374001937, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -398263874776089451, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 6062408524520973446, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: -8394103579533777509, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
+    - {fileID: 5108593321012204261, guid: f3d0a68d71249b646bf0e11894d0e980, type: 3}
     bottomSprites: []
     backgroundColor: {r: 1, g: 1, b: 1, a: 1}
     panelColor: {r: 1, g: 1, b: 1, a: 1}
-    textColor: {r: 1, g: 1, b: 1, a: 1}
+    textColor: {r: 0.15, g: 0.15, b: 0.15, a: 1}
     cellColorFixed: {r: 0.8, g: 0.8, b: 0.8, a: 1}
     cellColorNormal: {r: 1, g: 1, b: 1, a: 1}
     lineColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
-    highlightColor: {r: 0, g: 0, b: 0, a: 0}
-    shadowColor: {r: 0, g: 0, b: 0, a: 0}
+    highlightColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+    shadowColor: {r: 0.08, g: 0.08, b: 0.08, a: 1}
     sameDigitColor: {r: 0, g: 0, b: 0, a: 0}
     errorColor: {r: 0, g: 0, b: 0, a: 0}
-    showBezel: 0
+    showBezel: 1
     previewInterval: 0.8
     hasBlank: 1
-    isLocked: 1
-    bevelWidth: 0
+    isLocked: 0
+    bevelWidth: 4
     correctMarkColor: {r: 0.5, g: 1, b: 0, a: 1}
     errorMarkColor: {r: 1, g: 0, b: 0, a: 1}
-  selectedThemeIndex: 0
+    useOriginalSpriteColor: 1
+    originalSpriteBgColor: {r: 0.92, g: 0.92, b: 0.92, a: 1}
+  selectedThemeIndex: 5
   defaultMistLimit: 3

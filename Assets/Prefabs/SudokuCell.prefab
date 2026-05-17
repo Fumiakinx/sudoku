@@ -376,8 +376,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6119939501577291751}
-  - {fileID: 1371690434988466327}
   - {fileID: 4294669740908357753}
+  - {fileID: 1371690434988466327}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -465,6 +465,7 @@ MonoBehaviour:
   baseImage: {fileID: 0}
   animationSpeed: 0.5
   HideZero: 0
+  isTimerDigit: 0
 --- !u!114 &1912188718760404535
 MonoBehaviour:
   m_ObjectHideFlags: 0

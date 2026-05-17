@@ -5,11 +5,11 @@ using UnityEngine.Serialization;
 public class SudokuData : ScriptableObject
 {
     public enum ThemeDisplayType {
-        Normal,     // スプライト＋テキスト
-        Nixie,      // ニキシー管コンポーネント
-        LED7Seg,    // 7セグメントLEDコンポーネント
-        Mechanical, // ドラム式（メカニカル）
-        FlipFlap    // パタパタ（反転フラップ式）
+        Normal = 0,     // スプライト＋テキスト
+        Nixie = 1,      // ニキシー管コンポーネント
+        LED7Seg = 2,    // 7セグメントLEDコンポーネント
+        Mechanical = 3, // メカニカル（反転フラップ式 / ドラム式）
+        Roulette = 4    // 人生ゲーム（ルーレット）
     }
 
     [System.Serializable]
@@ -38,6 +38,8 @@ public class SudokuData : ScriptableObject
         public float bevelWidth;      // 追加：ベゼルの厚さ
         public Color correctMarkColor; // 正解時の「丸」の色
         public Color errorMarkColor;   // 不正解時の「バツ」の色
+        public bool useOriginalSpriteColor; // 元画像の色をそのまま使うフラグ（チェックボックス）
+        public Color originalSpriteBgColor; // 元画像色使用時の目に優しい背景カラー
     }
 
     public SudokuTheme[] themes;
