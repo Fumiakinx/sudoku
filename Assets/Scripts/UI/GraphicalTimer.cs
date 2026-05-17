@@ -12,6 +12,8 @@ public class GraphicalTimer : MonoBehaviour
     [Header("Static References")]
     [SerializeField] private SudokuDigitDisplay[] digits;
     [SerializeField] private TextMeshProUGUI[] colons;
+
+    private int[] _lastVals = new int[6] { -1, -1, -1, -1, -1, -1 };
     
     private void Start() {
         // 初期状態の反映
@@ -40,8 +42,12 @@ public class GraphicalTimer : MonoBehaviour
             // Log removed to prevent console flood
             for (int i = 0; i < digits.Length && i < vals.Length; i++) {
                 if (digits[i] != null) {
-                    var currentTheme = (SudokuThemeManager.Instance != null) ? SudokuThemeManager.Instance.CurrentTheme : default;
-                    digits[i].SetDigit(vals[i], currentTheme, true);
+                    // 値が変わった時だけ更新（SetDigit）を1回だけ行う
+                    if (_lastVals[i] != vals[i]) {
+                        var currentTheme = (SudokuThemeManager.Instance != null) ? SudokuThemeManager.Instance.CurrentTheme : default;
+                        digits[i].SetDigit(vals[i], currentTheme, !UseAnimation);
+                        _lastVals[i] = vals[i];
+                    }
                 } else {
                     Debug.LogWarning($"[TIMER-ERROR] Digit_{i} is NULL in GraphicalTimer array!");
                 }

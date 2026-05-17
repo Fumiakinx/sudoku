@@ -22,6 +22,7 @@ public class SudokuDigitDisplay : MonoBehaviour
     public bool HideZero = false; // 0を表示しない（ブランクにする）設定
     private int _lastValue = -1;
     private static System.Collections.Generic.Dictionary<string, Sprite> _spriteCache = new System.Collections.Generic.Dictionary<string, Sprite>();
+    private float _currentAlpha = 1.0f; // 画像の透明度（背面のハイライトを透かすため）
 
     public void SetDigit(int value, SudokuData.SudokuTheme theme, bool instant = false, bool forceRefresh = false) {
         if (string.IsNullOrEmpty(theme.themeName)) {
@@ -50,6 +51,19 @@ public class SudokuDigitDisplay : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 背面のハイライトを透かせるため、画像の透明度を制御します
+    /// </summary>
+    public void SetImageAlpha(float alpha) {
+        _currentAlpha = alpha;
+        // 即座に反映
+        if (_targetImage != null && _targetImage.enabled) {
+            Color c = _targetImage.color;
+            c.a = _currentAlpha;
+            _targetImage.color = c;
+        }
+    }
+
     private IEnumerator AnimateDigit(int value, SudokuData.SudokuTheme theme) {
         try {
             if (theme.displayType == SudokuData.ThemeDisplayType.Normal || 
@@ -62,16 +76,39 @@ public class SudokuDigitDisplay : MonoBehaviour
                 for (int i = sovietOrder.Length - 1; i >= targetPos; i--) {
                     float brightness = Mathf.Lerp(0.8f, 1.0f, (float)(sovietOrder.Length - 1 - i) / (sovietOrder.Length - 1));
                     ApplyVisual(sovietOrder[i], theme, brightness);
-                    yield return new WaitForSeconds(0.02f);
+                    yield return new WaitForSeconds(0.03f);
                 }
-            } else if (theme.displayType == SudokuData.ThemeDisplayType.Mechanical) {
-                int start = _lastValue >= 0 ? _lastValue : 0;
-                int end = value;
-                if (start > end) end += 10;
-                for (int v = start; v <= end; v++) {
-                    ApplyVisual(v % 10, theme);
-                    yield return new WaitForSeconds(0.05f);
+            } else if (theme.displayType == SudokuData.ThemeDisplayType.Mechanical || 
+                       theme.displayType == SudokuData.ThemeDisplayType.FlipFlap) {
+                
+                // 初回などで過去値がない場合は便宜上現在値を遷移前とする
+                int prev = _lastValue >= 0 ? _lastValue : value;
+                string prevStr = prev.ToString();
+                string targetStr = value.ToString();
+                string[] angles = { "45", "90", "135" };
+
+                // 途中コマの画像を順次表示
+                foreach (var angle in angles) {
+                    string spriteName = $"Anim_{prevStr}_{targetStr}_{angle}";
+                    Sprite s = FindSpriteInTheme(theme, spriteName);
+                    
+                    if (s != null && _targetImage != null) {
+                        _targetImage.enabled = true;
+                        _targetImage.sprite = s;
+                        
+                        // ベース色とアルファ値を適用
+                        Color baseColor = theme.textColor;
+                        baseColor.a *= _currentAlpha;
+                        _targetImage.color = baseColor;
+                        
+                        if (_textLabel != null) _textLabel.enabled = false;
+                        
+                        yield return new WaitForSeconds(0.05f);
+                    }
                 }
+                
+                // 最後に目標の数字を表示する
+                ApplyVisual(value, theme);
             }
         } finally {
             _lastValue = value;
@@ -79,7 +116,7 @@ public class SudokuDigitDisplay : MonoBehaviour
     }
 
     private Sprite GetThemeSprite(int value, SudokuData.SudokuTheme theme) {
-        if (value == -2) return FindSpriteInTheme(theme, "Clear");
+        if (value == -2) return null; // Clear用画像は使わず、常にテキスト表示させる
         if (value == 10) return FindSpriteInTheme(theme, "Blank");
         if (value <= 0) return FindSpriteInTheme(theme, HideZero ? "Blank" : "0");
         return FindSpriteInTheme(theme, value.ToString());
@@ -97,6 +134,17 @@ public class SudokuDigitDisplay : MonoBehaviour
                 return s;
             }
         }
+        
+        // 途中コマ用（Anim_）に allSprites からも検索する
+        if (theme.allSprites != null) {
+            foreach (var s in theme.allSprites) {
+                if (s != null && s.name.IndexOf(spriteName, System.StringComparison.OrdinalIgnoreCase) >= 0) {
+                    _spriteCache[cacheKey] = s;
+                    return s;
+                }
+            }
+        }
+        
         return null;
     }
 
@@ -110,7 +158,8 @@ public class SudokuDigitDisplay : MonoBehaviour
         if (s == null) {
             if (_targetImage != null) {
                 _targetImage.sprite = null;
-                _targetImage.enabled = true; // 背景色（テーマカラー）維持のため有効化
+                // テキスト表示時は、前面の画像領域を非表示にして「白い四角」を出さないようにする
+                _targetImage.enabled = false; 
             }
             // ベベルを消さないため、CanvasGroup.alpha = 0 の操作は行わない
 
@@ -120,8 +169,11 @@ public class SudokuDigitDisplay : MonoBehaviour
                 _textLabel.enabled = shouldShowLabel;
                 
                 if (shouldShowLabel) {
-                    if (displayValue == -2) _textLabel.text = "C";
-                    else _textLabel.text = displayValue.ToString();
+                    if (displayValue == -2) {
+                        _textLabel.text = "<size=150%>C</size>"; // 文字を少し大きく表示
+                    } else {
+                        _textLabel.text = displayValue.ToString();
+                    }
                     _textLabel.color = theme.textColor;
                 }
             }
@@ -133,7 +185,10 @@ public class SudokuDigitDisplay : MonoBehaviour
                 // メニューのサンプル（PreviewStandalone）に合わせて、Nixie/LED7Seg時は基本輝度を0.8倍に調整
                 float themeAdjust = (theme.displayType == SudokuData.ThemeDisplayType.Nixie || 
                                      theme.displayType == SudokuData.ThemeDisplayType.LED7Seg) ? 0.8f : 1.0f;
-                _targetImage.color = theme.textColor * brightness * themeAdjust;
+                // 基本色を設定し、指定されたアルファ値を適用する
+                Color baseColor = theme.textColor * brightness * themeAdjust;
+                baseColor.a *= _currentAlpha;
+                _targetImage.color = baseColor;
                 _targetImage.rectTransform.localScale = Vector3.one;
             }
 

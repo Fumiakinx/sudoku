@@ -63,9 +63,16 @@ public class SudokuInputButton : MonoBehaviour
             display.SetDigit(displayValue, default, true);
         }
 
-        // ベゼルの適用
+        // ベゼルおよび背景色の適用
         if (SudokuThemeManager.Instance != null) {
             var theme = SudokuThemeManager.Instance.CurrentTheme;
+            
+            // 背景色をテーマの通常セル色に合わせる
+            var img = GetComponent<Image>();
+            if (img != null) {
+                img.color = theme.cellColorNormal;
+            }
+
             SudokuBezelRenderer.ApplyBezel(gameObject, theme);
         }
     }
