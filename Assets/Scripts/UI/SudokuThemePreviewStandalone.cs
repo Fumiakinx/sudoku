@@ -26,7 +26,9 @@ public class SudokuThemePreviewStandalone : MonoBehaviour
 
     private void Awake() {
         if (sudokuData == null) {
+#if UNITY_EDITOR
             sudokuData = UnityEditor.AssetDatabase.LoadAssetAtPath<SudokuData>("Assets/Data/SudokuData.asset");
+#endif
         }
         
         if (sudokuData != null) _currentThemeIndex = sudokuData.selectedThemeIndex;
@@ -167,7 +169,7 @@ public class SudokuThemePreviewStandalone : MonoBehaviour
                 if (_imageCanvasGroup != null) _imageCanvasGroup.alpha = 0f;
             }
             Color baseColor = theme.useOriginalSpriteColor 
-                ? ((spriteName == "0" || spriteName == "Blank") ? theme.originalSpriteBgColor : Color.white) 
+                ? Color.white 
                 : theme.textColor;
             _displayImage.color = baseColor;
         }

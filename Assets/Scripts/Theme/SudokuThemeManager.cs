@@ -17,6 +17,9 @@ public class SudokuThemeManager : MonoBehaviour
         }
     }
 
+    // アプリ起動後に最初の初期化が行われたかを記録する静的フラグ
+    private static bool isAppFirstInitialized = false;
+
     [Header("Data Source")]
     public SudokuData sudokuData;
 
@@ -34,9 +37,32 @@ public class SudokuThemeManager : MonoBehaviour
     private void Awake() {
         instance = this;
         
-        // SudokuGameState から最後に選択されたテーマを復元
-        if (sudokuData != null) {
-            sudokuData.selectedThemeIndex = SudokuGameState.SelectedThemeIndex;
+        if (!isAppFirstInitialized) {
+            // アプリ起動後の最初のシーンロード時のみ、強制的にNixieテーマを選択する
+            isAppFirstInitialized = true;
+            if (sudokuData != null && sudokuData.themes != null) {
+                int nixieIndex = -1;
+                for (int i = 0; i < sudokuData.themes.Length; i++) {
+                    if (sudokuData.themes[i].themeName == "Nixie") {
+                        nixieIndex = i;
+                        break;
+                    }
+                }
+                if (nixieIndex != -1) {
+                    sudokuData.selectedThemeIndex = nixieIndex;
+                    SudokuGameState.SelectedThemeIndex = nixieIndex;
+                } else {
+                    // Nixieテーマが見つからない場合は以前のテーマを復元
+                    sudokuData.selectedThemeIndex = SudokuGameState.SelectedThemeIndex;
+                }
+            } else if (sudokuData != null) {
+                sudokuData.selectedThemeIndex = SudokuGameState.SelectedThemeIndex;
+            }
+        } else {
+            // 2回目以降（シーン遷移時やメニューに戻った際など）は、ユーザーが選んだテーマを正しく復元
+            if (sudokuData != null) {
+                sudokuData.selectedThemeIndex = SudokuGameState.SelectedThemeIndex;
+            }
         }
 
         // 起動時のテーマを通知

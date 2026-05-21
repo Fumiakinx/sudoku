@@ -241,9 +241,9 @@ public class SudokuDigitDisplay : MonoBehaviour
                                      theme.displayType == SudokuData.ThemeDisplayType.LED7Seg) ? 0.8f : 1.0f;
                 
                 // アセット側の設定フラグに従い、画像本来の色を活かすか、文字色を乗算するかを自動で切り替える
-                // ブランクスプライト（白い立体四角枠）の場合は目に優しい背景色を乗算して輝度をマイルドに和らげる
+                // 空白スプライト画像自体にすでに背景色が焼き込まれているため、ゲーム側では二重乗算を避けて等倍(Color.white)で描画します
                 Color tintColor = theme.useOriginalSpriteColor 
-                    ? (displayValue == 10 ? theme.originalSpriteBgColor : Color.white) 
+                    ? Color.white 
                     : theme.textColor;
 
                 // 基本色を設定し、指定されたアルファ値を適用する

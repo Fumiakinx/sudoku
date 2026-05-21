@@ -464,29 +464,29 @@ MonoBehaviour:
   - themeName: ARMY RUST
     displayType: 0
     sprites:
-    - {fileID: 2130000000000000000, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000001, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000002, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000003, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000004, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000005, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000006, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000007, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000008, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000009, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000010, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: -3540756737972483004, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -1891384097206569502, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -7082353282375354422, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -3243746778025709034, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: 7541608096095799550, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: 5743987676224363151, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: 773023674317908321, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -5751329163219315255, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -3218505570173106766, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -982600245077561698, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: 21300000, guid: ffdd3bf7877331d4289057d969292881, type: 3}
     allSprites:
-    - {fileID: 2130000000000000000, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000001, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000002, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000003, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000004, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000005, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000006, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000007, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000008, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000009, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
-    - {fileID: 2130000000000000010, guid: cdab743c1231ba9459cf4ae04635fabc, type: 3}
+    - {fileID: -3540756737972483004, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -1891384097206569502, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -7082353282375354422, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -3243746778025709034, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: 7541608096095799550, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: 5743987676224363151, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: 773023674317908321, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -5751329163219315255, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -3218505570173106766, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: -982600245077561698, guid: 374436481a7ebcf4b826c01bdf835980, type: 3}
+    - {fileID: 21300000, guid: ffdd3bf7877331d4289057d969292881, type: 3}
     topSprites: []
     bottomSprites: []
     backgroundColor: {r: 0.294, g: 0.282, b: 0.204, a: 1}
@@ -508,5 +508,52 @@ MonoBehaviour:
     errorMarkColor: {r: 0.9, g: 0.2, b: 0.2, a: 1}
     useOriginalSpriteColor: 1
     originalSpriteBgColor: {r: 0.294, g: 0.282, b: 0.204, a: 1}
-  selectedThemeIndex: 6
+  - themeName: METAL CHROME
+    displayType: 0
+    sprites:
+    - {fileID: -1182182201121958929, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 4748617022439104429, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 4302673026865846219, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 2551967837082433824, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 1586455976520226661, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: -8874665168843838130, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 2537742777438987570, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 3607673113224316092, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: -5911407449192388961, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 1771931391671215594, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 21300000, guid: a5921c13f199c704fb3d011d22c6ddd0, type: 3}
+    allSprites:
+    - {fileID: -1182182201121958929, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 4748617022439104429, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 4302673026865846219, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 2551967837082433824, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 1586455976520226661, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: -8874665168843838130, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 2537742777438987570, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 3607673113224316092, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: -5911407449192388961, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 1771931391671215594, guid: 1f9165ed311ee87408f90c9b46c71449, type: 3}
+    - {fileID: 21300000, guid: a5921c13f199c704fb3d011d22c6ddd0, type: 3}
+    topSprites: []
+    bottomSprites: []
+    backgroundColor: {r: 0, g: 0, b: 0, a: 1}
+    panelColor: {r: 0.12, g: 0.14, b: 0.18, a: 1}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    cellColorFixed: {r: 0.15, g: 0.18, b: 0.22, a: 1}
+    cellColorNormal: {r: 0.2, g: 0.22, b: 0.26, a: 1}
+    lineColor: {r: 0.4, g: 0.45, b: 0.5, a: 1}
+    highlightColor: {r: 0.77272725, g: 0.8036363, b: 0.85, a: 1}
+    shadowColor: {r: 0.22727272, g: 0.23636362, b: 0.25, a: 1}
+    sameDigitColor: {r: 0.2, g: 0.2, b: 0.25, a: 1}
+    errorColor: {r: 0.4, g: 0.15, b: 0.15, a: 1}
+    showBezel: 1
+    previewInterval: 0
+    hasBlank: 1
+    isLocked: 0
+    bevelWidth: 4
+    correctMarkColor: {r: 0.2, g: 0.8, b: 0.2, a: 1}
+    errorMarkColor: {r: 0.9, g: 0.2, b: 0.2, a: 1}
+    useOriginalSpriteColor: 1
+    originalSpriteBgColor: {r: 0.114196196, g: 0.109804064, b: 0.112000115, a: 1}
+  selectedThemeIndex: 8
   defaultMistLimit: 3

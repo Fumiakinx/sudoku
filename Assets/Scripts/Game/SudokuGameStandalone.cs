@@ -33,7 +33,9 @@ public class SudokuGameStandalone : MonoBehaviour {
         
         // データのロード（フォールバック付）
         if (sudokuData == null) {
+#if UNITY_EDITOR
             sudokuData = UnityEditor.AssetDatabase.LoadAssetAtPath<SudokuData>("Assets/Data/SudokuData.asset");
+#endif
         }
 
         // シーン内の要素の紐付け（リストから2次元配列を構築）

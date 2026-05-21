@@ -1215,6 +1215,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1818305435445324089, guid: 31fc9dfbc75c1404b948c1743bcb2558, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2097717318377144587, guid: 31fc9dfbc75c1404b948c1743bcb2558, type: 3}
       propertyPath: m_Layer
       value: 5
