@@ -92,8 +92,9 @@ public class SudokuCell : MonoBehaviour
         
         // 優先順位: エラー > 選択中 > 同じ数字 > 関連セル
         if (IsError) {
-            // エラー時は極太 10px の警告色ベゼルを適用
-            SudokuBezelRenderer.ApplyBezel(gameObject, theme.errorMarkColor, theme.errorMarkColor, selectThickness);
+            // エラー時は極太 10px の警告色ベゼルを適用（背景色に合わせてコントラスト自動調整）
+            Color adjustedErrorColor = SudokuFeedbackOverlay.GetVisibleMarkColor(theme.errorMarkColor, baseCellColor, false);
+            SudokuBezelRenderer.ApplyBezel(gameObject, adjustedErrorColor, adjustedErrorColor, selectThickness);
         } else if (_isSelected) {
             // 【選択中：最前面・極太 10px インテリジェントゴールドベゼル】
             // 黒背景（luminance=0）の時：明るく輝くネオンゴールド
@@ -159,6 +160,14 @@ public class SudokuCell : MonoBehaviour
                 cg.alpha = shouldShow ? 1f : 0f;
             } else {
                 crossText.color = new Color(crossText.color.r, crossText.color.g, crossText.color.b, shouldShow ? 1f : 0f);
+            }
+
+            if (shouldShow) {
+                var theme = SudokuThemeManager.Instance != null ? SudokuThemeManager.Instance.CurrentTheme : default;
+                // セルの背景色を取得
+                Color cellBgColor = bg != null ? bg.color : Color.black;
+                // コントラスト調整を適用したバツ印の色を設定
+                crossText.color = SudokuFeedbackOverlay.GetVisibleMarkColor(theme.errorMarkColor, cellBgColor, false);
             }
         }
     }
