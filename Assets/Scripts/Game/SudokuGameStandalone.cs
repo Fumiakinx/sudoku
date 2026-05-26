@@ -97,14 +97,6 @@ public class SudokuGameStandalone : MonoBehaviour {
         ApplyTheme(true);
     }
 
-    private int CountPreFilled(int[,] grid) {
-        int count = 0;
-        for (int r = 0; r < 9; r++)
-            for (int c = 0; c < 9; c++)
-                if (grid[r, c] != 0) count++;
-        return count;
-    }
-
     public void OnCellSelected(SudokuCell cell) {
         if (cell == null || cell.IsFixed) return;
         
@@ -216,20 +208,6 @@ public class SudokuGameStandalone : MonoBehaviour {
         }
     }
 
-
-    private void CheckErrors() {
-        for (int r = 0; r < 9; r++) {
-            for (int c = 0; c < 9; c++) {
-                if (cells[r, c] == null) continue;
-                cells[r, c].IsError = false;
-                if (cells[r, c].Value != 0) {
-                    if (cells[r, c].Value != solutionGrid[r, c]) {
-                         cells[r, c].IsError = true;
-                    }
-                }
-            }
-        }
-    }
 
     private bool CheckWin() {
         for (int r = 0; r < 9; r++) {

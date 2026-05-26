@@ -25,6 +25,11 @@ public class SudokuDigitDisplay : MonoBehaviour
     private static System.Collections.Generic.Dictionary<string, Sprite> _spriteCache = new System.Collections.Generic.Dictionary<string, Sprite>();
     private float _currentAlpha = 1.0f; // 画像の透明度（背面のハイライトを透かすため）
 
+    // コルーチンで使用される WaitForSeconds インスタンスをキャッシュ化 (GC Alloc 排除)
+    private static readonly WaitForSeconds nixieDelay = new WaitForSeconds(0.03f);
+    private static readonly WaitForSeconds mechanicalDelay = new WaitForSeconds(0.05f);
+
+
     public void SetDigit(int value, SudokuData.SudokuTheme theme, bool instant = false, bool forceRefresh = false) {
         if (string.IsNullOrEmpty(theme.themeName)) {
             if (SudokuThemeManager.Instance != null) {
@@ -88,7 +93,7 @@ public class SudokuDigitDisplay : MonoBehaviour
                 for (int i = sovietOrder.Length - 1; i >= targetPos; i--) {
                     float brightness = Mathf.Lerp(0.8f, 1.0f, (float)(sovietOrder.Length - 1 - i) / (sovietOrder.Length - 1));
                     ApplyVisual(sovietOrder[i], theme, brightness);
-                    yield return new WaitForSeconds(0.03f);
+                    yield return nixieDelay;
                 }
             } else if (theme.displayType == SudokuData.ThemeDisplayType.Mechanical) {
                 
@@ -114,7 +119,7 @@ public class SudokuDigitDisplay : MonoBehaviour
                         
                         if (_textLabel != null) _textLabel.enabled = false;
                         
-                        yield return new WaitForSeconds(0.05f);
+                        yield return mechanicalDelay;
                     }
                 }
                 
@@ -199,6 +204,8 @@ public class SudokuDigitDisplay : MonoBehaviour
             }
         }
         
+        // 見つからなかった場合もキャッシュに null を登録して、二度目以降の無駄な検索ループを防止 (O(1)化)
+        _spriteCache[cacheKey] = null;
         return null;
     }
 

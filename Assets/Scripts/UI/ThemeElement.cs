@@ -87,8 +87,8 @@ public class ThemeElement : MonoBehaviour
                     // メニューボタン本体などは透明にする
                     img.color = new Color(0,0,0,0);
                 } else if (img.GetComponentInParent<SudokuCell>() != null) {
-                    // 盤面のセル内部要素
-                    img.color = theme.cellColorNormal;
+                    // 盤面のセル内部要素は SudokuCell 自身が色管理を行うため、ここではスキップする
+                    continue;
                 } else if (img.GetComponentInParent<Button>() != null) {
                     // メニューボタンなどの子要素背景（盤面セル以外）は透明にして浮かないようにする
                     img.color = new Color(0, 0, 0, 0);

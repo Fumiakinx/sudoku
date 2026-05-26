@@ -48,9 +48,6 @@ public class UIManager : MonoBehaviour
         string sceneName = SceneManager.GetActiveScene().name;
         Debug.Log($"【診断ログ】UIManager.Start: 現在のシーン名は [{sceneName}] です。");
 
-        // 自動検索の再実行（Start時点でも念のため）
-        if (panelManager == null) panelManager = GetComponentInChildren<SudokuPanelManager>(true);
-
         if (sudokuBoard == null) {
             sudokuBoard = Object.FindAnyObjectByType<SudokuGameStandalone>(FindObjectsInactive.Include);
         }
@@ -171,32 +168,6 @@ public class UIManager : MonoBehaviour
             SudokuThemeManager.Instance.NotifyThemeChanged(true);
             if (Camera.main != null) {
                 Camera.main.backgroundColor = SudokuThemeManager.Instance.CurrentTheme.backgroundColor;
-            }
-        }
-    }
-
-    private void OnInputNumberClicked(int number) {
-        Debug.Log($"[UIManager] OnInputNumberClicked: Value={number}");
-        if (sudokuBoard == null) {
-            Debug.LogWarning("[UIManager] sudokuBoard is NULL!");
-            return;
-        }
-
-        // 特殊コマンド（0はセルの消去、負の数はデバッグ用など）
-
-        // ユーザー様テスト用：Cボタン(-2)で強制勝利（クリア画面遷移）
-        if (number == -2) {
-            Debug.Log("[UIManager] C-Button Pressed: Triggering Test Win Transition.");
-            if (GameManager.Instance != null) GameManager.Instance.OnWin();
-            return;
-        }
-        
-        var selected = sudokuBoard.SelectedCell;
-        if (selected != null) {
-            sudokuBoard.OnInputButtonClicked(number);
-            // 入力後にボタンの状態（カウント制限）を更新
-            if (inputPanelController != null) {
-                inputPanelController.UpdateButtonStates(sudokuBoard, selected);
             }
         }
     }

@@ -62,4 +62,12 @@ public class SudokuMenuController : MonoBehaviour
             Debug.Log("[SudokuMenuController] Theme Cycled: " + SudokuThemeManager.Instance.CurrentTheme.themeName);
         }
     }
+
+    /// <summary>
+    /// 説明（ヘルプ）ボタンが押された際に、説明専用シーン（HelpScene）へ遷移します。
+    /// </summary>
+    public void OnHelpClicked() {
+        Debug.Log("[DEBUG] OnHelpClicked: Loading HelpScene...");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("HelpScene");
+    }
 }

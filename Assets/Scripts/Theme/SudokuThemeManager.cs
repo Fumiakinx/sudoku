@@ -84,16 +84,8 @@ public class SudokuThemeManager : MonoBehaviour
         
         try {
             SudokuData.SudokuTheme theme = CurrentTheme;
-            var invocationList = OnThemeChanged?.GetInvocationList();
-            int count = invocationList?.Length ?? 0;
-            if (invocationList != null) {
-                for (int i = 0; i < invocationList.Length; i++) {
-                    var subscriber = invocationList[i];
-                    ((System.Action<SudokuData.SudokuTheme, bool>)subscriber).Invoke(theme, isInitial);
-                }
-            }
-            
-            // 通知完了
+            // GetInvocationListによるヒープ生成を廃止し、直接InvokeすることでGC Allocをゼロ化
+            OnThemeChanged?.Invoke(theme, isInitial);
         } catch (System.Exception e) {
             Debug.LogError($"[THEME-LOG] CRITICAL EXCEPTION during NotifyThemeChanged: {e.Message}\n{e.StackTrace}");
         } finally {

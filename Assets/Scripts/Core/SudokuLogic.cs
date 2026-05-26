@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public static class SudokuLogic
@@ -16,10 +15,21 @@ public static class SudokuLogic
         Expert
     }
 
+    // 81段階の再帰レベルそれぞれで使用する、1〜9の数字配列をあらかじめ静的バッファとして用意 (GCアロケーションの防止)
+    private static readonly int[][] recursionBuffer = new int[82][];
+
+    static SudokuLogic() {
+        // 静的コンストラクタで、各深さ用のサイズ9の配列を事前にアロケーションしておく
+        for (int i = 0; i < recursionBuffer.Length; i++) {
+            recursionBuffer[i] = new int[9];
+        }
+    }
+
     public static int[,] GenerateFullGrid()
     {
         int[,] grid = new int[GridSize, GridSize];
-        FillGrid(grid);
+        stepCount = 0;
+        FillGrid(grid, 0); // 初期深さ 0 で開始
         return grid;
     }
 
@@ -28,9 +38,20 @@ public static class SudokuLogic
         int[,] puzzle = (int[,])fullGrid.Clone();
         int holes = GetHoleCount(difficulty);
         
-        List<int> positions = Enumerable.Range(0, GridSize * GridSize).ToList();
-        System.Random rng = new System.Random();
-        positions = positions.OrderBy(x => rng.Next()).ToList();
+        // 81個のセルインデックス配列を固定確保
+        int[] positions = new int[GridSize * GridSize];
+        for (int i = 0; i < positions.Length; i++) {
+            positions[i] = i;
+        }
+
+        // Fisher-Yatesシャッフルにより、メモリ割り当て無しでO(N)で完全ランダムソート
+        System.Random localRng = new System.Random();
+        for (int i = positions.Length - 1; i > 0; i--) {
+            int j = localRng.Next(i + 1);
+            int temp = positions[i];
+            positions[i] = positions[j];
+            positions[j] = temp;
+        }
 
         int removed = 0;
         foreach (int pos in positions)
@@ -60,7 +81,11 @@ public static class SudokuLogic
     private static int stepCount = 0;
     private const int MAX_STEPS = 10000;
 
-    private static bool FillGrid(int[,] grid)
+    /// <summary>
+    /// バックトラッキングを用いて盤面を生成します。
+    /// depth 引数を用いて事前確保された recursionBuffer を参照し、GC Alloc を 0 にします。
+    /// </summary>
+    private static bool FillGrid(int[,] grid, int depth)
     {
         stepCount++;
         if (stepCount > MAX_STEPS) return false;
@@ -71,25 +96,34 @@ public static class SudokuLogic
             {
                 if (grid[row, col] == 0)
                 {
-                    List<int> nums = Enumerable.Range(1, 9).ToList();
+                    // 事前確保されたこの深さ用のバッファを使用 (GC Alloc なし)
+                    int[] nums = recursionBuffer[depth];
+                    
+                    // 1〜9の数値をセット
+                    for (int i = 0; i < 9; i++) {
+                        nums[i] = i + 1;
+                    }
+
                     // フィッシャー–イェーツのシャッフル
-                    for (int i = nums.Count - 1; i > 0; i--) {
+                    for (int i = 8; i > 0; i--) {
                         int j = rng.Next(i + 1);
                         int temp = nums[i];
                         nums[i] = nums[j];
                         nums[j] = temp;
                     }
 
-                    foreach (int num in nums)
+                    // 順に数値をあてはめ再帰検証
+                    for (int i = 0; i < 9; i++)
                     {
+                        int num = nums[i];
                         if (IsValid(grid, row, col, num))
                         {
                             grid[row, col] = num;
-                            if (FillGrid(grid)) return true;
+                            if (FillGrid(grid, depth + 1)) return true;
                             grid[row, col] = 0;
                         }
                     }
-                    return false;
+                    return false; // バックトラッキング
                 }
             }
         }
@@ -103,7 +137,7 @@ public static class SudokuLogic
             int[,] fullGrid = new int[GridSize, GridSize];
             stepCount = 0;
             Debug.Log($"[SudokuLogic] Attempt {retry + 1}/10 - Filling grid...");
-            if (FillGrid(fullGrid)) {
+            if (FillGrid(fullGrid, 0)) { // 初期深さ 0 で開始
                 Debug.Log($"[SudokuLogic] Grid filled successfully in {stepCount} steps.");
                 int[,] puzzle = GeneratePuzzle(fullGrid, difficulty);
                 Debug.Log("<color=green>【SudokuLogic】Generate SUCCESS</color>");
