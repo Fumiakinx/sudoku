@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour
         Debug.Log($"[GameManager] GameOver: {(won ? "WON" : "LOST")}");
         IsGameOver = true;
         SudokuGameState.LastGameWon = won;
+        SudokuGameState.LastGameTime = GameTime; // タイムを保存
         
         if (won) OnGameWon?.Invoke();
         else OnGameLost?.Invoke();

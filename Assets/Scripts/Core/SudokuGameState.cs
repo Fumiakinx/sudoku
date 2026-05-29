@@ -7,6 +7,9 @@ public static class SudokuGameState
     // リザルト画面で参照する勝敗フラグ
     public static bool LastGameWon = false;
     
+    // ゲームクリア時の最終経過時間を保持するフィールド
+    public static float LastGameTime = 0f;
+    
     // 選択されたテーマのインデックスを保持（PlayerPrefsで永続化）
     public static int SelectedThemeIndex {
         get => UnityEngine.PlayerPrefs.GetInt("SelectedThemeIndex", 0);
