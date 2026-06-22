@@ -1,168 +1,893 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="ja">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | Sudoku</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-  <script src="TemplateData/profiler.js"></script>
-  </head>
-  <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=600 height=960 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-      </div>
-      <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-logo-title-footer"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">Sudoku</div>
-      </div>
-    </div>
-    <script>
-      var canvas = document.querySelector("#unity-canvas");
-
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        var warningBanner = document.querySelector("#unity-warning");
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
+    <title>🔢 すうどく | SUDOKU WEB PLAYER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg-gradient-start: #0a0a0c;
+        --bg-gradient-end: #14141f;
+        --handle-bg: rgba(18, 18, 20, 0.85);
+        --handle-color: rgba(255, 255, 255, 0.6);
+        --handle-border: rgba(255, 255, 255, 0.15);
+        --handle-hover-bg: rgba(18, 18, 20, 0.95);
+        --handle-hover-color: #2196F3; /* すうどくのテーマ：鮮やかなブルーベベル */
+        --accent-glow: rgba(33, 150, 243, 0.4);
       }
 
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Build.loader.js";
-      var config = {
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: 'Inter', 'Outfit', sans-serif;
+        background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+        color: #ffffff;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        transition: background 0.8s ease;
+      }
+
+      /* メインレイアウトコンテナ */
+      #main-container {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 20px 20px 20px; /* 上部に80pxのゆったりした余白を設けて、ゲーム内のタイマーと完全に干渉しないよう下に押し下げ */
+        position: relative;
+      }
+
+      /* ゲームエリア */
+      #game-area {
+        position: relative;
+        width: 100%;
+        max-width: 50vh; /* 縦型アスペクト比維持 */
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #unity-canvas {
+        width: 100% !important;
+        height: 100% !important;
+        aspect-ratio: 9 / 16;
+        object-fit: contain;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        background: #231F20;
+        border-radius: 16px;
+      }
+
+      /* 常時表示ランキングサイドパネル */
+      #sidebar-ranking {
+        width: 320px;
+        height: 80%;
+        margin-left: 40px;
+        background: rgba(18, 18, 20, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        padding: 25px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        display: none; /* デフォルト非表示、メディアクエリで表示 */
+        flex-direction: column;
+        z-index: 10;
+        animation: fadeInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes fadeInRight {
+        from { opacity: 0; transform: translateX(30px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+
+      @media (min-width: 950px) {
+        #sidebar-ranking {
+          display: flex;
+        }
+      }
+
+      /* ランキングテーブルのデザイン */
+      .ranking-title-area {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
+
+      .ranking-main-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--handle-hover-color);
+        text-shadow: 0 0 10px var(--accent-glow);
+        letter-spacing: 0.5px;
+      }
+
+      .diff-selector {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: white;
+        border-radius: 8px;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: bold;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .diff-selector option {
+        background-color: #1a1a24; /* 暗いネイビー背景 */
+        color: #ffffff; /* 白文字に明示固定 */
+      }
+
+      .diff-selector:focus {
+        border-color: var(--handle-hover-color);
+        box-shadow: 0 0 8px var(--accent-glow);
+      }
+
+      .ranking-table-wrap {
+        flex-grow: 1;
+        overflow-y: auto;
+        margin-top: 10px;
+      }
+
+      .ranking-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 13px;
+      }
+
+      .ranking-table th {
+        color: #8a8a93;
+        font-weight: 600;
+        padding: 8px 6px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .ranking-table td {
+        padding: 8px 6px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        font-weight: 500;
+      }
+
+      /* 非表示時の極小引き下げハンドル */
+      .control-handle {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90px;
+        height: 16px;
+        background: linear-gradient(180deg, #2196F3 0%, #00d2ff 100%); /* 明るいブルーベベルグラデーション */
+        border: 1px solid #00d2ff;
+        border-top: none;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        z-index: 99999; /* z-indexを極限まで大きくして常に最前面へ */
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(8px);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity: 1;
+        box-shadow: 0 4px 12px rgba(0, 210, 255, 0.4), 0 0 10px var(--accent-glow);
+      }
+
+      .control-handle span {
+        font-size: 9px;
+        font-weight: bold;
+        color: #ffffff; /* 白文字に変更して視認性アップ */
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s ease, color 0.3s ease;
+      }
+
+      /* メニュー出現時に自動追従 */
+      .control-bar.active ~ .control-handle {
+        top: 41px;
+        background: var(--handle-hover-bg);
+        border-color: var(--handle-hover-color);
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        height: 18px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 10px var(--accent-glow);
+      }
+
+      .control-bar.active ~ .control-handle span {
+        transform: rotate(180deg);
+        color: var(--handle-hover-color);
+      }
+
+      /* コントロールバー */
+      .control-bar {
+        position: absolute;
+        top: -70px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(18, 18, 20, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: none;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        padding: 10px 40px;
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        z-index: 100000; /* z-indexを引き上げて最前面へ */
+        backdrop-filter: blur(12px);
+        opacity: 0;
+        pointer-events: none;
+        transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .control-bar.active {
+        top: 0px;
+        opacity: 1;
+        pointer-events: auto;
+        background: rgba(18, 18, 20, 0.95);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 15px var(--accent-glow);
+      }
+
+      /* フルスクリーン表示時の重ね順対策 */
+      :fullscreen .control-handle,
+      :fullscreen .control-bar,
+      :-webkit-full-screen .control-handle,
+      :-webkit-full-screen .control-bar {
+        z-index: 2147483647 !important;
+      }
+
+      .game-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: var(--handle-hover-color);
+        text-shadow: 0 0 8px var(--accent-glow);
+      }
+
+      .btn-control {
+        background: transparent;
+        border: none;
+        color: #a0a0a5;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        transition: color 0.2s ease, transform 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        outline: none;
+      }
+
+      .btn-control:hover {
+        color: #ffffff;
+        transform: translateY(-1px);
+      }
+
+      /* モーダル共通スタイル */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 5000;
+      }
+
+      .modal {
+        background: rgba(26, 26, 36, 0.98);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        width: 90%;
+        max-width: 500px;
+        border-radius: 24px;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 30px;
+        font-weight: bold;
+        color: rgba(255,255,255,0.4);
+        cursor: pointer;
+        line-height: 1;
+      }
+
+      .modal-close:hover {
+        color: #ffffff;
+      }
+
+      .modal-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--handle-hover-color);
+        margin-bottom: 20px;
+        text-align: center;
+        letter-spacing: 0.5px;
+        text-shadow: 0 0 10px var(--accent-glow);
+      }
+
+      .instruction-section {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        border-radius: 14px;
+        margin-bottom: 15px;
+      }
+
+      .instruction-title {
+        font-size: 15px;
+        color: var(--handle-hover-color);
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .instruction-list {
+        list-style: none;
+        padding-left: 5px;
+        font-size: 13px;
+        color: #d0d0d5;
+        line-height: 1.8;
+      }
+
+      .instruction-list strong {
+        color: white;
+      }
+
+      .btn-close-modal {
+        margin-top: 10px;
+        background: #333338;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .btn-close-modal:hover {
+        background: #44444c;
+      }
+
+      #globalPlayerName:focus {
+        border-color: var(--handle-hover-color) !important;
+        box-shadow: 0 0 8px var(--accent-glow) !important;
+      }
+
+      /* ポータルへ戻るボタン */
+      .btn-back-portal {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid #4CAF50;
+        color: #4CAF50;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: bold;
+        text-decoration: none;
+        display: none; /* デフォルト非表示 */
+        align-items: center;
+        gap: 6px;
+        z-index: 100000;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.15);
+      }
+
+      .btn-back-portal:hover {
+        background: rgba(76, 175, 80, 0.1);
+        box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4);
+        transform: translateY(-1px);
+      }
+
+      @media (min-width: 950px) {
+        .btn-back-portal {
+          display: flex;
+        }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- 🏠 画面右上ポータルTOPへ戻るボタン（広画面用） -->
+    <a href="#" class="btn-back-portal" id="btn-back-portal-top">
+      <span>🏠</span> ポータルTOPへ戻る
+    </a>
+
+    <!-- 極小引き下げハンドル -->
+    <div class="control-handle" id="control-handle">
+      <span>▼</span>
+    </div>
+
+    <!-- プレミアムコントロールバー -->
+    <div class="control-bar" id="control-bar">
+      <span class="game-title">🔢 すうどく WEB</span>
+      
+      <button class="btn-control" onclick="openInstructionsModal()">
+        <span>ℹ️</span> 操作説明
+      </button>
+
+      <button class="btn-control" onclick="openRankingModal()">
+        <span>🏆</span> ランキング
+      </button>
+
+      <button class="btn-control" onclick="toggleFullScreen()">
+        <span>📺</span> 全画面
+      </button>
+
+      <a class="btn-control" id="btn-back-portal-bar" href="#" style="text-decoration: none;">
+        <span>🏠</span> ポータルTOP
+      </a>
+
+      <button class="btn-control" onclick="window.close()">
+        <span>❌</span> 閉じる
+      </button>
+    </div>
+
+    <!-- メインのグリッド・レイアウト -->
+    <div id="main-container">
+      
+      <!-- ゲーム領域 -->
+      <div id="game-area">
+        <canvas id="unity-canvas" width="450" height="800" tabindex="-1"></canvas>
+      </div>
+
+      <!-- 常時表示サイドバーランキング（横幅余白時のみ表示） -->
+      <div id="sidebar-ranking">
+        
+        <!-- 👤 独立したプレイヤー名設定パネル -->
+        <div id="sidebar-profile-card" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 15px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.25);">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--handle-hover-color); letter-spacing: 0.5px; text-transform: uppercase; text-shadow: 0 0 5px var(--accent-glow);">👤 プレイヤー設定</span>
+            <span id="saveIndicator" style="font-size: 10px; color: #4CAF50; opacity: 0; transition: opacity 0.3s ease; font-weight: bold;">✓ 保存完了</span>
+          </div>
+          <input type="text" id="globalPlayerName" style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 12px; color: white; font-size: 13px; font-weight: bold; outline: none; transition: all 0.3s ease; width: 100%;" placeholder="名前を入力してください" maxlength="10">
+          <span style="font-size: 10px; color: #8a8a93; line-height: 1.4;">設定した名前は、すべてのゲームとオンラインランキングで自動共有されます。</span>
+        </div>
+
+        <div class="ranking-title-area">
+          <span class="ranking-main-title">🏆 順位表 (TOP10)</span>
+          <select id="sidebar-diff-select" class="diff-selector" onchange="loadLeaderboard(this.value, 'sidebar-table-body')">
+            <option value="EASY">EASY</option>
+            <option value="NORMAL">NORMAL</option>
+            <option value="HARD">HARD</option>
+            <option value="EXPERT">EXPERT</option>
+          </select>
+        </div>
+        <div class="ranking-table-wrap">
+          <table class="ranking-table">
+            <thead>
+              <tr>
+                <th style="width: 20%;">順位</th>
+                <th style="width: 50%;">プレイヤー</th>
+                <th style="width: 30%;">タイム</th>
+              </tr>
+            </thead>
+            <tbody id="sidebar-table-body">
+              <tr>
+                <td colspan="3" style="text-align: center; color: #888; padding: 30px 0;">読み込み中...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 🌟 操作説明モーダル -->
+    <div class="modal-overlay" id="instructionsModal" onclick="closeInstructionsModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeInstructionsModal()">&times;</span>
+        <div class="modal-title">🎮 すうどく 操作説明</div>
+        
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+          <!-- ルール -->
+          <div class="instruction-section">
+            <div class="instruction-title">
+              <span>🧩</span> すうどくのルール
+            </div>
+            <ul class="instruction-list">
+              <li>• 空いているセルに<strong>1から9まで</strong>の数字を入れます。</li>
+              <li>• <strong>縦の列・横の列・3x3のブロック</strong>のそれぞれに、同じ数字が重複して入らないように配置します。</li>
+            </ul>
+          </div>
+
+          <!-- PC用 -->
+          <div class="instruction-section">
+            <div class="instruction-title" style="color: #00d2ff;">
+              <span>💻</span> PC での操作
+            </div>
+            <ul class="instruction-list">
+              <li>🖱️ <strong>クリック</strong> : セルを選択</li>
+              <li>⌨️ <strong>キー入力 [1]-[9]</strong> : 選択したセルに数字を入力</li>
+              <li>⌨️ <strong>Backspace / Delete / [C] キー</strong> : 数字をクリア</li>
+              <li>⌨️ <strong>矢印キー</strong> : 選択セルを上下左右に移動</li>
+            </ul>
+          </div>
+          
+          <!-- スマホ用 -->
+          <div class="instruction-section" style="margin-bottom: 5px;">
+            <div class="instruction-title" style="color: #ff9800;">
+              <span>📱</span> スマホ / タブレット での操作
+            </div>
+            <ul class="instruction-list">
+              <li>👉 <strong>タップ</strong> : セルを選択</li>
+              <li>👉 <strong>下部の [1]〜[9] ボタン</strong> : 数字を入力</li>
+              <li>👉 <strong>下部の [Clear] / [C] ボタン</strong> : 数字をクリア</li>
+            </ul>
+          </div>
+        </div>
+        
+        <button class="btn-close-modal" onclick="closeInstructionsModal()">閉じる</button>
+      </div>
+    </div>
+
+    <!-- 🏆 ランキング閲覧モーダル（狭画面・全画面時用） -->
+    <div class="modal-overlay" id="rankingModal" onclick="closeRankingModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeRankingModal()">&times;</span>
+        <div class="modal-title">🏆 オンラインランキング</div>
+        
+        <div class="ranking-title-area" style="margin-bottom: 20px;">
+          <span style="font-size: 14px; font-weight: bold; color: #8a8a93;">難易度を選択:</span>
+          <select id="modal-diff-select" class="diff-selector" style="padding: 6px 14px; font-size: 13px;" onchange="loadLeaderboard(this.value, 'modal-table-body')">
+            <option value="EASY">EASY</option>
+            <option value="NORMAL">NORMAL</option>
+            <option value="HARD">HARD</option>
+            <option value="EXPERT">EXPERT</option>
+          </select>
+        </div>
+
+        <div class="ranking-table-wrap" style="max-height: 350px;">
+          <table class="ranking-table" style="font-size: 14px;">
+            <thead>
+              <tr>
+                <th style="width: 20%;">順位</th>
+                <th style="width: 50%;">プレイヤー</th>
+                <th style="width: 30%;">タイム</th>
+              </tr>
+            </thead>
+            <tbody id="modal-table-body">
+              <tr>
+                <td colspan="3" style="text-align: center; color: #888; padding: 30px 0;">読み込み中...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <button class="btn-close-modal" style="margin-top: 20px;" onclick="closeRankingModal()">閉じる</button>
+      </div>
+    </div>
+
+    <script src="Build/Build/Build.loader.js"></script>
+    <script>
+      const RANKING_API_URL = "https://script.google.com/macros/s/AKfycbzIgOMcU1d9kMOfeDjmZmDFcoW8k1LIK0yZbNSCmokaFdb7JyMwa6mHKxxfkVlgaOEt/exec";
+
+      // 15秒のタイムアウト付きfetchユーティリティ
+      async function fetchWithTimeout(resource, options = {}) {
+        const { timeout = 15000 } = options;
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeout);
+        try {
+          const response = await fetch(resource, {
+            ...options,
+            signal: controller.signal
+          });
+          clearTimeout(id);
+          return response;
+        } catch (error) {
+          clearTimeout(id);
+          if (error.name === 'AbortError') {
+            throw new Error("通信タイムアウト（15秒制限）");
+          }
+          throw error;
+        }
+      }
+
+      // 1. レスポンシブアスペクト比調整
+      var canvas = document.querySelector("#unity-canvas");
+      function resizeCanvas() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        // サイドバーが表示される幅（950px以上）がある場合はゲームエリアを適宜ロック
+        if (width >= 950) {
+          canvas.style.width = "auto";
+          canvas.style.height = "75vh"; // パディング拡大に合わせて高さを75vhに調整
+        } else {
+          canvas.style.width = "100%";
+          canvas.style.height = "100%";
+        }
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      var unityInstance = null;
+
+      // 2. Unityのロード起動
+      createUnityInstance(canvas, {
         arguments: [],
-        dataUrl: buildUrl + "/Build.data",
-        frameworkUrl: buildUrl + "/Build.framework.js",
-        codeUrl: buildUrl + "/Build.wasm",
+        dataUrl: "Build/Build/Build.data",
+        frameworkUrl: "Build/Build/Build.framework.js",
+        codeUrl: "Build/Build/Build.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "Sudoku",
         productVersion: "1.0",
-        showBanner: unityShowBanner,
-        // errorHandler: function(err, url, line) {
-        //    alert("error " + err + " occurred at line " + line);
-        //    // Return 'true' if you handled this error and don't want Unity
-        //    // to process it further, 'false' otherwise.
-        //    return true;
-        // },
-      };
+      }).then((instance) => {
+        unityInstance = instance;
+        console.log("Unity Sudoku Loaded successfully.");
+        // ロード完了時に Canvas にフォーカスを当ててキーボードが即座に効くようにする
+        canvas.focus();
+      }).catch((message) => {
+        alert(message);
+      });
 
-      // By default, Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
+      // Canvasクリック時にも自動的にフォーカスを当てる
+      canvas.addEventListener('click', () => {
+        canvas.focus();
+      });
 
-      // If you would like all file writes inside Unity Application.persistentDataPath
-      // directory to automatically persist so that the contents are remembered when
-      // the user revisits the site the next time, uncomment the following line:
-      // config.autoSyncPersistentDataPath = true;
-      // This autosyncing is currently not the default behavior to avoid regressing
-      // existing user projects that might rely on the earlier manual
-      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
-      // expected to change.
+      // 3. ランキングデータ取得・表示（10位まで）
+      async function loadLeaderboard(difficulty, targetTbodyId) {
+        const tbody = document.getElementById(targetTbodyId);
+        if (!tbody) return;
+        
+        let seconds = 0;
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #888; padding: 25px 0;">待機中 ${seconds}秒</td></tr>`;
 
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
+        // 毎秒経過秒数をインクリメントしてUIを更新するタイマー
+        const intervalId = setInterval(() => {
+          seconds++;
+          tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #888; padding: 25px 0;">待機中 ${seconds}秒</td></tr>`;
+        }, 1000);
 
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        document.querySelector("#unity-container").className = "unity-mobile";
-        canvas.className = "unity-mobile";
+        try {
+          const response = await fetchWithTimeout(`${RANKING_API_URL}?action=get_sudoku_leaderboard&difficulty=${difficulty}&limit=10`);
+          const resData = await response.json();
+          clearInterval(intervalId); // 正常終了でタイマー停止
 
-        // To lower canvas resolution on mobile devices to gain some
-        // performance, uncomment the following line:
-        // config.devicePixelRatio = 1;
+          if (resData.success && resData.leaderboard && resData.leaderboard.length > 0) {
+            tbody.innerHTML = "";
+            
+            // 最大10位まで表示する
+            const top10 = resData.leaderboard.slice(0, 10);
+            
+            top10.forEach((row, idx) => {
+              const tr = document.createElement('tr');
+              
+              // 自分の名前だった場合は行をハイライト（同一ローカルPC）
+              const localName = localStorage.getItem('jigsaw_player_name');
+              if (localName && row.name === localName) {
+                tr.style.backgroundColor = 'rgba(33, 150, 243, 0.15)';
+                tr.style.fontWeight = 'bold';
+              }
+              
+              // タイムを時:分:秒.ミリ秒のフォーマットに変換 (HH:MM:SS.ms)
+              const totalMs = Math.round(row.time * 1000);
+              const hours = Math.floor(totalMs / 3600000);
+              const minutes = Math.floor((totalMs % 3600000) / 60000);
+              const seconds = Math.floor((totalMs % 60000) / 1000);
+              const ms = Math.floor((totalMs % 1000) / 10);
+              const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
 
-
-      } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "600px";
-        canvas.style.height = "960px";
+              tr.innerHTML = `
+                <td style="font-weight: bold; color: ${idx === 0 ? '#FFD700' : (idx === 1 ? '#C0C0C0' : (idx === 2 ? '#CD7F32' : '#888'))};">${idx + 1}位</td>
+                <td style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px;">${row.name}</td>
+                <td style="font-weight: bold;">${formattedTime}</td>
+              `;
+              tbody.appendChild(tr);
+            });
+          } else {
+            tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #888; padding: 25px 0;">まだクリアタイムの<br>記録がありません。</td></tr>`;
+          }
+        } catch (error) {
+          clearInterval(intervalId); // エラー時もタイマー停止
+          console.error("ランキング取得中にエラーが発生しました:", error);
+          tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #ff6b6b; padding: 25px 0;">${error.message || "取得に失敗しました。"}</td></tr>`;
+        }
       }
 
-      document.querySelector("#unity-loading-bar").style.display = "block";
+      // 初期ロード（常時表示サイドバー用）
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log("=== Sudoku index.html v1.0.5 (Latest) ===");
+        // ポータルTOPへ戻るリンクの動的設定
+        const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const portalTopUrl = isLocalHost ? "/index.html" : "https://fumiakinx.github.io/";
+        
+        const topBackBtn = document.getElementById('btn-back-portal-top');
+        if (topBackBtn) {
+          topBackBtn.href = portalTopUrl;
+        }
+        
+        const barBackBtn = document.getElementById('btn-back-portal-bar');
+        if (barBackBtn) {
+          barBackBtn.href = portalTopUrl;
+        }
 
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                document.querySelector("#unity-loading-bar").style.display = "none";
-                document.querySelector("#unity-fullscreen-button").onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
+        // プレイヤーネームの同期と自動保存のバインド
+        const nameInput = document.getElementById('globalPlayerName');
+        const saveIndicator = document.getElementById('saveIndicator');
+        if (nameInput) {
+          const savedName = localStorage.getItem('jigsaw_player_name');
+          if (savedName) {
+            nameInput.value = savedName;
+          }
+          
+          let saveTimeout = null;
+          nameInput.addEventListener('input', () => {
+            const nameVal = nameInput.value.trim();
+            localStorage.setItem('jigsaw_player_name', nameVal);
+            
+            // 自動保存 of インジケータ表示
+            if (saveTimeout) clearTimeout(saveTimeout);
+            if (saveIndicator) {
+              saveIndicator.style.opacity = '1';
+              saveTimeout = setTimeout(() => {
+                saveIndicator.style.opacity = '0';
+              }, 1500);
+            }
+          });
 
-                var profile = unityProfiler.createButton(unityInstance);
-                profile.style.marginLeft = '5px';
-                document.querySelector("#unity-build-title").appendChild(profile);
+          nameInput.addEventListener('change', () => {
+            // 名前変更確定時に現在表示しているランキングを再読み込みしてハイライトを更新
+            const currentSidebarDiff = document.getElementById('sidebar-diff-select').value;
+            loadLeaderboard(currentSidebarDiff, 'sidebar-table-body');
+            
+            const currentModalDiff = document.getElementById('modal-diff-select').value;
+            loadLeaderboard(currentModalDiff, 'modal-table-body');
+          });
+        }
 
-                // Unloading web content from DOM so that browser GC can run can be tricky to get right.
-                // This code snippet shows how to correctly implement a Unity content Unload mechanism to a web page.
+        loadLeaderboard('EASY', 'sidebar-table-body');
+      });
 
-                // Unloading Unity content enables a web page to reclaim the memory used by Unity, e.g. for
-                // the purpose of later loading another Unity content instance on the _same_ web page.
+      // 4. 🌟 Unityゲームクリア時スコア送信グローバルコールバック
+      window.onSudokuComplete = async function (difficulty, elapsedTime, playerName) {
+        console.log("🏆 すうどくクリア！難易度:", difficulty, "タイム:", elapsedTime, "秒, プレイヤー:", playerName);
+        if (!playerName || playerName.trim() === "") {
+          console.warn("⚠️ プレイヤー名が空のためスコア登録をスキップします。");
+          return;
+        }
 
-                // When using this functionality, take caution to carefully make sure to clear all JavaScript code,
-                // DOM element and event handler references to the old content you may have retained, or
-                // otherwise the browser's garbage collector will be unable to reclaim the old page.
+        // プレイヤー名をポータル共通変数にも保存
+        localStorage.setItem('jigsaw_player_name', playerName.trim());
 
-                // N.b. Unity content does _not_ need to be manually unloaded when the user is navigating away from
-                // the current page to another web page. The browser will take care to clear memory of old visited
-                // pages automatically. This functionality is only needed if you want to switch between loading
-                // multiple Unity builds on a single web page.
-                var quit = document.createElement("button");
-                quit.style = "margin-left: 5px; background-color: lightgray; border: none; padding: 5px; cursor: pointer";
-                quit.innerHTML = "Unload";
-                document.querySelector("#unity-build-title").appendChild(quit);
-                quit.onclick = () => {
-                  // Quit Unity application execution
-                  unityInstance.Quit().then(() => {
-                    unityProfiler.shutDown();
-                    // Remove DOM elements from the page so GC can run
-                    document.querySelector("#unity-container").remove();
-                    canvas = null;
-                    // Remover script elements from the page so GC can run
-                    script.remove();
-                    script = null;
-                  });
-                };
-              }).catch((message) => {
-                alert(message);
-              });
-            };
+        // 新しいGASは add_sudoku_score を解釈するためパラメータを合わせます
+        const sendUrl = `${RANKING_API_URL}?action=add_sudoku_score&difficulty=${encodeURIComponent(difficulty.toUpperCase())}&name=${encodeURIComponent(playerName)}&time=${elapsedTime}&t=${Date.now()}`;
+        console.log("🏆 ランキング登録送信（CORSモード・結果待機）を開始します。URL:", sendUrl);
 
-      document.body.appendChild(script);
+        try {
+          const response = await fetch(sendUrl, {
+            method: 'GET'
+          });
+          const resData = await response.json();
+          console.log("🏆 ランキング登録成功:", resData);
 
+          // 順位情報が戻り値に含まれる場合、Unityインスタンスへ通知する
+          if (resData.success && resData.rank && unityInstance) {
+            console.log(`🏆 Unityへランクイン情報を通知します: ${resData.rank}位`);
+            unityInstance.SendMessage("ResultPanel", "OnRankInReceived", resData.rank);
+          }
+
+          // 即座にサイドバーの難易度を合わせ、ランキングを再読み込み
+          const sidebarSelector = document.getElementById('sidebar-diff-select');
+          if (sidebarSelector) {
+            sidebarSelector.value = difficulty.toUpperCase();
+          }
+          await loadLeaderboard(difficulty.toUpperCase(), 'sidebar-table-body');
+        } catch (e) {
+          console.error("❌ ランキング登録の送信または順位取得中にエラーが発生しました:", e);
+        }
+      };
+
+      // 5. コントロールバーのホバー・スライドイン/アウト制御
+      const controlBar = document.getElementById('control-bar');
+      const controlHandle = document.getElementById('control-handle');
+      let closeTimeout = null;
+
+      function showBar() {
+        if (closeTimeout) clearTimeout(closeTimeout);
+        controlBar.classList.add('active');
+      }
+
+      function hideBarWithDelay() {
+        if (closeTimeout) clearTimeout(closeTimeout);
+        closeTimeout = setTimeout(() => {
+          controlBar.classList.remove('active');
+        }, 1200);
+      }
+
+      controlHandle.addEventListener('mouseenter', showBar);
+      controlBar.addEventListener('mouseenter', showBar);
+      
+      controlHandle.addEventListener('mouseleave', hideBarWithDelay);
+      controlBar.addEventListener('mouseleave', hideBarWithDelay);
+
+      controlHandle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (controlBar.classList.contains('active')) {
+          controlBar.classList.remove('active');
+        } else {
+          showBar();
+          hideBarWithDelay();
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!controlBar.contains(e.target) && !controlHandle.contains(e.target)) {
+          controlBar.classList.remove('active');
+        }
+      });
+
+      // 6. 各モーダル制御
+      const instructionsModal = document.getElementById('instructionsModal');
+      const rankingModal = document.getElementById('rankingModal');
+
+      function openInstructionsModal() {
+        instructionsModal.style.display = 'flex';
+        controlBar.classList.remove('active');
+      }
+
+      function closeInstructionsModal() {
+        instructionsModal.style.display = 'none';
+      }
+
+      function openRankingModal() {
+        // 現在サイドバーで選択されている難易度にプルダウンを合わせる
+        const currentDiff = document.getElementById('sidebar-diff-select').value;
+        document.getElementById('modal-diff-select').value = currentDiff;
+        loadLeaderboard(currentDiff, 'modal-table-body');
+        
+        rankingModal.style.display = 'flex';
+        controlBar.classList.remove('active');
+      }
+
+      function closeRankingModal() {
+        rankingModal.style.display = 'none';
+      }
+
+      // 7. 全画面表示制御
+      function toggleFullScreen() {
+        var container = document.body;
+        if (!document.fullscreenElement) {
+          container.requestFullscreen().catch(err => {
+            alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+        controlBar.classList.remove('active');
+      }
     </script>
   </body>
 </html>
